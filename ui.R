@@ -1,18 +1,20 @@
 library(shiny)
 library(ggplot2)
+library(shinythemes)
+
 shinyUI(navbarPage(id = "pageList",
 
   title = "Test LGBF Tool", 
 #Can change the theme - see shinyTheme package  
   theme = shinytheme("simplex"),
-  tabPanel
+  tabPanel(
   sidebarLayout(
     sidebarPanel(
 
     ),
 
     mainPanel(
-  
+      plotOutput("plot1")
     )
-  )
-))
+  
+))))
