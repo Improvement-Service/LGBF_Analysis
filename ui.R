@@ -1,5 +1,5 @@
 library(shiny)
-
+library(ggplot2)
 shinyUI(navbarPage(id = "pageList",
 
   title = "Test LGBF Tool", 
