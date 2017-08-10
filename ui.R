@@ -9,7 +9,7 @@ shinyUI(navbarPage(id = "pageList",
       uiOutput("indicator"),
       checkboxGroupInput("LA", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority')),
       uiOutput("series"),
-      radioButtons("FmlyGrp", "Select Family Group", unique(excl_Scotland$`Family group (People)`), inline = TRUE),
+      radioButtons("FmlyGrp", "Select Family Group", c(1,2,3,4, "all"), inline = TRUE),
       actionButton("FmlyGrp2", "Update Family Group")
     ),
 

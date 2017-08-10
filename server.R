@@ -10,11 +10,11 @@ shinyServer(function(input, output, session) {
     checkboxGroupInput("TSeries", "Select Time Series", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
  })
   
-  observeEvent(eventExpr = input$FmlyGrp,
+  observeEvent(eventExpr = input$FmlyGrp2,
                handlerExpr = {
                  updateCheckboxGroupInput(session = session,
                                           inputId = "LA",
-                                          selected = unique(excl_Scotland$`Local Authority`))
+                                          selected = unique(filter(excl_Scotland, `Family group (People)` %in% input$FmlyGrp))[[1]])
                }
                )
 
