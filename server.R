@@ -1,4 +1,4 @@
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
   
   output$indicator <- renderUI({
     bnch_data_subset <- filter(excl_Scotland, Domain == input$category)
@@ -12,9 +12,9 @@ shinyServer(function(input, output) {
   
   observeEvent(eventExpr = input$FmlyGrp,
                handlerExpr = {
-                 updateCheckboxGroupInput(session  = session,
-                                          inputID = "LA",
-                                          selected = unique(excl_Scotland[excl_Scotland$`Family group (People)` == input$FmlyGrp,1]))
+                 updateCheckboxGroupInput(session = session,
+                                          inputId = "LA",
+                                          selected = unique(excl_Scotland$`Local Authority`))
                }
                )
 
