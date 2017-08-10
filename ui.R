@@ -5,7 +5,9 @@ shinyUI(navbarPage(id = "pageList",
   theme = shinytheme("simplex"),
   tabPanel("Something",
     sidebarPanel(
-      selectInput("inputName", "Title of Input", c("this", "is", "where","you", "choose", "inputs"))
+      selectInput("category", "Select Indicator Category", unique(bnch_data$Domain),selected = "Children's Services"),
+      uiOutput("indicator"),
+      checkboxGroupInput("LA", "Select Local Authority", unique(bnch_data$`Local Authority`), selected = unique(bnch_data$`Local Authority`))
     ),
 
     mainPanel(
