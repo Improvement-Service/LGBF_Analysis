@@ -18,6 +18,11 @@ shinyUI(navbarPage(id = "pageList",
     )
   ), ##New tab for year on year changes
   tabPanel("Year-on-Year Change",
+#some css
+  tags$head(tags$style(
+#    ".chckBx {column-count:2;-webkit-column-count:2; -moz-column-count:2}"
+      HTML("div.checkbox {margin-top: 0px;}")
+     )),
     fluidPage(
       wellPanel(
         div(class = "row",
@@ -31,8 +36,11 @@ shinyUI(navbarPage(id = "pageList",
       ),
      fluidRow( 
           sidebarPanel(id = "sidPnl", style = "height:55vh;overflow-y:auto;",
-                        checkboxGroupInput("LAYr", "Select Local Authority", unique(bnch_data$`Local Authority`), selected = unique(bnch_data$'Local Authority')),
-                        uiOutput("baseYr"),
+                       h5("Select Local Authority"),
+                       div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
+                         checkboxGroupInput("LAYr", label = NA, unique(bnch_data$`Local Authority`), selected = unique(bnch_data$'Local Authority'))
+                       ),
+                         uiOutput("baseYr"),
                         uiOutput("compYr"),
                         radioButtons("FmlyGrpYr", "Select Family Group", c(1,2,3,4, "all"), inline = TRUE),
                         actionButton("FmlyGrp2Yr", "Update Family Group"),
