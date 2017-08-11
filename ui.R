@@ -14,6 +14,7 @@ shinyUI(navbarPage(id = "pageList",
     ),
 
     mainPanel(
+      uiOutput("PlotTitle"),
       plotOutput("plot1")
     )
   ),

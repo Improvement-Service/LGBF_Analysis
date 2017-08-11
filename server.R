@@ -78,6 +78,10 @@ ScotMed15_16_Fun <- reactive({
    }
 })
 
+  output$PlotTitle <- renderText({
+    paste("",input$indicator2)
+  })
+
     output$plot1 <- renderPlot({
     colnames(excl_Scotland)[1] <- "Local_Authority"
     excl_Scotland <- filter(excl_Scotland, Local_Authority %in% input$LA & Time %in% input$TSeries)
