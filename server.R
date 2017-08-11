@@ -32,21 +32,44 @@ shinyServer(function(input, output, session) {
   })
 #Create Ui Outputs for year on year section    
     output$indicatorYr <- renderUI({
-      bnch_data_subset <- filter(excl_Scotland, Domain == input$categoryYr)
+      bnch_data_subset <- filter(bnch_data, Domain == input$categoryYr)
       selectInput("indicatorYrSrv", "Please Select Indicator", unique(bnch_data_subset[[5]]), width = "40%")
     })
+    
     bnch_data_indiYR <- reactive({
       dta <- filter(excl_Scotland, Indicator2 == input$indicatorYrSrv)
     })
     
     output$baseYr <- renderUI({
       bnch_data_indiYR <- bnch_data_indiYR()
-      selectInput("baseYrSrv", "Year", unique(bnch_data_indiYR$Time),
-                         selected = NA) 
+  #selectizeInput lets you have it start blank instead of
+  #selecting the first value - as selectInput does!
+      selectizeInput("baseYrSrv", "Year", 
+                     choices = unique(bnch_data_indiYR$Time),
+                    options = list(
+                      placeholder = "-",
+                      onInitialize = I('function() {this.setValue("");}')
+                    )
+               ) 
     })
     output$compYr <- renderUI({
       bnch_data_indiYR <- bnch_data_indiYR()
-      selectInput("compYrSrv", "Comparator Year:", c(unique(bnch_data_indiYR[bnch_data_indiYR$Time != input$baseYrSrv, "Time"]))) 
+      selectizeInput("compYrSrv", "Comparator Year:", 
+                     choices = c(unique(bnch_data_indiYR[bnch_data_indiYR$Time != input$baseYrSrv, "Time"])),
+      options = list(
+        placeholder = "-",
+        onInitialize = I('function() {this.setValue("");}')
+      ))
+    })
+#calculate changes for each LA between base and comparator year
+    chngDta <- reactive({
+      data <- bnch_data_indiYR()
+  #only keep selected years
+      yrs <- c(input$compYrSrv, input$baseYrSrv)
+      data <- data[data$Time %in% yrs,]
+    #Now calculate higher year (x[2]) minus lower year (x[1])
+      data <- round(ave(data$Value, as.factor(data$`Local Authority`), 
+                  FUN = function(x){x[2] -x[1]}), 1)[1:33]
     })
  })
 
