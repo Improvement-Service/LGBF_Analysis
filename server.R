@@ -68,8 +68,22 @@ shinyServer(function(input, output, session) {
       yrs <- c(input$compYrSrv, input$baseYrSrv)
       data <- data[data$Time %in% yrs,]
     #Now calculate higher year (x[2]) minus lower year (x[1])
-      data <- round(ave(data$Value, as.factor(data$`Local Authority`), 
+      Diffdata <- round(ave(data$Value, as.factor(data$`Local Authority`), 
                   FUN = function(x){x[2] -x[1]}), 1)[1:33]
+      data <- data.frame( data$`Local Authority`[1:33], Diffdata,stringsAsFactors = FALSE)
+    })
+    output$`Year-on-Year-Plot` <-renderPlot({
+      dat <- chngDta()
+      colnames(dat)[1] <- "Local_Authority"
+      ggplot(data = dat, aes(x = Local_Authority, y = Diffdata)) +
+        geom_bar(stat = "identity", position= "dodge", fill = "darkblue")+
+        theme_bw()+
+        ylab(paste("Change from", as.character(input$baseYrSrv), "to", as.character(input$compYrSrv))) +
+        theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 1),
+              panel.grid.major = element_blank(),
+              panel.grid.minor = element_blank(),
+              panel.border = element_blank(),
+              axis.line = element_line(colour = "black"))
     })
  })
 
