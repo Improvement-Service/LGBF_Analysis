@@ -35,10 +35,18 @@ shinyServer(function(input, output, session) {
       bnch_data_subset <- filter(excl_Scotland, Domain == input$categoryYr)
       selectInput("indicatorYrSrv", "Please Select Indicator", unique(bnch_data_subset[[5]]), width = "40%")
     })
-    output$seriesYr <- renderUI({
-      bnch_data_indi <- filter(excl_Scotland, Indicator2 == input$indicatorYrSrv)
-      checkboxGroupInput("TSeriesYrSrv", "Select Time Series", unique(bnch_data_indi$Time),
-                         selected = unique(bnch_data_indi$Time)) 
+    bnch_data_indiYR <- reactive({
+      dta <- filter(excl_Scotland, Indicator2 == input$indicatorYrSrv)
+    })
+    
+    output$baseYr <- renderUI({
+      bnch_data_indiYR <- bnch_data_indiYR()
+      selectInput("baseYrSrv", "Year", unique(bnch_data_indiYR$Time),
+                         selected = NA) 
+    })
+    output$compYr <- renderUI({
+      bnch_data_indiYR <- bnch_data_indiYR()
+      selectInput("compYrSrv", "Comparator Year:", c(unique(bnch_data_indiYR[bnch_data_indiYR$Time != input$baseYrSrv, "Time"]))) 
     })
  })
 
