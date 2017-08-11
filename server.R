@@ -2,7 +2,7 @@ shinyServer(function(input, output, session) {
   
   output$indicator <- renderUI({
     bnch_data_subset <- filter(excl_Scotland, Domain == input$category)
-    selectInput("indicator2", "Please Select Indicator", unique(bnch_data_subset[[5]]))
+    selectInput("indicator2", "Please Select Indicator", unique(bnch_data_subset[[5]]), width = "40%")
     })
   
   output$series <- renderUI({
