@@ -30,6 +30,16 @@ shinyServer(function(input, output, session) {
       guides(fill = FALSE)
             
   })
+#Create Ui Outputs for year on year section    
+    output$indicatorYr <- renderUI({
+      bnch_data_subset <- filter(excl_Scotland, Domain == input$categoryYr)
+      selectInput("indicatorYrSrv", "Please Select Indicator", unique(bnch_data_subset[[5]]), width = "40%")
+    })
+    output$seriesYr <- renderUI({
+      bnch_data_indi <- filter(excl_Scotland, Indicator2 == input$indicatorYrSrv)
+      checkboxGroupInput("TSeriesYrSrv", "Select Time Series", unique(bnch_data_indi$Time),
+                         selected = unique(bnch_data_indi$Time)) 
+    })
  })
 
 
