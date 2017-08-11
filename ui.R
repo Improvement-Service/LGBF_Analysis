@@ -16,4 +16,14 @@ shinyUI(navbarPage(id = "pageList",
     mainPanel(
       plotOutput("plot1")
     )
-  )))
+  ),
+  tabPanel("2nd",
+           sidebarPanel(
+             
+           ),
+           mainPanel(
+             
+           ))
+
+
+))
