@@ -70,11 +70,16 @@ shinyServer(function(input, output, session) {
     #Now calculate higher year (x[2]) minus lower year (x[1])
       Diffdata <- round(ave(data$Value, as.factor(data$`Local Authority`), 
                   FUN = function(x){x[2] -x[1]}), 1)[1:33]
-      data <- data.frame( data$`Local Authority`[1:33], Diffdata,stringsAsFactors = FALSE)
+    #This one calculates % change  
+      PerDiffdata <- round(ave(data$Value, as.factor(data$`Local Authority`), 
+             FUN = function(x){(x[2]/x[1]-1)*100}), 1)[1:33]
+      data <- data.frame( data$`Local Authority`[1:33], Diffdata, PerDiffdata,
+                    stringsAsFactors = FALSE)
     })
     output$`Year-on-Year-Plot` <-renderPlot({
       dat <- chngDta()
       colnames(dat)[1] <- "Local_Authority"
+      if(input$RelVal == FALSE){
       ggplot(data = dat, aes(x = Local_Authority, y = Diffdata)) +
         geom_bar(stat = "identity", position= "dodge", fill = "darkblue")+
         theme_bw()+
@@ -84,7 +89,27 @@ shinyServer(function(input, output, session) {
               panel.grid.minor = element_blank(),
               panel.border = element_blank(),
               axis.line = element_line(colour = "black"))
+      } else{
+        ggplot(data = dat, aes(x = Local_Authority, y = PerDiffdata)) +
+          geom_bar(stat = "identity", position= "dodge", fill = "darkblue")+
+          theme_bw()+
+          ylab(paste("Percentage Change from", as.character(input$baseYrSrv), "to", as.character(input$compYrSrv))) +
+          theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 1),
+                panel.grid.major = element_blank(),
+                panel.grid.minor = element_blank(),
+                panel.border = element_blank(),
+                axis.line = element_line(colour = "black"))
+      }
     })
+    
+    observeEvent(eventExpr = input$FmlyGrp2Yr,
+                 handlerExpr = {
+                   updateCheckboxGroupInput(session = session,
+                                            inputId = "LAYr",
+                                            selected = unique(filter(excl_Scotland, `Family group (People)` %in% input$FmlyGrpYr))[[1]])
+                 }
+    )
+    
  })
 
 
