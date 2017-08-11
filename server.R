@@ -33,7 +33,7 @@ shinyServer(function(input, output, session) {
 #Create Ui Outputs for year on year section    
     output$indicatorYr <- renderUI({
       bnch_data_subset <- filter(bnch_data, Domain == input$categoryYr)
-      selectInput("indicatorYrSrv", "Please Select Indicator", unique(bnch_data_subset[[5]]), width = "40%")
+      selectInput("indicatorYrSrv", "Please Select Indicator", unique(bnch_data_subset[[5]]))
     })
     
     bnch_data_indiYR <- reactive({
