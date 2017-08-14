@@ -30,7 +30,7 @@ SelectedDta <- reactive({
 #Calculates median values for each year group selected, based on the indicator selected and the authorities selected
 MedFun <- reactive({
   SelectedDta <- SelectedDta()
-  MedianVal <- round(ave(SelectedDta$Value, as.factor(SelectedDta$Time), FUN = median))
+  MedianVal <- round(ave(SelectedDta$Value, as.factor(SelectedDta$Time), FUN = function(x){median(x, na.rm = TRUE)}))
 })
 
   output$PlotTitle <- renderText({
