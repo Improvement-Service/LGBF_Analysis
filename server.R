@@ -19,7 +19,9 @@ shinyServer(function(input, output, session) {
                )
   
 ScotMed10_11_Fun <- reactive({
+  yrs <- c(input$TSeries)
     ScotMed10_11 <- filter(excl_Scotland, `Local Authority` %in% input$LA & Time %in% "2010-11" & Indicator2 %in% input$indicator2)
+    ScotMed10_11 <- ScotMed10_11[ScotMed10_11$Time %in% yrs,]
     if(is.null(median(ScotMed10_11$Value, na.rm = TRUE))){
       ScotMed10_11 <- 0
       }
@@ -29,7 +31,9 @@ ScotMed10_11_Fun <- reactive({
 })
 
 ScotMed11_12_Fun <- reactive({
+  yrs <- c(input$TSeries)
   ScotMed11_12 <- filter(excl_Scotland, `Local Authority` %in% input$LA & Time %in% "2011-12" & Indicator2 %in% input$indicator2)
+  ScotMed11_12 <- ScotMed11_12[ScotMed11_12$Time %in% yrs,]
   if(is.null(median(ScotMed11_12$Value, na.rm = TRUE))){
     ScotMed11_12 <- 0
   }
@@ -39,7 +43,9 @@ ScotMed11_12_Fun <- reactive({
 })
 
 ScotMed12_13_Fun <- reactive({
+  yrs <- c(input$TSeries)
   ScotMed12_13 <- filter(excl_Scotland, `Local Authority` %in% input$LA & Time %in% "2012-13" & Indicator2 %in% input$indicator2)
+  ScotMed12_13 <- ScotMed12_13[ScotMed12_13$Time %in% yrs,]
   if(is.null(median(ScotMed12_13$Value, na.rm = TRUE))){
     ScotMed12_13 <- 0
   }
@@ -49,7 +55,9 @@ ScotMed12_13_Fun <- reactive({
 })
 
 ScotMed13_14_Fun <- reactive({
+  yrs <- c(input$TSeries)
   ScotMed13_14 <- filter(excl_Scotland, `Local Authority` %in% input$LA & Time %in% "2013-14" & Indicator2 %in% input$indicator2)
+  ScotMed13_14 <- ScotMed13_14[ScotMed13_14$Time %in% yrs,]
   if(is.null(median(ScotMed13_14$Value, na.rm = TRUE))){
     ScotMed13_14 <- 0
   }
@@ -59,7 +67,9 @@ ScotMed13_14_Fun <- reactive({
 })
 
 ScotMed14_15_Fun <- reactive({
+  yrs <- c(input$TSeries)
   ScotMed14_15 <- filter(excl_Scotland, `Local Authority` %in% input$LA & Time %in% "2014-15" & Indicator2 %in% input$indicator2)
+  ScotMed14_15 <- ScotMed14_15[ScotMed14_15$Time %in% yrs,]
   if(is.null(median(ScotMed14_15$Value, na.rm = TRUE))){
     ScotMed14_15 <- 0
   }
@@ -69,7 +79,9 @@ ScotMed14_15_Fun <- reactive({
 })
 
 ScotMed15_16_Fun <- reactive({
+  yrs <- c(input$TSeries)
   ScotMed15_16 <- filter(excl_Scotland, `Local Authority` %in% input$LA & Time %in% "2015-16" & Indicator2 %in% input$indicator2)
+  ScotMed15_16 <- ScotMed15_16[ScotMed15_16$Time %in% yrs,]
   if(is.null(median(ScotMed15_16$Value, na.rm = TRUE))){
     ScotMed15_16 <- 0
   }
