@@ -99,6 +99,7 @@ MedFun <- reactive({
     output$`Year-on-Year-Plot` <-renderPlot({
       dat <- chngDta()
       colnames(dat)[1] <- "Local_Authority"
+      dat <- filter(dat,Local_Authority %in% input$LAYr)
       if(input$RelVal == FALSE){
       ggplot(data = dat, aes(x = Local_Authority, y = Diffdata)) +
         geom_bar(stat = "identity", position= "dodge", fill = "darkblue")+
