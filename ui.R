@@ -4,10 +4,18 @@ shinyUI(navbarPage(id = "pageList",
 #Can change the theme - see shinyTheme package  
   theme = shinytheme("simplex"),
   tabPanel("Something",
-    wellPanel(selectInput("category", "Select Indicator Category", unique(excl_Scotland$Domain),
-                          selected = "Children's Services", width = "40%"),
-                  uiOutput("indicator"), width ="100%"),
-    sidebarPanel(id = "sidPnl", style = "height:55vh;overflow-y:auto;",
+    wellPanel(
+      div(class = "row",
+          div(class = "span6", style = "display:inline-block; width:40vw",
+      selectInput("category", "Select Indicator Category", unique(excl_Scotland$Domain),
+                          selected = "Children's Services")
+          ),
+          div(class = "span6", style = "display:inline-block; width:40vw",
+            uiOutput("indicator")
+          )
+      ), width ="100%"
+    ),
+    sidebarPanel(id = "sidPnl", style = "height:75vh;overflow-y:auto;",
       checkboxGroupInput("LA", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority')),
       uiOutput("series"),
       radioButtons("FmlyGrp", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
