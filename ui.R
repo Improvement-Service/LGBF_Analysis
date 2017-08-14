@@ -42,7 +42,7 @@ shinyUI(navbarPage(id = "pageList",
                        ),
                          uiOutput("baseYr"),
                         uiOutput("compYr"),
-                        radioButtons("FmlyGrpYr", "Select Family Group", c(1,2,3,4, "all"), inline = TRUE),
+                        radioButtons("FmlyGrpYr", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
                         actionButton("FmlyGrp2Yr", "Update Family Group"),
                         checkboxInput("RelVal", "Show Percentage Change", value = FALSE)
         ),

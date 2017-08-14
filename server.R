@@ -106,7 +106,12 @@ shinyServer(function(input, output, session) {
                  handlerExpr = {
                    updateCheckboxGroupInput(session = session,
                                             inputId = "LAYr",
-                                            selected = unique(filter(excl_Scotland, `Family group (People)` %in% input$FmlyGrpYr))[[1]])
+                                            selected = if(input$FmlyGrpYr == "All"){
+                                              unique(bnch_data$`Local Authority`)
+                                            } else{
+                                              unique(filter(excl_Scotland, `Family group (People)` %in% input$FmlyGrpYr)[[1]])
+                                            }
+    )
                  }
     )
     
