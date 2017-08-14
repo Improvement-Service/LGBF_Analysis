@@ -36,7 +36,7 @@ shinyUI(navbarPage(id = "pageList",
           ), width = "100%"
       ),
      fluidRow( 
-          sidebarPanel(id = "sidPnl", style = "height:55vh;overflow-y:auto;",
+          sidebarPanel(id = "sidPnl", style = "height:75vh;overflow-y:auto;",
                        h5("Select Local Authority"),
                        div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
                          checkboxGroupInput("LAYr", label = NA, unique(bnch_data$`Local Authority`), selected = unique(bnch_data$'Local Authority'))

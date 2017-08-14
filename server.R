@@ -2,7 +2,7 @@ shinyServer(function(input, output, session) {
   
   output$indicator <- renderUI({
     bnch_data_subset <- filter(excl_Scotland, Domain == input$category)
-    selectInput("indicator2", "Please Select Indicator", unique(bnch_data_subset$Title), width = "40%")
+    selectInput("indicator2", "Please Select Indicator", sort(unique(bnch_data_subset$Title)), width = "40%")
     })
   
   output$series <- renderUI({
@@ -53,11 +53,11 @@ MedFun <- reactive({
 #Create Ui Outputs for year on year section    
     output$indicatorYr <- renderUI({
       bnch_data_subset <- filter(bnch_data, Domain == input$categoryYr)
-      selectInput("indicatorYrSrv", "Please Select Indicator", unique(bnch_data_subset$Title))
+      selectInput("indicatorYrSrv", "Please Select Indicator", sort(unique(bnch_data_subset$Title)))
     })
     
     bnch_data_indiYR <- reactive({
-      dta <- filter(excl_Scotland, Title == input$indicatorYrSrv)
+      dta <- filter(bnch_data, Title == input$indicatorYrSrv)
     })
     
     output$baseYr <- renderUI({
