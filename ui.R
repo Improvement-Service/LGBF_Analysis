@@ -10,10 +10,11 @@ shinyUI(navbarPage(id = "pageList",
     sidebarPanel(id = "sidPnl", style = "height:55vh;overflow-y:auto;",
       checkboxGroupInput("LA", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority')),
       uiOutput("series"),
-      radioButtons("FmlyGrp", "Select Family Group", c(1,2,3,4, "all"), inline = TRUE),
+      radioButtons("FmlyGrp", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
       actionButton("FmlyGrp2", "Update Family Group")
     ),
     mainPanel(
+      uiOutput("PlotTitle"),
       plotOutput("plot1")
     )
   ), ##New tab for year on year changes

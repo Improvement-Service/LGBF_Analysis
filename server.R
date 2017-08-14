@@ -2,11 +2,11 @@ shinyServer(function(input, output, session) {
   
   output$indicator <- renderUI({
     bnch_data_subset <- filter(excl_Scotland, Domain == input$category)
-    selectInput("indicator2", "Please Select Indicator", unique(bnch_data_subset[[5]]), width = "40%")
+    selectInput("indicator2", "Please Select Indicator", unique(bnch_data_subset$Title), width = "40%")
     })
   
   output$series <- renderUI({
-    bnch_data_indi <- filter(excl_Scotland, Indicator2 == input$indicator2)
+    bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2)
     checkboxGroupInput("TSeries", "Select Time Series", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
  })
   
@@ -14,17 +14,37 @@ shinyServer(function(input, output, session) {
                handlerExpr = {
                  updateCheckboxGroupInput(session = session,
                                           inputId = "LA",
-                                          selected = unique(filter(excl_Scotland, `Family group (People)` %in% input$FmlyGrp))[[1]])
+                                          selected = if(input$FmlyGrp == "All"){
+                                            unique(excl_Scotland$`Local Authority`)} 
+                                            else{
+                                              unique(filter(excl_Scotland, `Family group (People)` %in% input$FmlyGrp))[[1]] 
+                                            }
+                 )
                }
-               )
+  )
+  
+SelectedDta <- reactive({
+  dta <- filter(excl_Scotland, `Local Authority` %in% input$LA & Time %in% input$TSeries & Title %in% input$indicator2)
+})
+
+#Calculates median values for each year group selected, based on the indicator selected and the authorities selected
+MedFun <- reactive({
+  SelectedDta <- SelectedDta()
+  MedianVal <- round(ave(SelectedDta$Value, as.factor(SelectedDta$Time), FUN = median))
+})
+
+  output$PlotTitle <- renderText({
+    paste("",input$indicator2)
+  })
 
     output$plot1 <- renderPlot({
     colnames(excl_Scotland)[1] <- "Local_Authority"
     excl_Scotland <- filter(excl_Scotland, Local_Authority %in% input$LA & Time %in% input$TSeries)
-    ggplot(excl_Scotland[excl_Scotland$Indicator2 == input$indicator2,], 
+    ggplot(excl_Scotland[excl_Scotland$Title == input$indicator2,], 
            aes(x = Local_Authority, y = Value, fill = Time))+
       geom_bar(position = "dodge", stat = "identity")+
       theme_bw()+
+      geom_hline(aes(yintercept = MedFun(), colour = Time))+
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
             axis.text.x = element_text(angle = 90, hjust = 1))+
       guides(fill = FALSE)
@@ -33,11 +53,11 @@ shinyServer(function(input, output, session) {
 #Create Ui Outputs for year on year section    
     output$indicatorYr <- renderUI({
       bnch_data_subset <- filter(bnch_data, Domain == input$categoryYr)
-      selectInput("indicatorYrSrv", "Please Select Indicator", unique(bnch_data_subset[[5]]))
+      selectInput("indicatorYrSrv", "Please Select Indicator", unique(bnch_data_subset$Title))
     })
     
     bnch_data_indiYR <- reactive({
-      dta <- filter(excl_Scotland, Indicator2 == input$indicatorYrSrv)
+      dta <- filter(excl_Scotland, Title == input$indicatorYrSrv)
     })
     
     output$baseYr <- renderUI({
