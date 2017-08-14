@@ -44,8 +44,7 @@ MedFun <- reactive({
            aes(x = Local_Authority, y = Value, fill = Time))+
       geom_bar(position = "dodge", stat = "identity")+
       theme_bw()+
-      scale_color_brewer()
-      geom_hline(yintercept = MedFun(), colour = scale_color_brewer())+
+      geom_hline(aes(yintercept = MedFun(), colour = Time))+
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
             axis.text.x = element_text(angle = 90, hjust = 1))+
       guides(fill = FALSE)
