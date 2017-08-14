@@ -14,9 +14,14 @@ shinyServer(function(input, output, session) {
                handlerExpr = {
                  updateCheckboxGroupInput(session = session,
                                           inputId = "LA",
-                                          selected = unique(filter(excl_Scotland, `Family group (People)` %in% input$FmlyGrp))[[1]])
+                                          selected = if(input$FmlyGrp == "All"){
+                                            unique(excl_Scotland$`Local Authority`)} 
+                                            else{
+                                              unique(filter(excl_Scotland, `Family group (People)` %in% input$FmlyGrp))[[1]] 
+                                            }
+                 )
                }
-               )
+  )
   
 ScotMed10_11_Fun <- reactive({
   yrs <- c(input$TSeries)
@@ -90,6 +95,42 @@ ScotMed15_16_Fun <- reactive({
    }
 })
 
+ScotMed10_14_Fun <- reactive({
+  yrs <- c(input$TSeries)
+  ScotMed10_14 <- filter(excl_Scotland, `Local Authority` %in% input$LA & Time %in% "2010-14" & Indicator2 %in% input$indicator2)
+  ScotMed10_14 <- ScotMed10_14[ScotMed10_14$Time %in% yrs,]
+  if(is.null(median(ScotMed10_14$Value, na.rm = TRUE))){
+    ScotMed10_14 <- 0
+  }
+  else{
+    ScotMed10_14<- median(ScotMed10_14$Value)
+  }
+})
+
+ScotMed12_15_Fun <- reactive({
+  yrs <- c(input$TSeries)
+  ScotMed12_15 <- filter(excl_Scotland, `Local Authority` %in% input$LA & Time %in% "2012-15" & Indicator2 %in% input$indicator2)
+  ScotMed12_15 <- ScotMed12_15[ScotMed12_15$Time %in% yrs,]
+  if(is.null(median(ScotMed12_15$Value, na.rm = TRUE))){
+    ScotMed12_15 <- 0
+  }
+  else{
+    ScotMed12_15<- median(ScotMed12_15$Value)
+  }
+})
+
+ScotMed13_16_Fun <- reactive({
+  yrs <- c(input$TSeries)
+  ScotMed13_16 <- filter(excl_Scotland, `Local Authority` %in% input$LA & Time %in% "2013-16" & Indicator2 %in% input$indicator2)
+  ScotMed13_16 <- ScotMed13_16[ScotMed13_16$Time %in% yrs,]
+  if(is.null(median(ScotMed13_16$Value, na.rm = TRUE))){
+    ScotMed13_16 <- 0
+  }
+  else{
+    ScotMed13_16<- median(ScotMed13_16$Value)
+  }
+})
+
   output$PlotTitle <- renderText({
     paste("",input$indicator2)
   })
@@ -107,6 +148,9 @@ ScotMed15_16_Fun <- reactive({
       geom_hline(yintercept = ScotMed13_14_Fun())+
       geom_hline(yintercept = ScotMed14_15_Fun())+
       geom_hline(yintercept = ScotMed15_16_Fun())+
+      geom_hline(yintercept = ScotMed10_14_Fun())+
+      geom_hline(yintercept = ScotMed12_15_Fun())+
+      geom_hline(yintercept = ScotMed13_16_Fun())+
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
             axis.text.x = element_text(angle = 90, hjust = 1))+
       guides(fill = FALSE)
