@@ -46,7 +46,7 @@ MedFun <- reactive({
       theme_bw()+
       geom_hline(aes(yintercept = MedFun(), colour = Time))+
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
-            axis.text.x = element_text(angle = 90, hjust = 1))+
+            axis.text.x = element_text(angle = 90, hjust = 1.0, vjust = 0.3))+
       guides(fill = FALSE)
             
   })
@@ -105,7 +105,7 @@ MedFun <- reactive({
         geom_bar(stat = "identity", position= "dodge", fill = "darkblue")+
         theme_bw()+
         ylab(paste("Change from", as.character(input$baseYrSrv), "to", as.character(input$compYrSrv))) +
-        theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 1),
+        theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3),
               panel.grid.major = element_blank(),
               panel.grid.minor = element_blank(),
               panel.border = element_blank(),
