@@ -60,5 +60,32 @@ shinyUI(navbarPage(id = "pageList",
            )
       )
     )
-  )
+  ),
+#New Tab for Dispersion ====================================
+    tabPanel("Dispersion",
+             wellPanel(
+               div(class = "row",
+                   div(class = "span6", style = "display:inline-block; width:40vw",
+                       selectInput("categoryDisp", "Select Indicator Category", unique(excl_Scotland$Domain),
+                                   selected = "Children's Services")
+                   ),
+                   div(class = "span6", style = "display:inline-block; width:40vw",
+                       uiOutput("indicatorDisp"))
+               ), width = "100%"
+             ),   
+             sidebarPanel(id = "sidPnl", style = "height:75vh;overflow-y:auto;",
+                          h5("Select Local Authority"),
+                          div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
+                              checkboxGroupInput("LADisp", label = NA, unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority'))
+                          ),
+                          uiOutput("seriesDisp"),
+                          radioButtons("FmlyGrpDisp", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
+                          actionButton("FmlyGrp2Disp", "Update Family Group")
+             ),
+             mainPanel(
+               fluidRow(
+                 DT::dataTableOutput("tableDisp", width = "50%")
+               )
+             )
+        )
 ))

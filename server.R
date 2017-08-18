@@ -50,7 +50,7 @@ MedFun <- reactive({
       guides(fill = FALSE)
             
   })
-#Create Ui Outputs for year on year section    
+#Create Ui Outputs for year on year section======================================    
     output$indicatorYr <- renderUI({
       bnch_data_subset <- filter(bnch_data, Domain == input$categoryYr)
       selectInput("indicatorYrSrv", "Please Select Indicator", sort(unique(bnch_data_subset$Title)))
@@ -135,7 +135,55 @@ MedFun <- reactive({
                  }
     )
     
- })
 
 
+##Create outputs for Dispersion Page ========================
+output$indicatorDisp <- renderUI({
+  bnch_data_subset <- filter(excl_Scotland, Domain == input$categoryDisp)
+  selectInput("indicator2Disp", "Please Select Indicator", sort(unique(bnch_data_subset$Title)))
+})
+output$seriesDisp <- renderUI({
+  bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2Disp)
+  checkboxGroupInput("TSeriesDisp", "Select Time Series", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
+})
 
+observeEvent(eventExpr = input$FmlyGrp2Disp,
+             handlerExpr = {
+               updateCheckboxGroupInput(session = session,
+                                        inputId = "LADisp",
+                                        selected = if(input$FmlyGrpDisp == "All"){
+                                          unique(excl_Scotland$`Local Authority`)} 
+                                        else{
+                                          unique(filter(excl_Scotland, `Family group (People)` %in% input$FmlyGrpDisp))[[1]] 
+                                        }
+                            )
+                  }
+            )
+  #generate tables and graphs
+  output$tableDisp <- DT::renderDataTable({
+    dta <- filter(excl_Scotland, Title == input$indicator2Disp & Time %in% input$TSeriesDisp)[c(1,3,4,15)]
+    if(dta$`One is high` %in% "Yes"){
+      brks <- quantile(dta$Value, probs = seq(0, 1, 0.25), na.rm = TRUE)
+      clrs <- brewer.pal(length(brks) +1, "Blues")
+      txtbrks <- quantile(dta$Value, probs = c(0,0.75), na.rm = TRUE)
+      txtclrs <- c("black", "black", "white")
+    }else{
+      brks <- quantile(dta$Value, probs = seq(0, 1, 0.25), na.rm = TRUE)
+      clrs <- rev(brewer.pal(length(brks) +1, "Blues"))
+      txtbrks <- quantile(dta$Value, probs = c(0,0.75), na.rm = TRUE)
+      txtclrs <- c("white", "black", "black")
+    }
+    dta <- spread(dta[c(1,2,3)], key = Time, value = Value)
+    tbl <- datatable(dta, extensions = "Scroller", rownames = FALSE, 
+                     options = list(pageLength = 32, scrollY = 700, dom = "t")) %>%
+      formatStyle(names(dta)[2:ncol(dta)], color = styleInterval(txtbrks, txtclrs),
+                  backgroundColor = styleInterval(brks, clrs))
+  })
+  
+  output$boxDisp <- renderPlot({
+    bpdta <- filter(excl_Scotland, Title == input$indicator2Disp & Time %in% input$TSeriesDisp)
+    
+  })
+
+
+})
