@@ -55,15 +55,22 @@ shinyUI(navbarPage(id = "pageList",
   ),
 ##new tab for By Council
 tabPanel("By Council",
-         wellPanel(selectInput("categoryCNCL", "Select Indicator Category", unique(excl_Scotland$Domain),
-                               selected = "Children's Services", width = "40%")),
+         fluidPage(
+          wellPanel(
+            div(style = "display: inline-block;vertical-align:top;width: 150px;",
+           selectInput("categoryCNCL", "Select Indicator Category", unique(excl_Scotland$Domain),
+                               selected = "Children's Services")),
+           div(style ="display: inline-block;vertical-align:top;width: 150px;",
+                   selectInput("LA_CNCL", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = "Aberdeen City")),
+           div(style ="display: inline-block;vertical-align:top;width: 150px;",
+                   uiOutput("seriesCNCL"))
+                   ),
          sidebarPanel(
-           
          ),
          mainPanel(
            
          )
          
   
-)
+))
 ))

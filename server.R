@@ -136,6 +136,11 @@ MedFun <- reactive({
                  }
     )
     
+## By Council Tab
+    output$seriesCNCL <- renderUI({
+      DtaCNCL <- filter(excl_Scotland, `Local Authority` %in% input$LA_CNCL & Domain %in% input$categoryCNCL)
+      checkboxGroupInput("TSeriesCNCL", "Select Time Series", unique(DtaCNCL$Time), selected = unique(DtaCNCL$Time)) 
+    })
  })
 
 
