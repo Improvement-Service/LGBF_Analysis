@@ -84,7 +84,11 @@ shinyUI(navbarPage(id = "pageList",
              ),
              mainPanel(
                fluidRow(
-                 DT::dataTableOutput("tableDisp", width = "50%")
+                 splitLayout(
+                   cellWidths = c("40%", "60%"),
+                 div(DT::dataTableOutput("tableDisp"),style = "font-size:74%; line-height:40%"),
+                 plotOutput("boxDisp")
+                 )
                )
              )
         )

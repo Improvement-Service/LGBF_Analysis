@@ -161,7 +161,8 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
             )
   #generate tables and graphs
   output$tableDisp <- DT::renderDataTable({
-    dta <- filter(excl_Scotland, Title == input$indicator2Disp & Time %in% input$TSeriesDisp)[c(1,3,4,15)]
+    dta <- filter(excl_Scotland, `Local Authority` %in% input$LADisp & Title == input$indicator2Disp & Time %in% input$TSeriesDisp)[c(1,3,4,15)]
+    dta$Value <- round(dta$Value, 2)
     if(dta$`One is high` %in% "Yes"){
       brks <- quantile(dta$Value, probs = seq(0, 1, 0.25), na.rm = TRUE)
       clrs <- brewer.pal(length(brks) +1, "Blues")
@@ -174,15 +175,19 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
       txtclrs <- c("white", "black", "black")
     }
     dta <- spread(dta[c(1,2,3)], key = Time, value = Value)
-    tbl <- datatable(dta, extensions = "Scroller", rownames = FALSE, 
-                     options = list(pageLength = 32, scrollY = 700, dom = "t")) %>%
+    tbl <- datatable(dta, class = "row-border",extensions = c("Scroller", "FixedColumns"), rownames = FALSE, 
+                     options = list(pageLength = 32, scrollY = 700, dom = "t", 
+                  autoWidth = TRUE,
+                  scrollX = TRUE, fixedColumns = list(leftColumns = 1))) %>%
       formatStyle(names(dta)[2:ncol(dta)], color = styleInterval(txtbrks, txtclrs),
-                  backgroundColor = styleInterval(brks, clrs))
+                  backgroundColor = styleInterval(brks, clrs), lineHeight = "40%")
   })
   
   output$boxDisp <- renderPlot({
-    bpdta <- filter(excl_Scotland, Title == input$indicator2Disp & Time %in% input$TSeriesDisp)
-    
+    bpdta <- filter(excl_Scotland, `Local Authority` %in% input$LADisp & Title == input$indicator2Disp & Time %in% input$TSeriesDisp)
+    ggplot(data = bpdta, aes(x = Time, y = Value)) +
+      geom_boxplot() +
+      theme_bw()
   })
 
 
