@@ -52,5 +52,18 @@ shinyUI(navbarPage(id = "pageList",
            )
       )
     )
-  )
+  ),
+##new tab for By Council
+tabPanel("By Council",
+         wellPanel(selectInput("categoryCNCL", "Select Indicator Category", unique(excl_Scotland$Domain),
+                               selected = "Children's Services", width = "40%")),
+         sidebarPanel(
+           
+         ),
+         mainPanel(
+           
+         )
+         
+  
+)
 ))
