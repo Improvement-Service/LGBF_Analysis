@@ -162,6 +162,8 @@ MedFun <- reactive({
       
       output$CnclTbl <- renderDataTable({
         SelectedDtaCNCL <- SelectedDtaCNCL()
+        SelectedDtaCNCL <- select(SelectedDtaCNCL, -`Local Authority`, -Domain)
+        SelectedDtaCNCL <- arrange(SelectedDtaCNCL, Title, Time)
         datatable(SelectedDtaCNCL)
       })
     

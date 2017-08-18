@@ -65,8 +65,6 @@ tabPanel("By Council",
            div(style ="display: inline-block;vertical-align:top;width: 150px;",
                    uiOutput("seriesCNCL"))
                    ),
-         sidebarPanel(
-         ),
          mainPanel(
            DT::dataTableOutput("CnclTbl")
          )
