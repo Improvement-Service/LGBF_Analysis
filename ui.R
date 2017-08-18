@@ -73,7 +73,8 @@ shinyUI(navbarPage(id = "pageList",
                        uiOutput("indicatorDisp"))
                ), width = "100%"
              ),   
-             sidebarPanel(id = "sidPnl", style = "height:75vh;overflow-y:auto;",
+        fluidRow(
+             sidebarPanel(id = "sidPnl", style = "height:75vh;overflow-y:auto;width: 25vw; margin-right:1px; padding-right:1px",
                           h5("Select Local Authority"),
                           div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
                               checkboxGroupInput("LADisp", label = NA, unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority'))
@@ -82,8 +83,7 @@ shinyUI(navbarPage(id = "pageList",
                           radioButtons("FmlyGrpDisp", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
                           actionButton("FmlyGrp2Disp", "Update Family Group")
              ),
-             mainPanel(
-               fluidRow(
+             mainPanel(id = "mainDisp", style = "width:65vw; padding-left:1px; margin-left:1px",
                  splitLayout(
                    cellWidths = c("40%", "60%"),
                  div(DT::dataTableOutput("tableDisp"),style = "font-size:74%; line-height:40%"),
