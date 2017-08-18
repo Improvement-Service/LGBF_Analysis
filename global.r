@@ -2,6 +2,7 @@ library(shiny)
 library(tidyverse)
 library(plyr)
 library(shinythemes)
+library(DT)
 
 
 bnch_data <- read_csv("bnch_dta_macrosttest.csv")

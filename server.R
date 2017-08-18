@@ -141,6 +141,35 @@ MedFun <- reactive({
       DtaCNCL <- filter(excl_Scotland, `Local Authority` %in% input$LA_CNCL & Domain %in% input$categoryCNCL)
       checkboxGroupInput("TSeriesCNCL", "Select Time Series", unique(DtaCNCL$Time), selected = unique(DtaCNCL$Time)) 
     })
+    
+    MinVals <- ddply(excl_Scotland,.(Time,Title), summarize, Minimum = min(Value, na.rm = TRUE))
+    MaxVals <- ddply(excl_Scotland,.(Time, Title), summarize, Maximum = max(Value, na.rm = TRUE))
+    MedVals <- ddply(excl_Scotland,.(Time, Title), summarize, Median = median(Value, na.rm = TRUE))
+    excl_Scotland_subset <- select(excl_Scotland, `Local Authority`, Value, Time, Title, Domain)
+    SumStat <- left_join(excl_Scotland_subset, MinVals)
+    SumStat <- left_join(SumStat, MaxVals)
+    SumStat <- left_join(SumStat, MedVals )
+    Scotland_subset <- filter(bnch_data, `Local Authority` == "Scotland")
+    Scotland_subset <- select(Scotland_subset, Value, Time, Title, Domain)
+    colnames(Scotland_subset)[1] <- "Scotland Value"
+    SumStat <- left_join(SumStat, Scotland_subset)
+    SumStat <- SumStat[,c(1,5,4,3,2,6,7,8,9)]
+    
+    SelectedDtaCNCL <- reactive({
+      CNCLdta <- filter(SumStat, `Local Authority` %in% input$LA_CNCL & Domain %in% input$categoryCNCL & Time %in% input$TSeriesCNCL)
+    })
+    
+      
+      output$CnclTbl <- renderDataTable({
+        SelectedDtaCNCL <- SelectedDtaCNCL()
+        datatable(SelectedDtaCNCL)
+      })
+    
+    
+
+    
+    
+   
  })
 
 

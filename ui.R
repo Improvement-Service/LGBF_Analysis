@@ -68,7 +68,7 @@ tabPanel("By Council",
          sidebarPanel(
          ),
          mainPanel(
-           
+           DT::dataTableOutput("CnclTbl")
          )
          
   
