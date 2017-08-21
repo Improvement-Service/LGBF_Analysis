@@ -71,7 +71,7 @@ header = ##Some css
     tabPanel("Dispersion",
              wellPanel(
                div(class = "row", style = "padding-left:5px",
-                   div(class = "span6", style = "display:inline-block; width:40vw",
+                   div(class = "span6", style = "display:inline-block; width:40vw; padding-right:10px",
                        selectInput("categoryDisp", "Select Indicator Category", unique(excl_Scotland$Domain),
                                    selected = "Children's Services")
                    ),
@@ -114,6 +114,16 @@ header = ##Some css
                        uiOutput("indicatorTSD"))
                ), width = "100%"
              ),             
-      fluidRow()
+      fluidRow(column(3,
+                      wellPanel(style = "height:75vh;overflow-y:auto;",
+                        h5("Select Local Authority"),
+                        div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
+                         checkboxGroupInput("LATSD", label = NA, unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority'))
+                        ),
+                        uiOutput("seriesTSD"),
+                        radioButtons("FmlyGrpTSD", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
+                        actionButton("FmlyGrp2TSD", "Update Family Group")
+                      )
+                      ))
     )
 ))

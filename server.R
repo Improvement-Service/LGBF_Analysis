@@ -163,7 +163,7 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
   output$tableDisp <- DT::renderDataTable({
     dta <- filter(excl_Scotland, `Local Authority` %in% input$LADisp & Title == input$indicator2Disp & Time %in% input$TSeriesDisp)[c(1,3,4,15)]
     dta$Value <- round(dta$Value, 2)
-    if(dta$`One is high` %in% "Yes"){
+    if(dta$`One is high` == "Yes"){
       brks <- quantile(dta$Value, probs = seq(0, 1, 0.25), na.rm = TRUE)
       clrs <- brewer.pal(length(brks) +1, "Blues")
       txtbrks <- quantile(dta$Value, probs = c(0,0.75), na.rm = TRUE)
@@ -194,5 +194,21 @@ output$indicatorTSD <- renderUI({
     bnch_data_subset <- filter(excl_Scotland, Domain == input$categoryTSD)
     selectInput("indicator2TSD", "Please Select Indicator", sort(unique(bnch_data_subset$Title)))
   })
+output$seriesDisp <- renderUI({
+    bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2TSD)
+    checkboxGroupInput("TSeriesTSD", "Select Time Series", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
+  })
   
+observeEvent(eventExpr = input$FmlyGrp2TSD,
+               handlerExpr = {
+                 updateCheckboxGroupInput(session = session,
+                                   inputId = "LATSD",
+                                  selected = if(input$FmlyGrpTSD == "All"){
+                                            unique(excl_Scotland$`Local Authority`)} 
+                                          else{
+                                            unique(filter(excl_Scotland, `Family group (People)` %in% input$FmlyGrpTSD))[[1]] 
+                                          }
+                 )
+               }
+  )
 })
