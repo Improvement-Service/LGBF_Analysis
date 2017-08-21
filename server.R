@@ -177,7 +177,6 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
     dta <- spread(dta[c(1,2,3)], key = Time, value = Value)
     tbl <- datatable(dta, class = "row-border",extensions = c("Scroller", "FixedColumns"), rownames = FALSE, 
                      options = list(pageLength = 32, scrollY = 700, dom = "t", 
-                  autoWidth = TRUE,
                   scrollX = TRUE, fixedColumns = list(leftColumns = 1))) %>%
       formatStyle(names(dta)[2:ncol(dta)], color = styleInterval(txtbrks, txtclrs),
                   backgroundColor = styleInterval(brks, clrs), lineHeight = "40%")

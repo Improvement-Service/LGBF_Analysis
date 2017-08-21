@@ -64,7 +64,7 @@ shinyUI(navbarPage(id = "pageList",
 #New Tab for Dispersion ====================================
     tabPanel("Dispersion",
              wellPanel(
-               div(class = "row",
+               div(class = "row", style = "padding-left:5px",
                    div(class = "span6", style = "display:inline-block; width:40vw",
                        selectInput("categoryDisp", "Select Indicator Category", unique(excl_Scotland$Domain),
                                    selected = "Children's Services")
