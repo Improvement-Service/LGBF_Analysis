@@ -172,8 +172,10 @@ MedFun <- reactive({
         SelectedDtaCNCL <- SelectedDtaCNCL()
         SelectedDtaCNCL <- select(SelectedDtaCNCL, -`Local Authority`, -Domain)
         SelectedDtaCNCL <- arrange(SelectedDtaCNCL, Indicator, Time)
-        Table1 <- datatable(SelectedDtaCNCL)
-       formatRound(Table1, c(3:7), digits = 1)
+     
+       datatable(SelectedDtaCNCL) %>%
+       formatRound(c(3:7), digits = 1)
+       
       })
       
       
