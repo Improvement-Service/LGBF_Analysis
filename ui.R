@@ -5,7 +5,7 @@ shinyUI(navbarPage(id = "pageList",
   theme = shinytheme("simplex"),
   tabPanel("Something",
     wellPanel(selectInput("category", "Select Indicator Category", unique(excl_Scotland$Domain),
-                          selected = "Children's Services", width = "40%"),
+                          selected = "Adult Social Care", width = "40%"),
                   uiOutput("indicator"), width ="100%"),
     sidebarPanel(id = "sidPnl", style = "height:55vh;overflow-y:auto;",
       checkboxGroupInput("LA", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority')),
@@ -29,7 +29,7 @@ shinyUI(navbarPage(id = "pageList",
         div(class = "row",
           div(class = "span6", style = "display:inline-block; width:40vw",
                    selectInput("categoryYr", "Select Indicator Category", unique(excl_Scotland$Domain),
-                        selected = "Children's Services")
+                        selected = "Adult Social Care")
                    ),
           div(class = "span6", style = "display:inline-block; width:40vw",
                       uiOutput("indicatorYr"))
@@ -59,13 +59,14 @@ tabPanel("By Council",
           wellPanel(
             div(style = "display: inline-block;vertical-align:top;width: 150px;",
            selectInput("categoryCNCL", "Select Indicator Category", unique(excl_Scotland$Domain),
-                               selected = "Children's Services")),
+                               selected = "Adult Social Care")),
            div(style ="display: inline-block;vertical-align:top;width: 150px;",
                    selectInput("LA_CNCL", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = "Aberdeen City")),
            div(style ="display: inline-block;vertical-align:top;width: 150px;",
                    uiOutput("seriesCNCL"))
                    ),
          mainPanel(
+           uiOutput("TableTitle"),
            DT::dataTableOutput("CnclTbl")
          )
          

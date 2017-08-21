@@ -137,34 +137,47 @@ MedFun <- reactive({
     )
     
 ## By Council Tab
+  #create checkbox for selecting year, only shows years that are available for the domain selected
     output$seriesCNCL <- renderUI({
       DtaCNCL <- filter(excl_Scotland, `Local Authority` %in% input$LA_CNCL & Domain %in% input$categoryCNCL)
       checkboxGroupInput("TSeriesCNCL", "Select Time Series", unique(DtaCNCL$Time), selected = unique(DtaCNCL$Time)) 
     })
-    
-    MinVals <- ddply(excl_Scotland,.(Time,Title), summarize, Minimum = min(Value, na.rm = TRUE))
-    MaxVals <- ddply(excl_Scotland,.(Time, Title), summarize, Maximum = max(Value, na.rm = TRUE))
-    MedVals <- ddply(excl_Scotland,.(Time, Title), summarize, Median = median(Value, na.rm = TRUE))
+  #calculate median, minimum and maximum values for each indicator for each year
+    MinVals <- ddply(excl_Scotland,.(Time,Title), summarize, Minimum = min(round(Value,1), na.rm = TRUE))
+    MaxVals <- ddply(excl_Scotland,.(Time, Title), summarize, Maximum = max(round(Value,1), na.rm = TRUE))
+    MedVals <- ddply(excl_Scotland,.(Time, Title), summarize, Median = median(round(Value,1), na.rm = TRUE))
+  #select only the columns of the data needed
     excl_Scotland_subset <- select(excl_Scotland, `Local Authority`, Value, Time, Title, Domain)
+  #add the min, max and med values to the dataset
     SumStat <- left_join(excl_Scotland_subset, MinVals)
     SumStat <- left_join(SumStat, MaxVals)
     SumStat <- left_join(SumStat, MedVals )
+  #filter previous data to show only Scotland Values, add these to the new dataframe as a new column "Scotland Values"
     Scotland_subset <- filter(bnch_data, `Local Authority` == "Scotland")
     Scotland_subset <- select(Scotland_subset, Value, Time, Title, Domain)
     colnames(Scotland_subset)[1] <- "Scotland Value"
     SumStat <- left_join(SumStat, Scotland_subset)
+  #order columns and round values to one decimal place
     SumStat <- SumStat[,c(1,5,4,3,2,6,7,8,9)]
-    
+    SumStat$Value <- format(round(SumStat$Value, 1))
+    SumStat$`Scotland Value` <- format(round(SumStat$`Scotland Value`, 1))
+  
+  #create a reactive function to filter the new data set to only show what is selected for local authority and domain  
     SelectedDtaCNCL <- reactive({
       CNCLdta <- filter(SumStat, `Local Authority` %in% input$LA_CNCL & Domain %in% input$categoryCNCL & Time %in% input$TSeriesCNCL)
     })
     
-      
+   #create a table which displays all of the values   
       output$CnclTbl <- renderDataTable({
         SelectedDtaCNCL <- SelectedDtaCNCL()
         SelectedDtaCNCL <- select(SelectedDtaCNCL, -`Local Authority`, -Domain)
         SelectedDtaCNCL <- arrange(SelectedDtaCNCL, Title, Time)
         datatable(SelectedDtaCNCL)
+      })
+      
+    #add a title above the table
+      output$TableTitle <- renderText({
+        paste(input$LA_CNCL,":",input$categoryCNCL)
       })
     
     
