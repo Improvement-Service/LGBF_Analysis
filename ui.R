@@ -3,6 +3,12 @@ shinyUI(navbarPage(id = "pageList",
   title = "Test LGBF Tool", 
 #Can change the theme - see shinyTheme package  
   theme = shinytheme("simplex"),
+header = ##Some css
+  tags$head(tags$style(
+ "#plot1 {height:75vh !important}",
+ "#Year-on-Year-Plot {height:75vh !important}",
+ "#boxDisp {height:75vh !important}"
+)),
   tabPanel("Something",
     wellPanel(
       div(class = "row",
