@@ -101,5 +101,19 @@ header = ##Some css
                )
              )
            )
-        )
+        ),
+#New Tab for Time Series Data
+    tabPanel("Time Series Data",
+             wellPanel(
+               div(class = "row", style = "padding-left:5px",
+                   div(class = "span6", style = "display:inline-block; width:40vw",
+                       selectInput("categoryTSD", "Select Indicator Category", unique(excl_Scotland$Domain),
+                                   selected = "Children's Services")
+                   ),
+                   div(class = "span6", style = "display:inline-block; width:40vw",
+                       uiOutput("indicatorTSD"))
+               ), width = "100%"
+             ),             
+      fluidRow()
+    )
 ))

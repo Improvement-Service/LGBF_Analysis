@@ -189,5 +189,10 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
       theme_bw()
   })
 
-
+##Create outputs for Tme Series Page ========================
+output$indicatorTSD <- renderUI({
+    bnch_data_subset <- filter(excl_Scotland, Domain == input$categoryTSD)
+    selectInput("indicator2TSD", "Please Select Indicator", sort(unique(bnch_data_subset$Title)))
+  })
+  
 })
