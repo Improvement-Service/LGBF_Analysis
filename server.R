@@ -194,7 +194,7 @@ output$indicatorTSD <- renderUI({
     bnch_data_subset <- filter(excl_Scotland, Domain == input$categoryTSD)
     selectInput("indicator2TSD", "Please Select Indicator", sort(unique(bnch_data_subset$Title)))
   })
-output$seriesDisp <- renderUI({
+output$seriesTSD <- renderUI({
     bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2TSD)
     checkboxGroupInput("TSeriesTSD", "Select Time Series", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
   })
@@ -211,4 +211,24 @@ observeEvent(eventExpr = input$FmlyGrp2TSD,
                  )
                }
   )
+TSDData <- reactive({
+  dta <- filter(excl_Scotland, `Local Authority` %in% input$LATSD & Title == input$indicator2TSD & Time %in% input$TSeriesTSD)[c(1,3:4)]
+  })
+output$TSDTable1 <- renderDataTable({
+  dta <- TSDData()[2:3]
+  p <- dta %>% group_by(Time) %>%
+    summarise_at(., vars(Value), funs(mean, min, max, median, sd), na.rm =TRUE) %>%
+    mutate_at(., vars(mean:sd), funs(round), digits = 2)
+  datatable(p,  extensions = "Scroller",
+            options = list(pageLength = 4, scrollY = 100, dom = "t"))
+  })
+output$TSDTable2 <- renderDataTable({
+  dta <- TSDData()
+#calculate ranks by year
+  dta$rank <- ave(dta$Value, dta$Time, FUN = function(x) rank(-x, ties.method = "first"))
+  dta$rankMov<- ave(dta$rank, dta$`Local Authority`, FUN = function(x) {x - lag(x,1)})
+  dta$valMov<- ave(dta$Value, dta$`Local Authority`, FUN = function(x) {x - lag(x,1)})
+  dta <- spread(dta)
+  })
+
 })

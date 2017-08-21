@@ -124,6 +124,8 @@ header = ##Some css
                         radioButtons("FmlyGrpTSD", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
                         actionButton("FmlyGrp2TSD", "Update Family Group")
                       )
-                      ))
+                      ),
+               column(9,
+                      dataTableOutput("TSDTable1")))
     )
 ))
