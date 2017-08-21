@@ -3,10 +3,26 @@ shinyUI(navbarPage(id = "pageList",
   title = "Test LGBF Tool", 
 #Can change the theme - see shinyTheme package  
   theme = shinytheme("simplex"),
-  tabPanel("Something",
-    wellPanel(selectInput("category", "Select Indicator Category", unique(excl_Scotland$Domain),
-                          selected = "Adult Social Care", width = "40%"),
-                  uiOutput("indicator"), width ="100%"),
+header = ##Some css
+  tags$head(tags$style(
+    "#plot1 {height:75vh !important}",
+    "#Year-on-Year-Plot {height:75vh !important}",
+    "#CnclTbl {height:75vh !important}"
+  )),
+  tabPanel("By Indicator",
+    wellPanel(
+      fluidPage(
+        fluidRow(
+          column(6,
+      selectInput("category", "Select Indicator Category", unique(excl_Scotland$Domain),
+                          selected = "Adult Social Care")
+      ),
+      column(6,
+                  uiOutput("indicator")
+        )
+      )
+      )
+      ),
     sidebarPanel(id = "sidPnl", style = "height:55vh;overflow-y:auto;",
       checkboxGroupInput("LA", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority')),
       uiOutput("series"),
@@ -14,10 +30,12 @@ shinyUI(navbarPage(id = "pageList",
       actionButton("FmlyGrp2", "Update Family Group")
     ),
     mainPanel(
-      uiOutput("PlotTitle"),
+      tags$b(uiOutput("PlotTitle")),
       plotOutput("plot1")
     )
-  ), ##New tab for year on year changes
+  ), 
+
+##New tab for year on year changes
   tabPanel("Year-on-Year Change",
 #some css
   tags$head(tags$style(
@@ -55,21 +73,29 @@ shinyUI(navbarPage(id = "pageList",
   ),
 ##new tab for By Council
 tabPanel("By Council",
-         fluidPage(
           wellPanel(
-            div(style = "display: inline-block;vertical-align:top;width: 150px;",
+            fluidPage(
+              fluidRow(
+                column(6,
            selectInput("categoryCNCL", "Select Indicator Category", unique(excl_Scotland$Domain),
-                               selected = "Adult Social Care")),
-           div(style ="display: inline-block;vertical-align:top;width: 150px;",
-                   selectInput("LA_CNCL", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = "Aberdeen City")),
-           div(style ="display: inline-block;vertical-align:top;width: 150px;",
-                   uiOutput("seriesCNCL"))
-                   ),
-         mainPanel(
-           uiOutput("TableTitle"),
+                               selected = "Adult Social Care", width = "100%")
+           ),
+           column(6,
+                   selectInput("LA_CNCL", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = "Aberdeen City", width = "100%")
+           ),
+           column(12,
+                   uiOutput("seriesCNCL")
+                   )))),
+           fluidPage(id = "MnPnl", style = "height:55vh;overflow-y:auto;",
+             fluidRow(
+               column(4,
+           tags$b(uiOutput("TableTitle"))
+           ),
+           column(12,
            DT::dataTableOutput("CnclTbl")
-         )
+               )
+         ))
          
   
-))
-))
+
+)))
