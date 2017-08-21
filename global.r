@@ -3,6 +3,7 @@ library(tidyverse)
 library(plyr)
 library(shinythemes)
 library(RColorBrewer)
+library(DT)
 
 
 bnch_data <- read_csv("bnch_dta_macrosttest.csv")
