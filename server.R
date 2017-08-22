@@ -94,6 +94,7 @@ MedFun <- reactive({
       guides(fill = FALSE)
             
   })
+
     
 #Create Ui Outputs for year on year section  
     observeEvent(eventExpr = input$LAYrAll,
@@ -115,13 +116,16 @@ MedFun <- reactive({
     })
     
   
+
+#Create Ui Outputs for year on year section======================================    
+
     output$indicatorYr <- renderUI({
       bnch_data_subset <- filter(bnch_data, Domain == input$categoryYr)
-      selectInput("indicatorYrSrv", "Please Select Indicator", unique(bnch_data_subset$Title))
+      selectInput("indicatorYrSrv", "Please Select Indicator", sort(unique(bnch_data_subset$Title)))
     })
     
     bnch_data_indiYR <- reactive({
-      dta <- filter(excl_Scotland, Title == input$indicatorYrSrv)
+      dta <- filter(bnch_data, Title == input$indicatorYrSrv)
     })
     
     output$baseYr <- renderUI({
@@ -200,6 +204,7 @@ MedFun <- reactive({
                  }
     )
     
+
 ## By Council Tab
   #create checkbox for selecting year, only shows years that are available for the domain selected
     output$seriesCNCL <- renderUI({
@@ -282,7 +287,108 @@ MedFun <- reactive({
       output$TableTitle <- renderText({
         paste(input$LA_CNCL,":",input$categoryCNCL)
       })
- })
+ 
 
 
+##Create outputs for Dispersion Page ========================
+output$indicatorDisp <- renderUI({
+  bnch_data_subset <- filter(excl_Scotland, Domain == input$categoryDisp)
+  selectInput("indicator2Disp", "Please Select Indicator", sort(unique(bnch_data_subset$Title)))
+})
+output$seriesDisp <- renderUI({
+  bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2Disp)
+  checkboxGroupInput("TSeriesDisp", "Select Time Series", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
+})
 
+observeEvent(eventExpr = input$FmlyGrp2Disp,
+             handlerExpr = {
+               updateCheckboxGroupInput(session = session,
+                                        inputId = "LADisp",
+                                        selected = if(input$FmlyGrpDisp == "All"){
+                                          unique(excl_Scotland$`Local Authority`)} 
+                                        else{
+                                          unique(filter(excl_Scotland, `Family group (People)` %in% input$FmlyGrpDisp))[[1]] 
+                                        }
+                            )
+                  }
+            )
+  #generate tables and graphs
+  output$tableDisp <- DT::renderDataTable({
+    dta <- filter(excl_Scotland, `Local Authority` %in% input$LADisp & Title == input$indicator2Disp & Time %in% input$TSeriesDisp)[c(1,3,4,15)]
+    dta$Value <- round(dta$Value, 2)
+    if(dta$`One is high` == "Yes"){
+      brks <- quantile(dta$Value, probs = seq(0, 1, 0.25), na.rm = TRUE)
+      clrs <- brewer.pal(length(brks) +1, "Blues")
+      txtbrks <- quantile(dta$Value, probs = c(0,0.75), na.rm = TRUE)
+      txtclrs <- c("black", "black", "white")
+    }else{
+      brks <- quantile(dta$Value, probs = seq(0, 1, 0.25), na.rm = TRUE)
+      clrs <- rev(brewer.pal(length(brks) +1, "Blues"))
+      txtbrks <- quantile(dta$Value, probs = c(0,0.75), na.rm = TRUE)
+      txtclrs <- c("white", "black", "black")
+    }
+    dta <- spread(dta[c(1,2,3)], key = Time, value = Value)
+    tbl <- datatable(dta, class = "row-border",extensions = c("Scroller", "FixedColumns"), rownames = FALSE, 
+                     options = list(pageLength = 32, scrollY = 700, dom = "t", 
+                  scrollX = TRUE, fixedColumns = list(leftColumns = 1))) %>%
+      formatStyle(names(dta)[2:ncol(dta)], color = styleInterval(txtbrks, txtclrs),
+                  backgroundColor = styleInterval(brks, clrs), lineHeight = "40%")
+  })
+  
+  output$boxDisp <- renderPlot({
+    bpdta <- filter(excl_Scotland, `Local Authority` %in% input$LADisp & Title == input$indicator2Disp & Time %in% input$TSeriesDisp)
+    ggplot(data = bpdta, aes(x = Time, y = Value)) +
+      geom_boxplot() +
+      theme_bw()
+  })
+
+##Create outputs for Tme Series Page ========================
+output$indicatorTSD <- renderUI({
+    bnch_data_subset <- filter(excl_Scotland, Domain == input$categoryTSD)
+    selectInput("indicator2TSD", "Please Select Indicator", sort(unique(bnch_data_subset$Title)))
+  })
+output$seriesTSD <- renderUI({
+    bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2TSD)
+    checkboxGroupInput("TSeriesTSD", "Select Time Series", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
+  })
+  
+observeEvent(eventExpr = input$FmlyGrp2TSD,
+               handlerExpr = {
+                 updateCheckboxGroupInput(session = session,
+                                   inputId = "LATSD",
+                                  selected = if(input$FmlyGrpTSD == "All"){
+                                            unique(excl_Scotland$`Local Authority`)} 
+                                          else{
+                                            unique(filter(excl_Scotland, `Family group (People)` %in% input$FmlyGrpTSD))[[1]] 
+                                          }
+                 )
+               }
+  )
+TSDData <- reactive({
+  dta <- filter(excl_Scotland, `Local Authority` %in% input$LATSD & Title == input$indicator2TSD & Time %in% input$TSeriesTSD)[c(1,3:4, 15)]
+  })
+output$TSDTable1 <- renderDataTable({
+  dta <- TSDData()[2:3]
+  p <- dta %>% group_by(Time) %>%
+    summarise_at(., vars(Value), funs(mean, min, max, median, sd), na.rm =TRUE) %>%
+    mutate_at(., vars(mean:sd), funs(round), digits = 2)
+  datatable(p,  extensions = "Scroller",
+            options = list(pageLength = 4, scrollY = 100, dom = "t"))
+  })
+output$TSDTable2 <- renderDataTable({
+  dta <- TSDData()
+  dta$Value <- round(dta$Value,2)
+#calculate ranks by year
+  if(dta$`One is high` == "no"){
+  dta$rank <- ave(dta$Value, dta$Time, FUN = function(x) rank(x, ties.method = "first"))
+  } else{
+  dta$rank <- ave(dta$Value, dta$Time, FUN = function(x) rank(-x, ties.method = "first"))
+  }
+  dta$rankMov<- ave(dta$rank, dta$`Local Authority`, FUN = function(x) {x - lag(x,1)})
+  dta$valMov<- round(ave(dta$Value, dta$`Local Authority`, FUN = function(x) {x - lag(x,1)}),2)
+  dta <- dcast(setDT(dta), `Local Authority`~Time, value.var = c("Value","valMov","rank", "rankMov"))
+  datatable(dta, extensions = "Scroller", options = list(pageLength = 32, scrollX = TRUE,
+                          scrollY = 400, dom = "t"))
+  })
+
+})
