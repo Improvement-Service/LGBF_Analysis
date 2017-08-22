@@ -212,7 +212,7 @@ observeEvent(eventExpr = input$FmlyGrp2TSD,
                }
   )
 TSDData <- reactive({
-  dta <- filter(excl_Scotland, `Local Authority` %in% input$LATSD & Title == input$indicator2TSD & Time %in% input$TSeriesTSD)[c(1,3:4)]
+  dta <- filter(excl_Scotland, `Local Authority` %in% input$LATSD & Title == input$indicator2TSD & Time %in% input$TSeriesTSD)[c(1,3:4, 15)]
   })
 output$TSDTable1 <- renderDataTable({
   dta <- TSDData()[2:3]
@@ -224,11 +224,18 @@ output$TSDTable1 <- renderDataTable({
   })
 output$TSDTable2 <- renderDataTable({
   dta <- TSDData()
+  dta$Value <- round(dta$Value,2)
 #calculate ranks by year
+  if(dta$`One is high` == "no"){
+  dta$rank <- ave(dta$Value, dta$Time, FUN = function(x) rank(x, ties.method = "first"))
+  } else{
   dta$rank <- ave(dta$Value, dta$Time, FUN = function(x) rank(-x, ties.method = "first"))
+  }
   dta$rankMov<- ave(dta$rank, dta$`Local Authority`, FUN = function(x) {x - lag(x,1)})
-  dta$valMov<- ave(dta$Value, dta$`Local Authority`, FUN = function(x) {x - lag(x,1)})
-  dta <- spread(dta)
+  dta$valMov<- round(ave(dta$Value, dta$`Local Authority`, FUN = function(x) {x - lag(x,1)}),2)
+  dta <- dcast(setDT(dta), `Local Authority`~Time, value.var = c("Value","valMov","rank", "rankMov"))
+  datatable(dta, extensions = "Scroller", options = list(pageLength = 32, scrollX = TRUE,
+                          scrollY = 400, dom = "t"))
   })
 
 })

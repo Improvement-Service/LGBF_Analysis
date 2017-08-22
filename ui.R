@@ -126,6 +126,7 @@ header = ##Some css
                       )
                       ),
                column(9,
-                      dataTableOutput("TSDTable1")))
+                      dataTableOutput("TSDTable1"),
+                      dataTableOutput("TSDTable2")))
     )
 ))

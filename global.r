@@ -4,6 +4,7 @@ library(plyr)
 library(shinythemes)
 library(RColorBrewer)
 library(DT)
+library(data.table)
 
 
 bnch_data <- read_csv("bnch_dta_macrosttest.csv")
