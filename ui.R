@@ -26,7 +26,7 @@ header = ##Some css
     sidebarPanel(id = "sidPnl", style = "height:55vh;overflow-y:auto;",
       checkboxGroupInput("LA", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority')),
       uiOutput("series"),
-      radioButtons("FmlyGrp", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
+      radioButtons("FmlyGrp", "Select Family Group", c("All",1,2,3,4), inline = TRUE),
       actionButton("FmlyGrp2", "Update Family Group")
     ),
     mainPanel(
@@ -61,7 +61,7 @@ header = ##Some css
                        ),
                          uiOutput("baseYr"),
                         uiOutput("compYr"),
-                        radioButtons("FmlyGrpYr", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
+                        radioButtons("FmlyGrpYr", "Select Family Group", c("All",1,2,3,4), inline = TRUE),
                         actionButton("FmlyGrp2Yr", "Update Family Group"),
                         checkboxInput("RelVal", "Show Percentage Change", value = FALSE)
         ),

@@ -178,17 +178,10 @@ MedFun <- reactive({
        
       })
       
-      
     #add a title above the table
       output$TableTitle <- renderText({
         paste(input$LA_CNCL,":",input$categoryCNCL)
       })
-    
-    
-
-    
-    
-   
  })
 
 
