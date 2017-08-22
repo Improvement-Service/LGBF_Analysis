@@ -274,9 +274,8 @@ MedFun <- reactive({
         SelectedDtaCNCL <- select(SelectedDtaCNCL, -Local.Authority, -Domain)
         SelectedDtaCNCL <- arrange(SelectedDtaCNCL, Indicator, Time)
      
-       datatable(SelectedDtaCNCL) %>%
+       datatable(SelectedDtaCNCL, extensions = "Scroller", options = list(pageLength = 32, scrollY = 400, dom = "t")) %>%
        formatRound(c(3:7), digits = 1)
-       
       })
       
     #add a title above the table

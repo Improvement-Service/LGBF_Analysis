@@ -23,8 +23,10 @@ header = ##Some css
       )
       )
       ),
-    sidebarPanel(id = "sidPnl", style = "height:55vh;overflow-y:auto;",
-      checkboxGroupInput("LA", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$`Local Authority`)),
+    sidebarPanel(id = "sidPnl", style = "height:75vh;overflow-y:auto;",
+      h5("Select Local Authority"),
+      div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
+        checkboxGroupInput("LA", label = NA, unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$`Local Authority`))),
       actionButton("LAAll", "Select All"),
       actionButton("LAClear", "Clear All"),
       uiOutput("series"),
@@ -100,7 +102,7 @@ tabPanel("By Council",
                   actionButton("SeriesCNCLClear", "Clear All")
            )
            ))),
-           fluidPage(id = "MnPnl", style = "height:55vh;overflow-y:auto;",
+           fluidPage(
              fluidRow(
                column(4,
            tags$b(uiOutput("TableTitle"))
