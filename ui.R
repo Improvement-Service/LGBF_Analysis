@@ -95,10 +95,10 @@ tabPanel("By Council",
                    uiOutput("seriesCNCL")
                   
            ),
-           column(2,
+           column(1,
                   actionButton("SeriesCNCLALL", "Select All")
            ),
-           column(2,
+           column(1,
                   actionButton("SeriesCNCLClear", "Clear All")
            )
            ))),
