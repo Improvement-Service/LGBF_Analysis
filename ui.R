@@ -28,6 +28,8 @@ header = ##Some css
       actionButton("LAAll", "Select All"),
       actionButton("LAClear", "Clear All"),
       uiOutput("series"),
+      actionButton("SeriesAll", "Select All"),
+      actionButton("SeriesClear", "Clear All"),
       radioButtons("FmlyGrp", "Select Family Group", c("All",1,2,3,4), inline = TRUE),
       actionButton("FmlyGrp2", "Update Family Group")
     ),
@@ -88,7 +90,15 @@ tabPanel("By Council",
            ),
            column(12,
                    uiOutput("seriesCNCL")
-                   )))),
+                  
+           ),
+           column(2,
+                  actionButton("SeriesCNCLALL", "Select All")
+           ),
+           column(2,
+                  actionButton("SeriesCNCLClear", "Clear All")
+           )
+           ))),
            fluidPage(id = "MnPnl", style = "height:55vh;overflow-y:auto;",
              fluidRow(
                column(4,

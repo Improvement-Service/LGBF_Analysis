@@ -1,5 +1,6 @@
 shinyServer(function(input, output, session) {
- 
+
+ #create reactive input that updates local authoriy to select all or clear all  
    observeEvent(eventExpr = input$LAAll,
                handlerExpr = {
                  updateCheckboxGroupInput(session = session,
@@ -15,7 +16,6 @@ shinyServer(function(input, output, session) {
                                inputId = "LA",
                                selected = character(0))
     }
-      
   })
   
             
@@ -24,10 +24,35 @@ shinyServer(function(input, output, session) {
     selectInput("indicator2", "Please Select Indicator", unique(bnch_data_subset$Title), width = "100%")
     })
   
-  output$series <- renderUI({
+ output$series <- renderUI({
     bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2)
-    checkboxGroupInput("TSeries", "Select Time Series", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
+    checkboxGroupInput("TSeries", "Select Time Series", unique(bnch_data_indi$Time), selected = NULL) 
  })
+
+#create a reactive function to store time series choices available    
+ TDta <- reactive({
+   dta <- filter(excl_Scotland, Title == input$indicator2)
+   TChoices <- unique(dta$Time)
+ })   
+
+#create buttons to select all or clear all in time series
+  observeEvent(eventExpr = input$SeriesAll,
+               handlerExpr = {
+                 updateCheckboxGroupInput(session = session,
+                                          inputId = "TSeries",
+                                          selected = TDta())
+               }
+  )
+  
+  observe({
+    if(input$SeriesClear >0){
+      updateCheckboxGroupInput(session = session, 
+                               inputId = "TSeries",
+                               selected = character(0))
+    }
+    
+  }) 
+  
   
   observeEvent(eventExpr = input$FmlyGrp2,
                handlerExpr = {
@@ -179,8 +204,37 @@ MedFun <- reactive({
   #create checkbox for selecting year, only shows years that are available for the domain selected
     output$seriesCNCL <- renderUI({
       DtaCNCL <- filter(excl_Scotland, `Local Authority` %in% input$LA_CNCL & Domain %in% input$categoryCNCL)
-      checkboxGroupInput("TSeriesCNCL", "Select Time Series", unique(DtaCNCL$Time), selected = unique(DtaCNCL$Time), inline = TRUE) 
+      checkboxGroupInput("TSeriesCNCL", "Select Time Series", unique(DtaCNCL$Time), selected = NULL, inline = TRUE) 
     })
+    
+    #create a reactive function to store time series choices available    
+   TDtaCNCL <- reactive({
+     dtaCNCL <- filter(excl_Scotland, `Local Authority` %in% input$LA_CNCL & Domain %in% input$categoryCNCL)
+      TChoicesCNCL <- unique(dtaCNCL$Time)
+    })   
+    
+    #create buttons to select all or clear all in time series
+    observeEvent(eventExpr = input$SeriesCNCLALL,
+                 handlerExpr = {
+                   updateCheckboxGroupInput(session = session,
+                                            inputId = "TSeriesCNCL",
+                                            selected = TDtaCNCL())
+                 }
+    )
+    
+    observe({
+      if(input$SeriesCNCLClear >0){
+        updateCheckboxGroupInput(session = session, 
+                                 inputId = "TSeriesCNCL",
+                                 selected = character(0))
+      }
+      
+    }) 
+    
+    
+    
+    
+    
   #calculate median, minimum and maximum values for each indicator for each year
     StatVals <- ddply(excl_Scotland,. (Time, Title), transform, Minimum = min(Value, na.rm = TRUE),
                       Maximum = max(Value, na.rm = TRUE), Median = median(Value, na.rm = TRUE))
