@@ -24,7 +24,9 @@ header = ##Some css
       )
       ),
     sidebarPanel(id = "sidPnl", style = "height:55vh;overflow-y:auto;",
-      checkboxGroupInput("LA", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority')),
+      checkboxGroupInput("LA", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = NULL),
+      actionButton("LAAll", "Select All"),
+      actionButton("LAClear", "Clear All"),
       uiOutput("series"),
       radioButtons("FmlyGrp", "Select Family Group", c("All",1,2,3,4), inline = TRUE),
       actionButton("FmlyGrp2", "Update Family Group")
@@ -57,9 +59,9 @@ header = ##Some css
           sidebarPanel(id = "sidPnl", style = "height:55vh;overflow-y:auto;",
                        h5("Select Local Authority"),
                        div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
-                         checkboxGroupInput("LAYr", label = NA, unique(bnch_data$`Local Authority`), selected = unique(bnch_data$'Local Authority'))
-                       ),
-                         uiOutput("baseYr"),
+                         checkboxGroupInput("LAYr", label = NA, unique(bnch_data$`Local Authority`), selected = unique(bnch_data$`Local Authority`))),
+                       
+                        uiOutput("baseYr"),
                         uiOutput("compYr"),
                         radioButtons("FmlyGrpYr", "Select Family Group", c("All",1,2,3,4), inline = TRUE),
                         actionButton("FmlyGrp2Yr", "Update Family Group"),

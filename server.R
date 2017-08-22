@@ -1,5 +1,24 @@
 shinyServer(function(input, output, session) {
+ 
+   observeEvent(eventExpr = input$LAAll,
+               handlerExpr = {
+                 updateCheckboxGroupInput(session = session,
+                                          inputId = "LA",
+                                          selected = unique(excl_Scotland$`Local Authority`)
+                 )
+               }
+  )
   
+  observe({
+    if(input$LAClear >0){
+      updateCheckboxGroupInput(session = session, 
+                               inputId = "LA",
+                               selected = character(0))
+    }
+      
+  })
+  
+            
   output$indicator <- renderUI({
     bnch_data_subset <- filter(excl_Scotland, Domain == input$category)
     selectInput("indicator2", "Please Select Indicator", unique(bnch_data_subset$Title), width = "100%")
@@ -50,6 +69,7 @@ MedFun <- reactive({
       guides(fill = FALSE)
             
   })
+    
 #Create Ui Outputs for year on year section    
     output$indicatorYr <- renderUI({
       bnch_data_subset <- filter(bnch_data, Domain == input$categoryYr)
