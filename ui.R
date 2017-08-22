@@ -59,8 +59,9 @@ header = ##Some css
           sidebarPanel(id = "sidPnl", style = "height:55vh;overflow-y:auto;",
                        h5("Select Local Authority"),
                        div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
-                         checkboxGroupInput("LAYr", label = NA, unique(bnch_data$`Local Authority`), selected = unique(bnch_data$`Local Authority`))),
-                       
+                         checkboxGroupInput("LAYr", label = NA, unique(bnch_data$`Local Authority`), selected = NULL)),
+                        actionButton("LAYrAll", "Select All"),
+                        actionButton("LAYrClear", "Clear All"),
                         uiOutput("baseYr"),
                         uiOutput("compYr"),
                         radioButtons("FmlyGrpYr", "Select Family Group", c("All",1,2,3,4), inline = TRUE),

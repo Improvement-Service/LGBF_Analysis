@@ -70,7 +70,26 @@ MedFun <- reactive({
             
   })
     
-#Create Ui Outputs for year on year section    
+#Create Ui Outputs for year on year section  
+    observeEvent(eventExpr = input$LAYrAll,
+                 handlerExpr = {
+                   updateCheckboxGroupInput(session = session,
+                                            inputId = "LAYr",
+                                            selected = unique(bnch_data$`Local Authority`)
+                   )
+                 }
+    )
+    
+    observe({
+      if(input$LAYrClear >0){
+        updateCheckboxGroupInput(session = session, 
+                                 inputId = "LAYr",
+                                 selected = character(0))
+      }
+      
+    })
+    
+  
     output$indicatorYr <- renderUI({
       bnch_data_subset <- filter(bnch_data, Domain == input$categoryYr)
       selectInput("indicatorYrSrv", "Please Select Indicator", unique(bnch_data_subset$Title))
