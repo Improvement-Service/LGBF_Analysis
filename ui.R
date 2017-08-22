@@ -47,13 +47,14 @@ header = ##Some css
      )),
     fluidPage(
       wellPanel(
-        div(class = "row",
-          div(class = "span6", style = "display:inline-block; width:40vw",
-                   selectInput("categoryYr", "Select Indicator Category", unique(excl_Scotland$Domain),
+        fluidRow(
+        column(6,
+          selectInput("categoryYr", "Select Indicator Category", unique(excl_Scotland$Domain),
                         selected = "Adult Social Care")
                    ),
-          div(class = "span6", style = "display:inline-block; width:40vw",
-                      uiOutput("indicatorYr"))
+        column(6,
+          uiOutput("indicatorYr")
+          )
           ), width = "100%"
       ),
      fluidRow( 
@@ -116,15 +117,17 @@ tabPanel("By Council",
 #New Tab for Dispersion ====================================
     tabPanel("Dispersion",
              wellPanel(
-               div(class = "row", style = "padding-left:5px",
-                   div(class = "span6", style = "display:inline-block; width:40vw; padding-right:10px",
-                       selectInput("categoryDisp", "Select Indicator Category", unique(excl_Scotland$Domain),
+               fluidPage(
+                 fluidRow(
+                  column(6, 
+                     selectInput("categoryDisp", "Select Indicator Category", unique(excl_Scotland$Domain),
                                    selected = "Children's Services")
                    ),
-                   div(class = "span6", style = "display:inline-block; width:40vw",
-                       uiOutput("indicatorDisp"))
+                  column(6,
+                       uiOutput("indicatorDisp")
+                       )
                ), width = "100%"
-             ),   
+             )),   
         fluidRow(
              column(3,
                     wellPanel(id = "sidPnl", style = "height:75vh;overflow-y:auto; margin-right:1px; padding-right:1px; margin-left:5px",
@@ -155,15 +158,17 @@ tabPanel("By Council",
 #New Tab for Time Series Data
     tabPanel("Time Series Data",
              wellPanel(
-               div(class = "row", style = "padding-left:5px",
-                   div(class = "span6", style = "display:inline-block; width:40vw",
-                       selectInput("categoryTSD", "Select Indicator Category", unique(excl_Scotland$Domain),
+               fluidPage(
+                 fluidRow(
+                  column(6,  
+                      selectInput("categoryTSD", "Select Indicator Category", unique(excl_Scotland$Domain),
                                    selected = "Children's Services")
                    ),
-                   div(class = "span6", style = "display:inline-block; width:40vw",
-                       uiOutput("indicatorTSD"))
-               ), width = "100%"
-             ),             
+                  column(6,
+                       uiOutput("indicatorTSD")
+                       ),
+                    width = "100%"
+             ))),             
       fluidRow(column(3,
                       wellPanel(style = "height:75vh;overflow-y:auto;",
                         h5("Select Local Authority"),
