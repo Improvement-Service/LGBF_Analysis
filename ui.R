@@ -24,7 +24,7 @@ header = ##Some css
       )
       ),
     sidebarPanel(id = "sidPnl", style = "height:55vh;overflow-y:auto;",
-      checkboxGroupInput("LA", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = NULL),
+      checkboxGroupInput("LA", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$`Local Authority`)),
       actionButton("LAAll", "Select All"),
       actionButton("LAClear", "Clear All"),
       uiOutput("series"),
@@ -60,7 +60,7 @@ header = ##Some css
           sidebarPanel(id = "sidPnl", style = "height:75vh;overflow-y:auto;",
                        h5("Select Local Authority"),
                        div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
-                         checkboxGroupInput("LAYr", label = NA, unique(bnch_data$`Local Authority`), selected = NULL)),
+                         checkboxGroupInput("LAYr", label = NA, unique(bnch_data$`Local Authority`), selected = bnch_data$`Local Authority`)),
                         actionButton("LAYrAll", "Select All"),
                         actionButton("LAYrClear", "Clear All"),
                         uiOutput("baseYr"),
@@ -92,10 +92,10 @@ tabPanel("By Council",
                    uiOutput("seriesCNCL")
                   
            ),
-           column(1,
+           column(2,
                   actionButton("SeriesCNCLALL", "Select All")
            ),
-           column(1,
+           column(2,
                   actionButton("SeriesCNCLClear", "Clear All")
            )
            ))),
@@ -132,7 +132,11 @@ tabPanel("By Council",
                           div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
                               checkboxGroupInput("LADisp", label = NA, unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority'))
                           ),
+                          actionButton("LADispAll", "Select All"),
+                          actionButton("LADispClear", "Clear All"),
                           uiOutput("seriesDisp"),
+                          actionButton("seriesDispAll", "Select All"),
+                          actionButton("seriesDispClear", "Clear All"),
                           radioButtons("FmlyGrpDisp", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
                           actionButton("FmlyGrp2Disp", "Update Family Group")
              )
@@ -166,7 +170,11 @@ tabPanel("By Council",
                         div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
                          checkboxGroupInput("LATSD", label = NA, unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority'))
                         ),
+                        actionButton("LATSDAll", "Select All"),
+                        actionButton("LATSDClear", "Clear All"),
                         uiOutput("seriesTSD"),
+                        actionButton("seriesTSDAll", "Select All"),
+                        actionButton("seriesTSDClear", "Clear All"),
                         radioButtons("FmlyGrpTSD", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
                         actionButton("FmlyGrp2TSD", "Update Family Group")
                       )
