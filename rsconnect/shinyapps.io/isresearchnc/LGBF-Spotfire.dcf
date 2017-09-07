@@ -1,0 +1,11 @@
+name: LGBF-Spotfire
+title: LGBF-Spotfire
+account: isresearchnc
+server: shinyapps.io
+appId: 211240
+bundleId: 969545
+url: https://isresearchnc.shinyapps.io/LGBF-Spotfire/
+when: 1504692868.22897
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: old data/bnch_dta_macrosttest.csv

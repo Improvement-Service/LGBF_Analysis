@@ -453,11 +453,30 @@ output$TSDTable1 <- renderDataTable({
     summarise_at(., vars(Value), funs(mean, min, max, median, sd), na.rm =TRUE) %>%
     mutate_at(., vars(mean:sd), funs(round), digits = 2)
   datatable(p,  extensions = "Scroller",
-            options = list(pageLength = 4, scrollY = 100, dom = "t"))
+            options = list(pageLength = 4, scrollY = 100, dom = "t", rownames = FALSE),
+            colnames = c("Year" = "Time"))
   })
+
+
+
 output$TSDTable2 <- renderDataTable({
   dta <- TSDData()
-  dta$Value <- round(dta$Value,2)
+  yrs <- input$TSeriesTSD
+##this creates the custom headers for the table  
+  cont = htmltools::withTags(table(
+    class = "display",
+    thead(
+      tr(
+        th(rowspan = 2, "Local Authority"),
+        lapply(yrs, th, colspan = 4, class = 'dt-center')
+      ),
+      tr(
+        lapply(rep(c("Value", "Change", "Rank", "Rank Change"), length(yrs)), th)
+      )
+    )
+   )
+  )
+    dta$Value <- round(dta$Value,2)
 #calculate ranks by year
   if(dta$`One is high` == "no"){
   dta$rank <- ave(dta$Value, dta$Time, FUN = function(x) rank(x, ties.method = "first"))
@@ -467,8 +486,16 @@ output$TSDTable2 <- renderDataTable({
   dta$rankMov<- ave(dta$rank, dta$`Local Authority`, FUN = function(x) {x - lag(x,1)})
   dta$valMov<- round(ave(dta$Value, dta$`Local Authority`, FUN = function(x) {x - lag(x,1)}),2)
   dta <- dcast(setDT(dta), `Local Authority`~Time, value.var = c("Value","valMov","rank", "rankMov"))
-  datatable(dta, extensions = "Scroller", options = list(pageLength = 32, scrollX = TRUE,
-                          scrollY = 400, dom = "t"))
+#Sort by year  
+  lng <- (ncol(dta)-1)/length(yrs)
+  colNums <- c(1)
+  for(i in 2:lng){
+    tmp <- seq(from  = i, to = ncol(dta), by = length(yrs))
+    colNums <- c(colNums, tmp)
+  }
+  srtDta <- dta %>% select(colNums)
+  datatable(srtDta, extensions = "Scroller", options = list(pageLength = 32, scrollX = TRUE,
+                          scrollY = 400, dom = "t"),container = cont  ,rownames = FALSE)
   })
 
 })
