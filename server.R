@@ -487,7 +487,7 @@ output$TSDTable2 <- renderDataTable({
   dta$valMov<- round(ave(dta$Value, dta$`Local Authority`, FUN = function(x) {x - lag(x,1)}),2)
   dta <- dcast(setDT(dta), `Local Authority`~Time, value.var = c("Value","valMov","rank", "rankMov"))
 #Sort by year  
-  lng <- (ncol(dta)-1)/length(yrs)
+  lng <- length(yrs) +1
   colNums <- c(1)
   for(i in 2:lng){
     tmp <- seq(from  = i, to = ncol(dta), by = length(yrs))
@@ -495,7 +495,7 @@ output$TSDTable2 <- renderDataTable({
   }
   srtDta <- dta %>% select(colNums)
   datatable(srtDta, extensions = "Scroller", options = list(pageLength = 32, scrollX = TRUE,
-                          scrollY = 400, dom = "t"),container = cont  ,rownames = FALSE)
+                          scrollY = 400, dom = "t"),container = cont, rownames = FALSE)
   })
 
 })
