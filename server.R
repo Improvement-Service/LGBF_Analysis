@@ -86,8 +86,8 @@ MedFun <- reactive({
     excl_Scotland <- filter(excl_Scotland, Local_Authority %in% input$LA & Time %in% input$TSeries)
     p <- ggplot(excl_Scotland[excl_Scotland$Title == input$indicator2,])+
       geom_bar(aes(x = Local_Authority, y = Value, fill = Time, 
-                    text = paste("Local Authority:", `Local_Authority`, "</br>", "Year:", `Time`,
-                                 "</br>", "Value:", `Value`)),position = "dodge", stat = "identity")+
+                    text = paste("Local Authority:", `Local_Authority`, "<br>", "Year:", `Time`,
+                                 "<br>", "Value:", `Value`)),position = "dodge", stat = "identity")+
       theme_bw()+
       geom_hline(aes(yintercept = MedFun(), colour = Time))+
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
