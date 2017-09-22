@@ -84,14 +84,16 @@ MedFun <- reactive({
     output$plot1 <- renderPlotly({
     colnames(excl_Scotland)[1] <- "Local_Authority"
     excl_Scotland <- filter(excl_Scotland, Local_Authority %in% input$LA & Time %in% input$TSeries)
-    ggplot(excl_Scotland[excl_Scotland$Title == input$indicator2,], 
-           aes(x = Local_Authority, y = Value, fill = Time))+
-      geom_bar(position = "dodge", stat = "identity")+
+    p <- ggplot(excl_Scotland[excl_Scotland$Title == input$indicator2,])+
+      geom_bar(aes(x = Local_Authority, y = Value, fill = Time, 
+                    text = paste("Local Authority:", `Local_Authority`, "</br>", "Year:", `Time`,
+                                 "</br>", "Value:", `Value`)),position = "dodge", stat = "identity")+
       theme_bw()+
       geom_hline(aes(yintercept = MedFun(), colour = Time))+
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
             axis.text.x = element_text(angle = 90, hjust = 1.0, vjust = 0.3))+
       guides(fill = FALSE)
+    ggplotly(p, tooltip = c("text","y"))
             
   })
 
