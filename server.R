@@ -81,7 +81,7 @@ MedFun <- reactive({
     paste("",input$indicator2)
   })
 
-    output$plot1 <- renderPlot({
+    output$plot1 <- renderPlotly({
     colnames(excl_Scotland)[1] <- "Local_Authority"
     excl_Scotland <- filter(excl_Scotland, Local_Authority %in% input$LA & Time %in% input$TSeries)
     ggplot(excl_Scotland[excl_Scotland$Title == input$indicator2,], 
@@ -164,7 +164,7 @@ MedFun <- reactive({
       data <- data.frame( data$`Local Authority`[1:33], Diffdata, PerDiffdata,
                     stringsAsFactors = FALSE)
     })
-    output$`Year-on-Year-Plot` <-renderPlot({
+    output$`Year-on-Year-Plot` <-renderPlotly({
       dat <- chngDta()
       colnames(dat)[1] <- "Local_Authority"
       dat <- filter(dat,Local_Authority %in% input$LAYr)
@@ -373,7 +373,7 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
                   backgroundColor = styleInterval(brks, clrs), lineHeight = "40%")
   })
   
-  output$boxDisp <- renderPlot({
+  output$boxDisp <- renderPlotly({
     bpdta <- filter(excl_Scotland, `Local Authority` %in% input$LADisp & Title == input$indicator2Disp & Time %in% input$TSeriesDisp)
     ggplot(data = bpdta, aes(x = Time, y = Value)) +
       geom_boxplot() +

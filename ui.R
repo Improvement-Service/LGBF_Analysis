@@ -37,7 +37,7 @@ header = ##Some css
     ),
     mainPanel(
       tags$b(uiOutput("PlotTitle")),
-      plotOutput("plot1")
+      plotlyOutput("plot1")
     )),
 
 ##New tab for year on year changes
@@ -73,7 +73,7 @@ header = ##Some css
                         checkboxInput("RelVal", "Show Percentage Change", value = FALSE)
         ),
            mainPanel(
-             plotOutput("Year-on-Year-Plot")
+             plotlyOutput("Year-on-Year-Plot")
            )
       )
     )
@@ -151,7 +151,7 @@ tabPanel("By Council",
                  splitLayout(
                    cellWidths = c("70%", "80%"),
                  div(DT::dataTableOutput("tableDisp"),style = "font-size:74%; line-height:40%"),
-                 plotOutput("boxDisp")
+                 plotlyOutput("boxDisp")
                  )
                )
              )

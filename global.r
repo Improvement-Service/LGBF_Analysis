@@ -5,7 +5,7 @@ library(shinythemes)
 library(RColorBrewer)
 library(DT)
 library(data.table)
-
+library(plotly)
 
 
 bnch_data <- read_csv("bnch_dta_macrosttest.csv")
