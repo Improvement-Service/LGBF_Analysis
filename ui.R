@@ -10,8 +10,8 @@ header = ##Some css
     "#CnclTbl {height:75vh !important}"
   )),
   tabPanel("By Indicator",
-    wellPanel(
       fluidPage(
+        wellPanel(
         fluidRow(
           column(6,
       selectInput("category", "Select Indicator Category", unique(excl_Scotland$Domain),
@@ -20,7 +20,6 @@ header = ##Some css
       column(6,
                   uiOutput("indicator")
         )
-      )
       )
       ),
     sidebarPanel(id = "sidPnl", style = "height:75vh;overflow-y:auto;",
@@ -33,12 +32,12 @@ header = ##Some css
       actionButton("SeriesAll", "Select All"),
       actionButton("SeriesClear", "Clear All"),
       radioButtons("FmlyGrp", "Select Family Group", c("All",1,2,3,4), inline = TRUE),
-      actionButton("FmlyGrp2", "Update Family Group")
+      actionButton("FmlyGrp2", "Update Family Group"), width = 4
     ),
     mainPanel(
       tags$b(uiOutput("PlotTitle")),
-      plotlyOutput("plot1")
-    )),
+      plotlyOutput("plot1"), width = 8
+    ))),
 
 ##New tab for year on year changes
   tabPanel("Year-on-Year Change",

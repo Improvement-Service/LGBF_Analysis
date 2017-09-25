@@ -93,7 +93,7 @@ MedFun <- reactive({
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
             axis.text.x = element_text(angle = 90, hjust = 1.0, vjust = 0.3))+
       guides(fill = FALSE)
-    ggplotly(p, tooltip = c("text","y"))
+    ggplotly(p, tooltip = c("text","y"), width = "100%", height = "100%")
             
   })
 
