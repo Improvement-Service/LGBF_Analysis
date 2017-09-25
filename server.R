@@ -171,7 +171,7 @@ MedFun <- reactive({
       colnames(dat)[1] <- "Local_Authority"
       dat <- filter(dat,Local_Authority %in% input$LAYr)
       if(input$RelVal == FALSE){
-      ggplot(data = dat, aes(x = Local_Authority, y = Diffdata)) +
+      pp <- ggplot(data = dat, aes(x = Local_Authority, y = Diffdata)) +
         geom_bar(stat = "identity", position= "dodge", fill = "darkblue")+
         theme_bw()+
         ylab(paste("Change from", as.character(input$baseYrSrv), "to", as.character(input$compYrSrv))) +
@@ -181,7 +181,7 @@ MedFun <- reactive({
               panel.border = element_blank(),
               axis.line = element_line(colour = "black"))
       } else{
-        ggplot(data = dat, aes(x = Local_Authority, y = PerDiffdata)) +
+        pp <- ggplot(data = dat, aes(x = Local_Authority, y = PerDiffdata)) +
           geom_bar(stat = "identity", position= "dodge", fill = "darkblue")+
           theme_bw()+
           ylab(paste("Percentage Change from", as.character(input$baseYrSrv), "to", as.character(input$compYrSrv))) +
@@ -191,6 +191,7 @@ MedFun <- reactive({
                 panel.border = element_blank(),
                 axis.line = element_line(colour = "black"))
       }
+      ggplotly(pp, width = "100%")
     })
     
     observeEvent(eventExpr = input$FmlyGrp2Yr,
@@ -377,9 +378,10 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
   
   output$boxDisp <- renderPlotly({
     bpdta <- filter(excl_Scotland, `Local Authority` %in% input$LADisp & Title == input$indicator2Disp & Time %in% input$TSeriesDisp)
-    ggplot(data = bpdta, aes(x = Time, y = Value)) +
+    p <- ggplot(data = bpdta, aes(x = Time, y = Value)) +
       geom_boxplot() +
       theme_bw()
+    ggplotly(p, height = 800)
   })
 
 ##Create outputs for Tme Series Page ========================
