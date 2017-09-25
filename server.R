@@ -264,8 +264,7 @@ MedFun <- reactive({
   #order columns 
     SumStat <- SumStat[,c(1,5,4,3,2,6,7,8,10,9)]
     colnames(SumStat)[3] <- "Indicator"
-   
-   
+
   #create a reactive function to filter the new data set to only show what is selected for local authority and domain  
     SelectedDtaCNCL <- reactive({
       CNCLdta <- filter(SumStat, Local.Authority %in% input$LA_CNCL & Domain %in% input$categoryCNCL & Time %in% input$TSeriesCNCL)
@@ -276,9 +275,12 @@ MedFun <- reactive({
         SelectedDtaCNCL <- SelectedDtaCNCL()
         SelectedDtaCNCL <- select(SelectedDtaCNCL, -Local.Authority, -Domain)
         SelectedDtaCNCL <- arrange(SelectedDtaCNCL, Indicator, Time)
-     
-       datatable(SelectedDtaCNCL, extensions = "Scroller", options = list(pageLength = 32, scrollY = 400, dom = "t")) %>%
-       formatRound(c(3:7), digits = 1)
+        SelectedDtaCNCL[duplicated(SelectedDtaCNCL$Indicator), "Indicator"] <- ""
+       
+       datatable(SelectedDtaCNCL, extensions = "Scroller", options = list(pageLength = 100, 
+                              scrollY = 600, dom = "t"), rownames = FALSE, class = "hover") %>%
+       formatRound(c(3:7), digits = 1) %>%
+         formatStyle("Indicator", fontWeight = "bold", fontSize = 14, color = "black")
       })
       
     #add a title above the table

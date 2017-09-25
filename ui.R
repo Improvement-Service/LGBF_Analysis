@@ -80,7 +80,7 @@ header = ##Some css
 
 ##new tab for By Council
 tabPanel("By Council",
-          wellPanel(
+    
             fluidPage(
               fluidRow(
                 column(6,
@@ -100,8 +100,7 @@ tabPanel("By Council",
            column(1,
                   actionButton("SeriesCNCLClear", "Clear All")
            )
-           ))),
-           fluidPage(
+           ),
              fluidRow(
                column(4,
            tags$b(uiOutput("TableTitle"))
@@ -109,9 +108,9 @@ tabPanel("By Council",
            column(12,
            DT::dataTableOutput("CnclTbl")
                )
-         ))
+         )
          
-  
+            )
 
 ),
 
