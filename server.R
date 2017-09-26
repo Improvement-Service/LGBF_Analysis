@@ -277,8 +277,9 @@ MedFun <- reactive({
         SelectedDtaCNCL <- arrange(SelectedDtaCNCL, Indicator, Time)
         SelectedDtaCNCL[duplicated(SelectedDtaCNCL$Indicator), "Indicator"] <- ""
        
-       datatable(SelectedDtaCNCL, extensions = "Scroller", options = list(pageLength = 100, 
-                              scrollY = 600, dom = "t"), rownames = FALSE, class = "hover") %>%
+       datatable(SelectedDtaCNCL, extensions = c("Scroller", "Buttons"), options = list(pageLength = 100, 
+                              scrollY = 600, dom = "tB",
+                              buttons = c('copy', 'csv', 'excel', 'pdf')), rownames = FALSE, class = "hover") %>%
        formatRound(c(3:7), digits = 1) %>%
          formatStyle("Indicator", fontWeight = "bold", fontSize = 14, color = "black")
       })
