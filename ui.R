@@ -61,7 +61,7 @@ header = ##Some css
      fluidRow( 
           sidebarPanel(id = "sidPnl", style = "height:75vh;overflow-y:auto;",
                        h5("Select Local Authority"),
-                       div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
+                       div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2; margin-top: 0px",
                          checkboxGroupInput("LAYr", label = NA, unique(bnch_data$`Local Authority`), selected = bnch_data$`Local Authority`)),
                         actionButton("LAYrAll", "Select All"),
                         actionButton("LAYrClear", "Clear All"),
@@ -94,10 +94,10 @@ tabPanel("By Council",
                    uiOutput("seriesCNCL")
                   
            ),
-           column(1,
+           column(1, style = "margin-left:5px;padding:0px; max-width:auto",
                   actionButton("SeriesCNCLALL", "Select All")
            ),
-           column(1,
+           column(1, style = "max-width:auto",
                   actionButton("SeriesCNCLClear", "Clear All")
            )
            ),
@@ -187,6 +187,24 @@ tabPanel("By Council",
                column(9,
                       dataTableOutput("TSDTable1"),
                       dataTableOutput("TSDTable2")))
+    ),
+##New Tab with Rankings
+    tabPanel("Rankings Over Time",
+             fluidPage(
+               fluidRow(
+                 column(6,  
+                        selectInput("categoryRank", "Select Indicator Category", unique(excl_Scotland$Domain),
+                                    selected = "Children's Services")
+                 ),
+                 column(6,offset = 1,
+                        uiOutput("indicatorRank")
+                 )
+               ),
+               fluidRow(
+                 print("Blah")
+               )
+             )
+      
     )
 ))
 

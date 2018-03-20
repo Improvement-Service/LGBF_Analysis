@@ -505,4 +505,12 @@ output$TSDTable2 <- renderDataTable({
                           scrollY = 400, dom = "t"),container = cont, rownames = FALSE)
   })
 
+##Inputs for ranking Page
+output$indicatorRank <- renderUI({
+  bnch_data_subset <- filter(excl_Scotland, Domain == input$categoryRank)
+  selectInput("indiRank", "Select Indicator", sort(unique(bnch_data_subset$Title))) 
+  })
+##Producing Graph for Ranking page
+
+
 })
