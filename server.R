@@ -531,5 +531,5 @@ output$rankPlot <- renderPlotly({
     geom_label(aes(label = `Local Authority`, x = 1, y = ranks))
   ggplotly(grp) %>% layout(showlegend = FALSE)
 })
-
+#comment
 })
