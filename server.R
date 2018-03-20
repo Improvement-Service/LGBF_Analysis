@@ -485,7 +485,7 @@ output$TSDTable2 <- renderDataTable({
   )
     dta$Value <- round(dta$Value,2)
 #calculate ranks by year
-  if(dta$`One is high` == "no"){
+  if("no" %in% dta$`One is high`){
   dta$rank <- ave(dta$Value, dta$Time, FUN = function(x) rank(x, ties.method = "first"))
   } else{
   dta$rank <- ave(dta$Value, dta$Time, FUN = function(x) rank(-x, ties.method = "first"))
@@ -508,9 +508,28 @@ output$TSDTable2 <- renderDataTable({
 ##Inputs for ranking Page
 output$indicatorRank <- renderUI({
   bnch_data_subset <- filter(excl_Scotland, Domain == input$categoryRank)
-  selectInput("indiRank", "Select Indicator", sort(unique(bnch_data_subset$Title))) 
+  selectInput("indiRank", "Select Indicator", sort(unique(bnch_data_subset$Title)), width = "90%") 
   })
 ##Producing Graph for Ranking page
-
+rnkData <- reactive({
+  dta <- filter(excl_Scotland, Title == input$indiRank)
+    })
+output$rankPlot <- renderPlotly({
+  dtaRnk <<- rnkData()
+  if("no" %in% dtaRnk$`One is high`){
+    dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Time, FUN = function(x) rank(x, ties.method = "first"))
+  }
+  else{
+    dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Time, FUN = function(x) rank(-x, ties.method = "first"))
+  }
+  grp <- ggplot(data = dtaRnk) +
+    geom_line(aes(x = Time, y = ranks, group = `Local Authority`, colour = `Local Authority`), size = 1, na.rm = TRUE) +
+    scale_y_reverse(lim = c(32,1), breaks = seq(1,32, 6)) +
+    theme_bw()+
+    guides(colour = FALSE)+
+    scale_x_discrete(expand = c(0,0))+
+    geom_label(aes(label = `Local Authority`, x = 1, y = ranks))
+  ggplotly(grp) %>% layout(showlegend = FALSE)
+})
 
 })

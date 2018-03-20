@@ -194,15 +194,15 @@ tabPanel("By Council",
                fluidRow(
                  column(6,  
                         selectInput("categoryRank", "Select Indicator Category", unique(excl_Scotland$Domain),
-                                    selected = "Children's Services")
+                                    selected = "Children's Services", width = "90%")
                  ),
-                 column(6,offset = 1,
+                 column(6,
                         uiOutput("indicatorRank")
-                 )
+                 ),
+                 width = "100%"
                ),
-               fluidRow(
-                 print("Blah")
-               )
+             
+                 plotlyOutput("rankPlot", height = "80vh")
              )
       
     )
