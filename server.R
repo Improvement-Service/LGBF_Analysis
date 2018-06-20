@@ -89,11 +89,12 @@ MedFun <- reactive({
                     text = paste("Local Authority:", `Local_Authority`, "<br>", "Year:", `Time`,
                                  "<br>", "Value:", `Value`)),position = "dodge", stat = "identity")+
       theme_bw()+
+      xlab("")+ylab("")+
       geom_hline(aes(yintercept = MedFun(), colour = Time))+
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
             axis.text.x = element_text(angle = 90, hjust = 1.0, vjust = 0.3))+
       guides(fill = FALSE)
-    ggplotly(p, tooltip = c("text","y"), width = "100%", height = "100%")
+    ggplotly(p, tooltip = c("text","y"))
             
   })
 
@@ -191,7 +192,7 @@ MedFun <- reactive({
                 panel.border = element_blank(),
                 axis.line = element_line(colour = "black"))
       }
-      ggplotly(pp, width = "100%")
+      ggplotly(pp)
     })
     
     observeEvent(eventExpr = input$FmlyGrp2Yr,

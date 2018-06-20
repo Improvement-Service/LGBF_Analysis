@@ -5,7 +5,7 @@ shinyUI(navbarPage(id = "pageList",
   theme = shinytheme("simplex"),
 header = ##Some css
   tags$head(tags$style(
-    "#plot1 {height:75vh !important}",
+    "#plot1 {height:75vh !important; border-right:0px; padding-right:0px}",
     "#Year-on-Year-Plot {height:75vh !important}",
     "#CnclTbl {height:75vh !important}"
   )),
