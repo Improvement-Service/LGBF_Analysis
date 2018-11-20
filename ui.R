@@ -9,7 +9,12 @@ header = ##Some css
     "#Year-on-Year-Plot {height:75vh !important}",
     "#CnclTbl {height:75vh !important}",
     ".form-group.shiny-input-container.shiny-input-checkboxgroup.shiny-bound-input{margin-top:-10px; font-size: 1em}",
-    ".well{padding-left:5px; padding-top:5px}"
+    ".well{padding-left:5px; padding-top:5px}",
+    ".bttn-unite{margin-bottom:10px}",
+    ".control-label{font-weight:bold; color:black}",
+    "#TableTitle{font-weight:bold;color:black}",
+    HTML("h5{font-weight:bold;color:black}
+         label{font-weight:bold; color:black}")
   )),
   tabPanel("By Indicator",
       fluidPage(
@@ -27,13 +32,13 @@ header = ##Some css
       h5("Select Local Authority"),
       div(class = "multicol",style = "column-count:2;-webkit-column-count:2; -moz-column-count:2; margin-top:0px",
         awesomeCheckboxGroup("LA", label = "", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$`Local Authority`))),
-      actionBttn("LAAll", "Select All"),
-      actionBttn("LAClear", "Clear All"),
+      actionBttn("LAAll", "Select All",size = "sm"),
+      actionBttn("LAClear", "Clear All",size = "sm"),
       uiOutput("series"),
-      actionBttn("SeriesAll", "Select All"),
-      actionBttn("SeriesClear", "Clear All"),
+      actionBttn("SeriesAll", "Select All",size = "sm"),
+      actionBttn("SeriesClear", "Clear All",size = "sm"),
       awesomeRadio("FmlyGrp", "Select Family Group", c("All",1,2,3,4), inline = TRUE),
-      actionBttn("FmlyGrp2", "Update Family Group"), width = 4
+      actionBttn("FmlyGrp2", "Update Family Group",size = "sm"), width = 4
     ),
     mainPanel(
       tags$b(uiOutput("PlotTitle")),
@@ -64,12 +69,12 @@ header = ##Some css
                        h5("Select Local Authority"),
                        div(class = "multicol",style = "column-count:2;-webkit-column-count:2; -moz-column-count:2; margin-top:0px",
                          awesomeCheckboxGroup("LAYr", label = "", unique(bnch_data$`Local Authority`), selected = bnch_data$`Local Authority`)),
-                        actionBttn("LAYrAll", "Select All"),
-                       actionBttn("LAYrClear", "Clear All"),
+                        actionBttn("LAYrAll", "Select All",size = "sm"),
+                       actionBttn("LAYrClear", "Clear All",size = "sm"),
                         uiOutput("baseYr"),
                         uiOutput("compYr"),
                         radioButtons("FmlyGrpYr", "Select Family Group", c("All",1,2,3,4), inline = TRUE),
-                        actionBttn("FmlyGrp2Yr", "Update Family Group"),
+                        actionBttn("FmlyGrp2Yr", "Update Family Group",size = "sm"),
                         awesomeCheckbox("RelVal", "Show Percentage Change", value = FALSE)
         ),
            mainPanel(
@@ -95,12 +100,9 @@ tabPanel("By Council",
                    uiOutput("seriesCNCL")
                   
            ),
-           column(1, style = "margin-left:5px;padding:0px; max-width:auto",
-                  actionBttn("SeriesCNCLALL", "Select All")
-           ),
-           column(1, style = "max-width:auto",
+                  div(style = "padding-right:8px;padding-left:4px;display:inline",actionBttn("SeriesCNCLALL", "Select All")),
+
                   actionBttn("SeriesCNCLClear", "Clear All")
-           )
            ),
              fluidRow(
                column(4,
@@ -136,14 +138,14 @@ tabPanel("By Council",
                           div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
                               awesomeCheckboxGroup("LADisp", label = "", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority'))
                           ),
-                          actionBttn("LADispAll", "Select All"),
-                          actionBttn("LADispClear", "Clear All"),
+                          actionBttn("LADispAll", "Select All",size = "sm"),
+                          actionBttn("LADispClear", "Clear All",size = "sm"),
                           h5("Select time series"),
                           uiOutput("seriesDisp"),
-                          actionBttn("seriesDispAll", "Select All"),
-                          actionBttn("seriesDispClear", "Clear All"),
+                          actionBttn("seriesDispAll", "Select All",size = "sm"),
+                          actionBttn("seriesDispClear", "Clear All",size = "sm"),
                           radioButtons("FmlyGrpDisp", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
-                          actionBttn("FmlyGrp2Disp", "Update Family Group")
+                          actionBttn("FmlyGrp2Disp", "Update Family Group",size = "sm")
              )
              ),
              column(8,
@@ -177,14 +179,14 @@ tabPanel("By Council",
                         div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
                             awesomeCheckboxGroup("LATSD", label = "", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority'))
                         ),
-                        actionBttn("LATSDAll", "Select All"),
-                        actionBttn("LATSDClear", "Clear All"),
+                        actionBttn("LATSDAll", "Select All",size = "sm"),
+                        actionBttn("LATSDClear", "Clear All",size = "sm"),
                         h5("Select time series"),
                         uiOutput("seriesTSD"),
-                        actionBttn("seriesTSDAll", "Select All"),
-                        actionBttn("seriesTSDClear", "Clear All"),
+                        actionBttn("seriesTSDAll", "Select All",size = "sm"),
+                        actionBttn("seriesTSDClear", "Clear All",size = "sm"),
                         radioButtons("FmlyGrpTSD", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
-                        actionBttn("FmlyGrp2TSD", "Update Family Group")
+                        actionBttn("FmlyGrp2TSD", "Update Family Group",size = "sm")
                       )
                       ),
                column(8,

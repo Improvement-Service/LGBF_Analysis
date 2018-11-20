@@ -26,7 +26,7 @@ shinyServer(function(input, output, session) {
   
  output$series <- renderUI({
     bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2)
-    checkboxGroupInput("TSeries", "Select Time Series", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
+    awesomeCheckboxGroup("TSeries", "Select Time Series", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
  })
 
 #create a reactive function to store time series choices available    
@@ -138,7 +138,7 @@ MedFun <- reactive({
       selectizeInput("baseYrSrv", "Year", 
                      choices = unique(bnch_data_indiYR$Time),
                     options = list(
-                      placeholder = "-",
+                      placeholder = "Select Start Year",
                       onInitialize = I('function() {this.setValue("");}')
                     )
                ) 
@@ -148,7 +148,7 @@ MedFun <- reactive({
       selectizeInput("compYrSrv", "Comparator Year:", 
                      choices = c(unique(bnch_data_indiYR[bnch_data_indiYR$Time != input$baseYrSrv, "Time"])),
       options = list(
-        placeholder = "-",
+        placeholder = "Select End Year",
         onInitialize = I('function() {this.setValue("");}')
       ))
     })
@@ -213,7 +213,7 @@ MedFun <- reactive({
   #create checkbox for selecting year, only shows years that are available for the domain selected
     output$seriesCNCL <- renderUI({
       DtaCNCL <- filter(excl_Scotland, `Local Authority` %in% input$LA_CNCL & Domain %in% input$categoryCNCL)
-      checkboxGroupInput("TSeriesCNCL", "Select Time Series", unique(DtaCNCL$Time), selected = unique(DtaCNCL$Time), inline = TRUE) 
+      awesomeCheckboxGroup("TSeriesCNCL", "Select Time Series", unique(DtaCNCL$Time), selected = unique(DtaCNCL$Time), inline = TRUE) 
     })
     
     #create a reactive function to store time series choices available    
@@ -318,7 +318,7 @@ output$indicatorDisp <- renderUI({
     
 output$seriesDisp <- renderUI({
   bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2Disp)
-  checkboxGroupInput("TSeriesDisp", "", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
+  awesomeCheckboxGroup("TSeriesDisp", "", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
 })
 
 #create reactive funciton to store time series choices available
@@ -412,7 +412,7 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
   })
 output$seriesTSD <- renderUI({
     bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2TSD)
-    checkboxGroupInput("TSeriesTSD", "", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
+    awesomeCheckboxGroup("TSeriesTSD", "", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
   })
 
 #create reactive funciton to store time series choices available
