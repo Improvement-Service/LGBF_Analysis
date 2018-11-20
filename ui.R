@@ -119,7 +119,6 @@ tabPanel("By Council",
 
 #New Tab for Dispersion ====================================
     tabPanel("Dispersion",
-             wellPanel(
                fluidPage(
                  fluidRow(
                   column(6, 
@@ -130,7 +129,7 @@ tabPanel("By Council",
                        uiOutput("indicatorDisp")
                        )
                ), width = "100%"
-             )),   
+             ),   
         fluidRow(
              column(4,
                     wellPanel(id = "sidPnl", style = "height:75vh;overflow-y:auto; margin-right:1px; padding-right:1px; margin-left:5px",
@@ -161,7 +160,6 @@ tabPanel("By Council",
         ),
 #New Tab for Time Series Data
     tabPanel("Time Series Data",
-             wellPanel(
                fluidPage(
                  fluidRow(
                   column(6,  
@@ -172,7 +170,7 @@ tabPanel("By Council",
                        uiOutput("indicatorTSD")
                        ),
                     width = "100%"
-             ))),             
+             )),             
       fluidRow(column(4,
                       wellPanel(style = "height:75vh;overflow-y:auto;",
                         h5("Select Local Authority"),
