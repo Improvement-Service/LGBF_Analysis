@@ -6,6 +6,7 @@ library(RColorBrewer)
 library(DT)
 library(data.table)
 library(plotly)
+library(shinyWidgets)
 
 Sys.setenv("plotly_username" = "NMCassidy")
 Sys.setenv("plotly_api_key" = "xwk9zuxumf")

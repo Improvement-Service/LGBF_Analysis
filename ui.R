@@ -7,37 +7,40 @@ header = ##Some css
   tags$head(tags$style(
     "#plot1 {height:75vh !important; border-right:0px; padding-right:0px}",
     "#Year-on-Year-Plot {height:75vh !important}",
-    "#CnclTbl {height:75vh !important}"
+    "#CnclTbl {height:75vh !important}",
+    ".form-group.shiny-input-container.shiny-input-checkboxgroup.shiny-bound-input{margin-top:-10px; font-size: 1em}",
+    ".well{padding-left:5px; padding-top:5px}"
   )),
   tabPanel("By Indicator",
       fluidPage(
-        wellPanel(
         fluidRow(
-          column(6,
+          column(4,
       selectInput("category", "Select Indicator Category", unique(excl_Scotland$Domain),
                           selected = "Adult Social Care")
       ),
       column(6,
                   uiOutput("indicator")
         )
-      )
       ),
+      fluidRow(
     sidebarPanel(id = "sidPnl", style = "height:75vh;overflow-y:auto;",
       h5("Select Local Authority"),
-      div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
-        checkboxGroupInput("LA", label = NA, unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$`Local Authority`))),
-      actionButton("LAAll", "Select All"),
-      actionButton("LAClear", "Clear All"),
+      div(class = "multicol",style = "column-count:2;-webkit-column-count:2; -moz-column-count:2; margin-top:0px",
+        awesomeCheckboxGroup("LA", label = "", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$`Local Authority`))),
+      actionBttn("LAAll", "Select All"),
+      actionBttn("LAClear", "Clear All"),
       uiOutput("series"),
-      actionButton("SeriesAll", "Select All"),
-      actionButton("SeriesClear", "Clear All"),
-      radioButtons("FmlyGrp", "Select Family Group", c("All",1,2,3,4), inline = TRUE),
-      actionButton("FmlyGrp2", "Update Family Group"), width = 4
+      actionBttn("SeriesAll", "Select All"),
+      actionBttn("SeriesClear", "Clear All"),
+      awesomeRadio("FmlyGrp", "Select Family Group", c("All",1,2,3,4), inline = TRUE),
+      actionBttn("FmlyGrp2", "Update Family Group"), width = 4
     ),
     mainPanel(
       tags$b(uiOutput("PlotTitle")),
       plotlyOutput("plot1"), width = 8
-    ))),
+    )
+      )
+    )),
 
 ##New tab for year on year changes
   tabPanel("Year-on-Year Change",
@@ -47,29 +50,27 @@ header = ##Some css
       HTML("div.checkbox {margin-top: 0px;}")
      )),
     fluidPage(
-      wellPanel(
         fluidRow(
-        column(6,
+        column(4,
           selectInput("categoryYr", "Select Indicator Category", unique(excl_Scotland$Domain),
                         selected = "Adult Social Care")
                    ),
         column(6,
           uiOutput("indicatorYr")
           )
-          ), width = "100%"
-      ),
+          ),
      fluidRow( 
           sidebarPanel(id = "sidPnl", style = "height:75vh;overflow-y:auto;",
                        h5("Select Local Authority"),
-                       div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2; margin-top: 0px",
-                         checkboxGroupInput("LAYr", label = NA, unique(bnch_data$`Local Authority`), selected = bnch_data$`Local Authority`)),
-                        actionButton("LAYrAll", "Select All"),
-                        actionButton("LAYrClear", "Clear All"),
+                       div(class = "multicol",style = "column-count:2;-webkit-column-count:2; -moz-column-count:2; margin-top:0px",
+                         awesomeCheckboxGroup("LAYr", label = "", unique(bnch_data$`Local Authority`), selected = bnch_data$`Local Authority`)),
+                        actionBttn("LAYrAll", "Select All"),
+                       actionBttn("LAYrClear", "Clear All"),
                         uiOutput("baseYr"),
                         uiOutput("compYr"),
                         radioButtons("FmlyGrpYr", "Select Family Group", c("All",1,2,3,4), inline = TRUE),
-                        actionButton("FmlyGrp2Yr", "Update Family Group"),
-                        checkboxInput("RelVal", "Show Percentage Change", value = FALSE)
+                        actionBttn("FmlyGrp2Yr", "Update Family Group"),
+                        awesomeCheckbox("RelVal", "Show Percentage Change", value = FALSE)
         ),
            mainPanel(
              plotlyOutput("Year-on-Year-Plot")
@@ -95,10 +96,10 @@ tabPanel("By Council",
                   
            ),
            column(1, style = "margin-left:5px;padding:0px; max-width:auto",
-                  actionButton("SeriesCNCLALL", "Select All")
+                  actionBttn("SeriesCNCLALL", "Select All")
            ),
            column(1, style = "max-width:auto",
-                  actionButton("SeriesCNCLClear", "Clear All")
+                  actionBttn("SeriesCNCLClear", "Clear All")
            )
            ),
              fluidRow(
@@ -129,27 +130,28 @@ tabPanel("By Council",
                ), width = "100%"
              )),   
         fluidRow(
-             column(3,
+             column(4,
                     wellPanel(id = "sidPnl", style = "height:75vh;overflow-y:auto; margin-right:1px; padding-right:1px; margin-left:5px",
                           h5("Select Local Authority"),
                           div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
-                              checkboxGroupInput("LADisp", label = NA, unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority'))
+                              awesomeCheckboxGroup("LADisp", label = "", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority'))
                           ),
-                          actionButton("LADispAll", "Select All"),
-                          actionButton("LADispClear", "Clear All"),
+                          actionBttn("LADispAll", "Select All"),
+                          actionBttn("LADispClear", "Clear All"),
+                          h5("Select time series"),
                           uiOutput("seriesDisp"),
-                          actionButton("seriesDispAll", "Select All"),
-                          actionButton("seriesDispClear", "Clear All"),
+                          actionBttn("seriesDispAll", "Select All"),
+                          actionBttn("seriesDispClear", "Clear All"),
                           radioButtons("FmlyGrpDisp", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
-                          actionButton("FmlyGrp2Disp", "Update Family Group")
+                          actionBttn("FmlyGrp2Disp", "Update Family Group")
              )
              ),
-             column(9,
+             column(8,
                     mainPanel(id = "mainDisp", style = "padding-left:1px; margin-left:1px",
                  splitLayout(
                    cellWidths = c("70%", "80%"),
                  div(DT::dataTableOutput("tableDisp"),style = "font-size:74%; line-height:40%"),
-                 plotlyOutput("boxDisp")
+                 plotOutput("boxDisp")
                  )
                )
              )
@@ -169,22 +171,23 @@ tabPanel("By Council",
                        ),
                     width = "100%"
              ))),             
-      fluidRow(column(3,
+      fluidRow(column(4,
                       wellPanel(style = "height:75vh;overflow-y:auto;",
                         h5("Select Local Authority"),
                         div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
-                         checkboxGroupInput("LATSD", label = NA, unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority'))
+                            awesomeCheckboxGroup("LATSD", label = "", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority'))
                         ),
-                        actionButton("LATSDAll", "Select All"),
-                        actionButton("LATSDClear", "Clear All"),
+                        actionBttn("LATSDAll", "Select All"),
+                        actionBttn("LATSDClear", "Clear All"),
+                        h5("Select time series"),
                         uiOutput("seriesTSD"),
-                        actionButton("seriesTSDAll", "Select All"),
-                        actionButton("seriesTSDClear", "Clear All"),
+                        actionBttn("seriesTSDAll", "Select All"),
+                        actionBttn("seriesTSDClear", "Clear All"),
                         radioButtons("FmlyGrpTSD", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
-                        actionButton("FmlyGrp2TSD", "Update Family Group")
+                        actionBttn("FmlyGrp2TSD", "Update Family Group")
                       )
                       ),
-               column(9,
+               column(8,
                       dataTableOutput("TSDTable1"),
                       dataTableOutput("TSDTable2")))
     ),

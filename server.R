@@ -124,7 +124,7 @@ MedFun <- reactive({
 
     output$indicatorYr <- renderUI({
       bnch_data_subset <- filter(bnch_data, Domain == input$categoryYr)
-      selectInput("indicatorYrSrv", "Please Select Indicator", sort(unique(bnch_data_subset$Title)))
+      selectInput("indicatorYrSrv", "Please Select Indicator", sort(unique(bnch_data_subset$Title)), width = "100%")
     })
     
     bnch_data_indiYR <- reactive({
@@ -318,7 +318,7 @@ output$indicatorDisp <- renderUI({
     
 output$seriesDisp <- renderUI({
   bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2Disp)
-  checkboxGroupInput("TSeriesDisp", "Select Time Series", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
+  checkboxGroupInput("TSeriesDisp", "", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
 })
 
 #create reactive funciton to store time series choices available
@@ -380,12 +380,11 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
                   backgroundColor = styleInterval(brks, clrs), lineHeight = "40%")
   })
   
-  output$boxDisp <- renderPlotly({
+  output$boxDisp <- renderPlot({
     bpdta <- filter(excl_Scotland, `Local Authority` %in% input$LADisp & Title == input$indicator2Disp & Time %in% input$TSeriesDisp)
-    p <- ggplot(data = bpdta, aes(x = Time, y = Value)) +
+    ggplot(data = bpdta, aes(x = Time, y = Value)) +
       geom_boxplot() +
       theme_bw()
-    ggplotly(p, height = 800)
   })
 
 ##Create outputs for Tme Series Page ========================
@@ -413,7 +412,7 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
   })
 output$seriesTSD <- renderUI({
     bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2TSD)
-    checkboxGroupInput("TSeriesTSD", "Select Time Series", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
+    checkboxGroupInput("TSeriesTSD", "", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
   })
 
 #create reactive funciton to store time series choices available
