@@ -34,7 +34,7 @@ header = ##Some css
         awesomeCheckboxGroup("LA", label = "", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$`Local Authority`))),
       actionBttn("LAAll", "Select All",size = "sm"),
       actionBttn("LAClear", "Clear All",size = "sm"),
-      uiOutput("series"),
+      uiOutput("series", style = "margin-top:10px;margin-bottom:-5px"),
       actionBttn("SeriesAll", "Select All",size = "sm"),
       actionBttn("SeriesClear", "Clear All",size = "sm"),
       awesomeRadio("FmlyGrp", "Select Family Group", c("All",1,2,3,4), inline = TRUE),
@@ -73,7 +73,7 @@ header = ##Some css
                        actionBttn("LAYrClear", "Clear All",size = "sm"),
                         uiOutput("baseYr"),
                         uiOutput("compYr"),
-                        radioButtons("FmlyGrpYr", "Select Family Group", c("All",1,2,3,4), inline = TRUE),
+                       awesomeRadio("FmlyGrpYr", "Select Family Group", c("All",1,2,3,4), inline = TRUE),
                         actionBttn("FmlyGrp2Yr", "Update Family Group",size = "sm"),
                         awesomeCheckbox("RelVal", "Show Percentage Change", value = FALSE)
         ),
@@ -140,10 +140,10 @@ tabPanel("By Council",
                           actionBttn("LADispAll", "Select All",size = "sm"),
                           actionBttn("LADispClear", "Clear All",size = "sm"),
                           h5("Select time series"),
-                          uiOutput("seriesDisp"),
+                          uiOutput("seriesDisp",style = "margin-top:10px;margin-bottom:-5px"),
                           actionBttn("seriesDispAll", "Select All",size = "sm"),
                           actionBttn("seriesDispClear", "Clear All",size = "sm"),
-                          radioButtons("FmlyGrpDisp", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
+                          awesomeRadio("FmlyGrpDisp", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
                           actionBttn("FmlyGrp2Disp", "Update Family Group",size = "sm")
              )
              ),
@@ -180,10 +180,10 @@ tabPanel("By Council",
                         actionBttn("LATSDAll", "Select All",size = "sm"),
                         actionBttn("LATSDClear", "Clear All",size = "sm"),
                         h5("Select time series"),
-                        uiOutput("seriesTSD"),
+                        uiOutput("seriesTSD",style = "margin-top:10px;margin-bottom:-5px"),
                         actionBttn("seriesTSDAll", "Select All",size = "sm"),
                         actionBttn("seriesTSDClear", "Clear All",size = "sm"),
-                        radioButtons("FmlyGrpTSD", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
+                        awesomeRadio("FmlyGrpTSD", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
                         actionBttn("FmlyGrp2TSD", "Update Family Group",size = "sm")
                       )
                       ),
@@ -195,13 +195,15 @@ tabPanel("By Council",
     tabPanel("Rankings Over Time",
              fluidPage(
                fluidRow(
-                 column(6,  
+                 column(4,  
                         selectInput("categoryRank", "Select Indicator Category", unique(excl_Scotland$Domain),
                                     selected = "Children's Services", width = "90%")
                  ),
-                 column(6,
+                 column(4,
                         uiOutput("indicatorRank")
                  ),
+                 column(4,
+                      selectInput("RnkLA", "Select Local Authority", excl_Scotland$`Local Authority`)),
                  width = "100%"
                ),
              

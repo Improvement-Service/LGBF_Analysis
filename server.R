@@ -515,7 +515,7 @@ rnkData <- reactive({
   dta <- filter(excl_Scotland, Title == input$indiRank)
     })
 output$rankPlot <- renderPlotly({
-  dtaRnk <<- rnkData()
+  dtaRnk <- rnkData()
   if("no" %in% dtaRnk$`One is high`){
     dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Time, FUN = function(x) rank(x, ties.method = "first"))
   }
@@ -523,7 +523,7 @@ output$rankPlot <- renderPlotly({
     dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Time, FUN = function(x) rank(-x, ties.method = "first"))
   }
   grp <- ggplot(data = dtaRnk) +
-    geom_line(aes(x = Time, y = ranks, group = `Local Authority`, colour = `Local Authority`), size = 1, na.rm = TRUE) +
+    geom_line(aes(x = Time, y = ranks, group = `Local Authority`, colour ="grey"), size = 1, na.rm = TRUE) +
     scale_y_reverse(lim = c(32,1), breaks = seq(1,32, 6)) +
     theme_bw()+
     guides(colour = FALSE)+

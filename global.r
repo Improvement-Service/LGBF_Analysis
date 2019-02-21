@@ -7,6 +7,7 @@ library(DT)
 library(data.table)
 library(plotly)
 library(shinyWidgets)
+library(dygraphs)
 
 Sys.setenv("plotly_username" = "NMCassidy")
 Sys.setenv("plotly_api_key" = "xwk9zuxumf")
