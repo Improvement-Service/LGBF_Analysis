@@ -25,6 +25,8 @@ bnch_data <- filter(bnch_data, !Time %in% c("1974", "2012", "2013"))
 bnch_data <- filter(bnch_data, !is.na(`One is high`))
 #arrange options in alphabetical order
 bnch_data<- arrange(bnch_data, Domain, Title, Time)
+#rename Time columns as "Year"
+colnames(bnch_data)[4] <- "Year"
 ##Tidy up the names for 
 #The Gross Cost of \"Children Looked After\" in a Community Setting per Child per Week adjusted for inflation
 bnch_data$Title <- gsub('\"', "", bnch_data$Title)

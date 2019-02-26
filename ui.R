@@ -199,11 +199,12 @@ tabPanel("By Council",
                         selectInput("categoryRank", "Select Indicator Category", unique(excl_Scotland$Domain),
                                     selected = "Children's Services", width = "90%")
                  ),
-                 column(4,
+                 column(3,
                         uiOutput("indicatorRank")
                  ),
-                 column(4,
-                      selectInput("RnkLA", "Select Local Authority", excl_Scotland$`Local Authority`)),
+                 column(3,
+                      selectInput("RnkLA", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = "Aberdeen City")),
+                 column(2,awesomeCheckbox("ValRank", "Show values")),
                  width = "100%"
                ),
              

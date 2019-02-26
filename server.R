@@ -26,13 +26,13 @@ shinyServer(function(input, output, session) {
   
  output$series <- renderUI({
     bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2)
-    awesomeCheckboxGroup("TSeries", "Select Time Series", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
+    awesomeCheckboxGroup("TSeries", "Select Time Series", unique(bnch_data_indi$Year), selected = unique(bnch_data_indi$Year)) 
  })
 
 #create a reactive function to store time series choices available    
  TDta <- reactive({
    dta <- filter(excl_Scotland, Title == input$indicator2)
-   TChoices <- unique(dta$Time)
+   TChoices <- unique(dta$Year)
  })   
 
 #create buttons to select all or clear all in time series
@@ -68,13 +68,13 @@ shinyServer(function(input, output, session) {
   )
   
 SelectedDta <- reactive({
-  dta <- filter(excl_Scotland, `Local Authority` %in% input$LA & Time %in% input$TSeries & Title %in% input$indicator2)
+  dta <- filter(excl_Scotland, `Local Authority` %in% input$LA & Year %in% input$TSeries & Title %in% input$indicator2)
 })
 
 #Calculates median values for each year group selected, based on the indicator selected and the authorities selected
 MedFun <- reactive({
   SelectedDta <- SelectedDta()
-  MedianVal <- round(ave(SelectedDta$Value, as.factor(SelectedDta$Time), FUN = function(x){median(x, na.rm = TRUE)}))
+  MedianVal <- round(ave(SelectedDta$Value, as.factor(SelectedDta$Year), FUN = function(x){median(x, na.rm = TRUE)}))
 })
 
   output$PlotTitle <- renderText({
@@ -83,14 +83,14 @@ MedFun <- reactive({
 
     output$plot1 <- renderPlotly({
     colnames(excl_Scotland)[1] <- "Local_Authority"
-    excl_Scotland <- filter(excl_Scotland, Local_Authority %in% input$LA & Time %in% input$TSeries)
+    excl_Scotland <- filter(excl_Scotland, Local_Authority %in% input$LA & Year %in% input$TSeries)
     p <- ggplot(excl_Scotland[excl_Scotland$Title == input$indicator2,])+
-      geom_bar(aes(x = Local_Authority, y = Value, fill = Time, 
-                    text = paste("Local Authority:", `Local_Authority`, "<br>", "Year:", `Time`,
+      geom_bar(aes(x = Local_Authority, y = Value, fill = Year, 
+                    text = paste("Local Authority:", `Local_Authority`, "<br>", "Year:", `Year`,
                                  "<br>", "Value:", `Value`)),position = "dodge", stat = "identity")+
       theme_bw()+
       xlab("")+ylab("")+
-      geom_hline(aes(yintercept = MedFun(), colour = Time))+
+      geom_hline(aes(yintercept = MedFun(), colour = Year))+
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
             axis.text.x = element_text(angle = 90, hjust = 1.0, vjust = 0.3))+
       guides(fill = FALSE)
@@ -136,7 +136,7 @@ MedFun <- reactive({
   #selectizeInput lets you have it start blank instead of
   #selecting the first value - as selectInput does!
       selectizeInput("baseYrSrv", "Year", 
-                     choices = unique(bnch_data_indiYR$Time),
+                     choices = unique(bnch_data_indiYR$Year),
                     options = list(
                       placeholder = "Select Start Year",
                       onInitialize = I('function() {this.setValue("");}')
@@ -146,7 +146,7 @@ MedFun <- reactive({
     output$compYr <- renderUI({
       bnch_data_indiYR <- bnch_data_indiYR()
       selectizeInput("compYrSrv", "Comparator Year:", 
-                     choices = c(unique(bnch_data_indiYR[bnch_data_indiYR$Time != input$baseYrSrv, "Time"])),
+                     choices = c(unique(bnch_data_indiYR[bnch_data_indiYR$Year != input$baseYrSrv, "Year"])),
       options = list(
         placeholder = "Select End Year",
         onInitialize = I('function() {this.setValue("");}')
@@ -157,7 +157,7 @@ MedFun <- reactive({
       data <- bnch_data_indiYR()
   #only keep selected years
       yrs <- c(input$compYrSrv, input$baseYrSrv)
-      data <- data[data$Time %in% yrs,]
+      data <- data[data$Year %in% yrs,]
     #Now calculate higher year (x[2]) minus lower year (x[1])
       Diffdata <- round(ave(data$Value, as.factor(data$`Local Authority`), 
                   FUN = function(x){x[2] -x[1]}), 1)[1:33]
@@ -213,13 +213,13 @@ MedFun <- reactive({
   #create checkbox for selecting year, only shows years that are available for the domain selected
     output$seriesCNCL <- renderUI({
       DtaCNCL <- filter(excl_Scotland, `Local Authority` %in% input$LA_CNCL & Domain %in% input$categoryCNCL)
-      awesomeCheckboxGroup("TSeriesCNCL", "Select Time Series", unique(DtaCNCL$Time), selected = unique(DtaCNCL$Time), inline = TRUE) 
+      awesomeCheckboxGroup("TSeriesCNCL", "Select Time Series", unique(DtaCNCL$Year), selected = unique(DtaCNCL$Year), inline = TRUE) 
     })
     
     #create a reactive function to store time series choices available    
    TDtaCNCL <- reactive({
      dtaCNCL <- filter(excl_Scotland, `Local Authority` %in% input$LA_CNCL & Domain %in% input$categoryCNCL)
-      TChoicesCNCL <- unique(dtaCNCL$Time)
+      TChoicesCNCL <- unique(dtaCNCL$Year)
     })   
     
     #create buttons to select all or clear all in time series
@@ -241,25 +241,25 @@ MedFun <- reactive({
     }) 
    
   #calculate median, minimum and maximum values for each indicator for each year
-    StatVals <- ddply(excl_Scotland,. (Time, Title), transform, Minimum = min(Value, na.rm = TRUE),
+    StatVals <- ddply(excl_Scotland,. (Year, Title), transform, Minimum = min(Value, na.rm = TRUE),
                       Maximum = max(Value, na.rm = TRUE), Median = median(Value, na.rm = TRUE))
     
   #split data by whether one is high
     OneIsHigh <- filter(excl_Scotland, `One is high` == "Yes")
     OneIsLow <- filter(excl_Scotland, `One is high` == "No")
   #calculate rankings
-    RankHigh <- ddply(OneIsHigh,. (Time, Title), transform, Ranking = rank(-Value, ties.method = "max"))
-    RankLow <- ddply(OneIsLow,. (Time, Title), transform, Ranking = rank(Value, ties.method = "max"))
+    RankHigh <- ddply(OneIsHigh,. (Year, Title), transform, Ranking = rank(-Value, ties.method = "max"))
+    RankLow <- ddply(OneIsLow,. (Year, Title), transform, Ranking = rank(Value, ties.method = "max"))
     Rankings <- rbind(RankHigh, RankLow)
     
   #add the min, max and med values to the dataset
     SumStat <- left_join(StatVals, Rankings)
   #select only the columns of the data needed
-    SumStat <- select(SumStat, Local.Authority, Value, Time, Title, Domain, Minimum, Maximum, Median, Ranking)
+    SumStat <- select(SumStat, Local.Authority, Value, Year, Title, Domain, Minimum, Maximum, Median, Ranking)
     
   #filter previous data to show only Scotland Values, add these to the new dataframe as a new column "Scotland Values"
     Scotland_subset <- filter(bnch_data, `Local Authority` == "Scotland")
-    Scotland_subset <- select(Scotland_subset, Value, Time, Title, Domain)
+    Scotland_subset <- select(Scotland_subset, Value, Year, Title, Domain)
     colnames(Scotland_subset)[1] <- "Scotland Value"
     SumStat <- left_join(SumStat, Scotland_subset)
   #order columns 
@@ -268,14 +268,14 @@ MedFun <- reactive({
 
   #create a reactive function to filter the new data set to only show what is selected for local authority and domain  
     SelectedDtaCNCL <- reactive({
-      CNCLdta <- filter(SumStat, Local.Authority %in% input$LA_CNCL & Domain %in% input$categoryCNCL & Time %in% input$TSeriesCNCL)
+      CNCLdta <- filter(SumStat, Local.Authority %in% input$LA_CNCL & Domain %in% input$categoryCNCL & Year %in% input$TSeriesCNCL)
     })
     
    #create a table which displays all of the values   
       output$CnclTbl <- renderDataTable({
         SelectedDtaCNCL <- SelectedDtaCNCL()
         SelectedDtaCNCL <- select(SelectedDtaCNCL, -Local.Authority, -Domain)
-        SelectedDtaCNCL <- arrange(SelectedDtaCNCL, Indicator, Time)
+        SelectedDtaCNCL <- arrange(SelectedDtaCNCL, Indicator, Year)
         SelectedDtaCNCL[duplicated(SelectedDtaCNCL$Indicator), "Indicator"] <- ""
        
        datatable(SelectedDtaCNCL, extensions = c("Scroller", "Buttons"), options = list(pageLength = 100, 
@@ -318,13 +318,13 @@ output$indicatorDisp <- renderUI({
     
 output$seriesDisp <- renderUI({
   bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2Disp)
-  awesomeCheckboxGroup("TSeriesDisp", "", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
+  awesomeCheckboxGroup("TSeriesDisp", "", unique(bnch_data_indi$Year), selected = unique(bnch_data_indi$Year)) 
 })
 
 #create reactive funciton to store time series choices available
 TChoicesDisp <- reactive({
   dta <- filter(excl_Scotland, Title == input$indicator2Disp)
-  Tchoices <- unique(dta$Time)
+  Tchoices <- unique(dta$Year)
 })
 
 #create buttons to select all or clear all in time series
@@ -359,7 +359,7 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
             )
   #generate tables and graphs
   output$tableDisp <- DT::renderDataTable({
-    dta <- filter(excl_Scotland, `Local Authority` %in% input$LADisp & Title == input$indicator2Disp & Time %in% input$TSeriesDisp)[c(1,3,4,15)]
+    dta <- filter(excl_Scotland, `Local Authority` %in% input$LADisp & Title == input$indicator2Disp & Year %in% input$TSeriesDisp)[c(1,3,4,15)]
     dta$Value <- round(dta$Value, 2)
     if(dta$`One is high` == "Yes"){
       brks <- quantile(dta$Value, probs = seq(0, 1, 0.25), na.rm = TRUE)
@@ -372,7 +372,7 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
       txtbrks <- quantile(dta$Value, probs = c(0,0.75), na.rm = TRUE)
       txtclrs <- c("white", "black", "black")
     }
-    dta <- spread(dta[c(1,2,3)], key = Time, value = Value)
+    dta <- spread(dta[c(1,2,3)], key = Year, value = Value)
     tbl <- datatable(dta, class = "row-border",extensions = c("Scroller", "FixedColumns"), rownames = FALSE, 
                      options = list(pageLength = 32, scrollY = 700, dom = "t", 
                   scrollX = TRUE, fixedColumns = list(leftColumns = 1))) %>%
@@ -381,8 +381,8 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
   })
   
   output$boxDisp <- renderPlot({
-    bpdta <- filter(excl_Scotland, `Local Authority` %in% input$LADisp & Title == input$indicator2Disp & Time %in% input$TSeriesDisp)
-    ggplot(data = bpdta, aes(x = Time, y = Value)) +
+    bpdta <- filter(excl_Scotland, `Local Authority` %in% input$LADisp & Title == input$indicator2Disp & Year %in% input$TSeriesDisp)
+    ggplot(data = bpdta, aes(x = Year, y = Value)) +
       geom_boxplot() +
       theme_bw()
   })
@@ -412,13 +412,13 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
   })
 output$seriesTSD <- renderUI({
     bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2TSD)
-    awesomeCheckboxGroup("TSeriesTSD", "", unique(bnch_data_indi$Time), selected = unique(bnch_data_indi$Time)) 
+    awesomeCheckboxGroup("TSeriesTSD", "", unique(bnch_data_indi$Year), selected = unique(bnch_data_indi$Year)) 
   })
 
 #create reactive funciton to store time series choices available
 TChoicesTSD <- reactive({
   dta <- filter(excl_Scotland, Title == input$indicator2TSD)
-  Tchoices <- unique(dta$Time)
+  Tchoices <- unique(dta$Year)
 })
 
 #create buttons to select all or clear all in time series
@@ -452,16 +452,15 @@ observeEvent(eventExpr = input$FmlyGrp2TSD,
                }
   )
 TSDData <- reactive({
-  dta <- filter(excl_Scotland, `Local Authority` %in% input$LATSD & Title == input$indicator2TSD & Time %in% input$TSeriesTSD)[c(1,3:4, 15)]
+  dta <- filter(excl_Scotland, `Local Authority` %in% input$LATSD & Title == input$indicator2TSD & Year %in% input$TSeriesTSD)[c(1,3:4, 15)]
   })
 output$TSDTable1 <- renderDataTable({
   dta <- TSDData()[2:3]
-  p <- dta %>% group_by(Time) %>%
+  p <- dta %>% group_by(Year) %>%
     summarise_at(., vars(Value), funs(mean, min, max, median, sd), na.rm =TRUE) %>%
     mutate_at(., vars(mean:sd), funs(round), digits = 2)
   datatable(p,  extensions = "Scroller",
-            options = list(pageLength = 4, scrollY = 100, dom = "t", rownames = FALSE),
-            colnames = c("Year" = "Time"))
+            options = list(pageLength = 4, scrollY = 100, dom = "t", rownames = FALSE))
   })
 
 
@@ -486,13 +485,13 @@ output$TSDTable2 <- renderDataTable({
     dta$Value <- round(dta$Value,2)
 #calculate ranks by year
   if("no" %in% dta$`One is high`){
-  dta$rank <- ave(dta$Value, dta$Time, FUN = function(x) rank(x, ties.method = "first"))
+  dta$rank <- ave(dta$Value, dta$Year, FUN = function(x) rank(x, ties.method = "first"))
   } else{
-  dta$rank <- ave(dta$Value, dta$Time, FUN = function(x) rank(-x, ties.method = "first"))
+  dta$rank <- ave(dta$Value, dta$Year, FUN = function(x) rank(-x, ties.method = "first"))
   }
   dta$rankMov<- ave(dta$rank, dta$`Local Authority`, FUN = function(x) {x - lag(x,1)})
   dta$valMov<- round(ave(dta$Value, dta$`Local Authority`, FUN = function(x) {x - lag(x,1)}),2)
-  dta <- dcast(setDT(dta), `Local Authority`~Time, value.var = c("Value","valMov","rank", "rankMov"))
+  dta <- dcast(setDT(dta), `Local Authority`~Year, value.var = c("Value","valMov","rank", "rankMov"))
 #Sort by year  
   lng <- length(yrs) +1
   colNums <- c(1)
@@ -511,24 +510,26 @@ output$indicatorRank <- renderUI({
   selectInput("indiRank", "Select Indicator", sort(unique(bnch_data_subset$Title)), width = "90%") 
   })
 ##Producing Graph for Ranking page
-rnkData <- reactive({
-  dta <- filter(excl_Scotland, Title == input$indiRank)
-    })
 output$rankPlot <- renderPlotly({
-  dtaRnk <- rnkData()
+  dtaRnk <- filter(excl_Scotland, Title == input$indiRank)
+  dtaRnk$selection <- ifelse(dtaRnk$`Local Authority` == input$RnkLA, "Yes", "No")
   if("no" %in% dtaRnk$`One is high`){
-    dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Time, FUN = function(x) rank(x, ties.method = "first"))
+    dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Year, FUN = function(x) rank(x, ties.method = "first"))
   }
   else{
-    dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Time, FUN = function(x) rank(-x, ties.method = "first"))
+    dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Year, FUN = function(x) rank(-x, ties.method = "first"))
   }
+  selDta <- ifelse(input$ValRank == FALSE, "ranks","Value")
   grp <- ggplot(data = dtaRnk) +
-    geom_line(aes(x = Time, y = ranks, group = `Local Authority`, colour ="grey"), size = 1, na.rm = TRUE) +
-    scale_y_reverse(lim = c(32,1), breaks = seq(1,32, 6)) +
+    geom_line(aes_string(x = "Year", y = selDta, group = "`Local Authority`", colour = "selection", size = "selection"), na.rm = TRUE) +
+    {if(input$ValRank== FALSE)
+      scale_y_reverse(lim = c(32,1), breaks = seq(1,32, 6)) 
+    }+
     theme_bw()+
     guides(colour = FALSE)+
     scale_x_discrete(expand = c(0,0))+
-    geom_label(aes(label = `Local Authority`, x = 1, y = ranks))
+  scale_size_manual(breaks = c("Yes", "No"), values = c(0.4,1.5))+
+    scale_colour_manual(breaks = c("Yes", "No"), values = c("grey","red"))
   ggplotly(grp) %>% layout(showlegend = FALSE)
 })
 #comment
