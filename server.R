@@ -274,18 +274,21 @@ MedFun <- reactive({
     })
     
    #create a table which displays all of the values   
-      output$CnclTbl <- renderDataTable({
+      output$CnclTbl <- function(){
         SelectedDtaCNCL <- SelectedDtaCNCL()
         SelectedDtaCNCL <- select(SelectedDtaCNCL, -Local.Authority, -Domain)
         SelectedDtaCNCL <- arrange(SelectedDtaCNCL, Indicator, Year)
-        SelectedDtaCNCL[duplicated(SelectedDtaCNCL$Indicator), "Indicator"] <- ""
-       
-       datatable(SelectedDtaCNCL, extensions = c("Scroller", "Buttons"), options = list(pageLength = 100, 
-                              scrollY = 600, dom = "tB",
-                              buttons = c('copy', 'csv', 'excel', 'pdf')), rownames = FALSE, class = "hover") %>%
-       formatRound(c(3:7), digits = 1) %>%
-         formatStyle("Indicator", fontWeight = "bold", fontSize = 14, color = "black")
-      })
+        indis <- unique(SelectedDtaCNCL$Indicator)
+        lstGrps <- c()
+        for(i in 1:length(indis)){
+          rws <- sum(SelectedDtaCNCL$Indicator == indis[i])
+          names(rws) <- indis[i]
+          lstGrps <- c(lstGrps, rws)
+        }
+        tab <- kable(SelectedDtaCNCL[-1]) %>%
+          group_rows(index = lstGrps)
+        return(tab)
+      }
       
     #add a title above the table
       output$TableTitle <- renderText({
@@ -533,6 +536,12 @@ output$rankPlot <- renderPlotly({
   scale_size_manual(breaks = c("Yes", "No"), values = c(0.4,1.5))+
     scale_colour_manual(breaks = c("Yes", "No"), values = c("grey","red"))
   ggplotly(grp) %>% layout(showlegend = FALSE)
-})
-#comment
+  })
+
+  output$tbSv <- downloadHandler(
+    filename = paste0(input$LA_CNCL, "_",input$categoryCNCL,".pdf"),
+    content = function(con){
+      save_kable(CnclTbl(), filename)
+    }
+  )
 })

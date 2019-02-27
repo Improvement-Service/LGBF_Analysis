@@ -30,4 +30,5 @@ colnames(bnch_data)[4] <- "Year"
 ##Tidy up the names for 
 #The Gross Cost of \"Children Looked After\" in a Community Setting per Child per Week adjusted for inflation
 bnch_data$Title <- gsub('\"', "", bnch_data$Title)
+bnch_data$Value <- round(bnch_data$Value,1)
 excl_Scotland <- filter(bnch_data, `Local Authority` != "Scotland")

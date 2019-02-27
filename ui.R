@@ -103,14 +103,15 @@ tabPanel("By Council",
            ),
                   div(style = "padding-right:8px;padding-left:4px;display:inline",actionBttn("SeriesCNCLALL", "Select All", size = "sm")),
 
-                  actionBttn("SeriesCNCLClear", "Clear All", size = "sm")
+                  actionBttn("SeriesCNCLClear", "Clear All", size = "sm"),
+           actionBttn("tbSv","Save this table", size = "sm")
            ),
              fluidRow(
                column(4,
            tags$b(uiOutput("TableTitle"))
            ),
            column(12,
-           DT::dataTableOutput("CnclTbl")
+           tableOutput("CnclTbl")
                )
          )
          
@@ -133,7 +134,7 @@ tabPanel("By Council",
              ),   
         fluidRow(
              column(4,
-                    wellPanel(id = "sidPnl", style = "height:75vh;overflow-y:auto; margin-right:1px; padding-right:1px; margin-left:5px",
+                    wellPanel(id = "sidPnl", style = "height:80vh;overflow-y:auto; margin-right:1px; padding-right:1px; margin-left:5px",
                           h5("Select Local Authority"),
                           div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
                               awesomeCheckboxGroup("LADisp", label = "", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority'))
@@ -141,7 +142,7 @@ tabPanel("By Council",
                           actionBttn("LADispAll", "Select All",size = "sm"),
                           actionBttn("LADispClear", "Clear All",size = "sm"),
                           h5("Select years"),
-                          uiOutput("seriesDisp",style = "margin-top:10px;margin-bottom:-5px"),
+                          uiOutput("seriesDisp",style = "margin-top:10px;margin-bottom:-5px;column-count:2;-webkit-column-count:2; -moz-column-count:2"),
                           actionBttn("seriesDispAll", "Select All",size = "sm"),
                           actionBttn("seriesDispClear", "Clear All",size = "sm"),
                           awesomeRadio("FmlyGrpDisp", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
