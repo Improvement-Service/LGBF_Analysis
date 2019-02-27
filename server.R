@@ -26,7 +26,7 @@ shinyServer(function(input, output, session) {
   
  output$series <- renderUI({
     bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2)
-    awesomeCheckboxGroup("TSeries", "Select Time Series", unique(bnch_data_indi$Year), selected = unique(bnch_data_indi$Year)) 
+    awesomeCheckboxGroup("TSeries", "", unique(bnch_data_indi$Year), selected = unique(bnch_data_indi$Year)) 
  })
 
 #create a reactive function to store time series choices available    
@@ -87,14 +87,14 @@ MedFun <- reactive({
     p <- ggplot(excl_Scotland[excl_Scotland$Title == input$indicator2,])+
       geom_bar(aes(x = Local_Authority, y = Value, fill = Year, 
                     text = paste("Local Authority:", `Local_Authority`, "<br>", "Year:", `Year`,
-                                 "<br>", "Value:", `Value`)),position = "dodge", stat = "identity")+
+                                 "<br>", "Value:", `Value`)), colour = "black",position = "dodge", stat = "identity")+
       theme_bw()+
       xlab("")+ylab("")+
       geom_hline(aes(yintercept = MedFun(), colour = Year))+
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
             axis.text.x = element_text(angle = 90, hjust = 1.0, vjust = 0.3))+
       guides(fill = FALSE)
-    ggplotly(p, tooltip = c("text","y"))
+    ggplotly(p, tooltip = c("text")) %>% hide_legend()
             
   })
 
@@ -135,7 +135,7 @@ MedFun <- reactive({
       bnch_data_indiYR <- bnch_data_indiYR()
   #selectizeInput lets you have it start blank instead of
   #selecting the first value - as selectInput does!
-      selectizeInput("baseYrSrv", "Year", 
+      selectizeInput("baseYrSrv", "Start Year", 
                      choices = unique(bnch_data_indiYR$Year),
                     options = list(
                       placeholder = "Select Start Year",
@@ -145,7 +145,7 @@ MedFun <- reactive({
     })
     output$compYr <- renderUI({
       bnch_data_indiYR <- bnch_data_indiYR()
-      selectizeInput("compYrSrv", "Comparator Year:", 
+      selectizeInput("compYrSrv", "End Year:", 
                      choices = c(unique(bnch_data_indiYR[bnch_data_indiYR$Year != input$baseYrSrv, "Year"])),
       options = list(
         placeholder = "Select End Year",
@@ -175,7 +175,8 @@ MedFun <- reactive({
       pp <- ggplot(data = dat, aes(x = Local_Authority, y = Diffdata)) +
         geom_bar(stat = "identity", position= "dodge", fill = "darkblue")+
         theme_bw()+
-        ylab(paste("Change from", as.character(input$baseYrSrv), "to", as.character(input$compYrSrv))) +
+        xlab("")+
+        ylab(paste("Change", as.character(input$baseYrSrv), "to", as.character(input$compYrSrv))) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3),
               panel.grid.major = element_blank(),
               panel.grid.minor = element_blank(),
@@ -185,7 +186,8 @@ MedFun <- reactive({
         pp <- ggplot(data = dat, aes(x = Local_Authority, y = PerDiffdata)) +
           geom_bar(stat = "identity", position= "dodge", fill = "darkblue")+
           theme_bw()+
-          ylab(paste("Percentage Change from", as.character(input$baseYrSrv), "to", as.character(input$compYrSrv))) +
+          xlab("")+
+          ylab(paste("Percentage Change", as.character(input$baseYrSrv), "to", as.character(input$compYrSrv))) +
           theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 1),
                 panel.grid.major = element_blank(),
                 panel.grid.minor = element_blank(),
