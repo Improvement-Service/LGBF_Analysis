@@ -285,10 +285,11 @@ MedFun <- reactive({
           names(rws) <- indis[i]
           lstGrps <- c(lstGrps, rws)
         }
-        tab <- kable(SelectedDtaCNCL[-1]) %>%
-          group_rows(index = lstGrps)
-        return(tab)
+        kable(SelectedDtaCNCL[-1]) %>%
+          group_rows(index = lstGrps) %>%
+          kable_styling()
       }
+
       
     #add a title above the table
       output$TableTitle <- renderText({
@@ -388,7 +389,7 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
   output$boxDisp <- renderPlot({
     bpdta <- filter(excl_Scotland, `Local Authority` %in% input$LADisp & Title == input$indicator2Disp & Year %in% input$TSeriesDisp)
     ggplot(data = bpdta, aes(x = Year, y = Value)) +
-      geom_boxplot() +
+      geom_violin() +
       theme_bw()
   })
 
@@ -541,7 +542,15 @@ output$rankPlot <- renderPlotly({
   output$tbSv <- downloadHandler(
     filename = paste0(input$LA_CNCL, "_",input$categoryCNCL,".pdf"),
     content = function(con){
-      save_kable(CnclTbl(), filename)
+      src <- normalizePath("TableDL.rmd")
+      
+      owd <- setwd(tempdir())
+      on.exit(setwd(owd))
+      file.copy(src, 'TableDL.rmd', overwrite = TRUE)
+      
+      library(rmarkdown)
+      out <- render('TableDL.rmd', "pdf_document")
+      file.rename(out, con)
     }
   )
 })

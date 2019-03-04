@@ -8,6 +8,8 @@ library(data.table)
 library(plotly)
 library(shinyWidgets)
 library(dygraphs)
+library(kableExtra)
+library(tinytex)
 
 Sys.setenv("plotly_username" = "NMCassidy")
 Sys.setenv("plotly_api_key" = "xwk9zuxumf")
