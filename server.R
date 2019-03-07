@@ -389,8 +389,9 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
   output$boxDisp <- renderPlot({
     bpdta <- filter(excl_Scotland, `Local Authority` %in% input$LADisp & Title == input$indicator2Disp & Year %in% input$TSeriesDisp)
     ggplot(data = bpdta, aes(x = Year, y = Value)) +
-      geom_violin() +
-      theme_bw()
+      geom_violin(draw_quantiles = c(0.5), colour = "black") +
+      theme_bw() +
+      theme(panel.grid.major = element_blank())
   })
 
 ##Create outputs for Tme Series Page ========================

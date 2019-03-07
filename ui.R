@@ -5,9 +5,9 @@ shinyUI(navbarPage(id = "pageList",
   theme = shinytheme("simplex"),
 header = ##Some css
   tags$head(tags$style(
-    "#plot1 {height:75vh !important; border-right:0px; padding-right:0px}",
-    "#Year-on-Year-Plot {height:75vh !important}",
-    "#CnclTbl {height:75vh !important}",
+    "#plot1 {height:78vh !important; border-right:0px; padding-right:0px}",
+    "#Year-on-Year-Plot {height:78vh !important}",
+    "#CnclTbl {height:78vh !important}",
     ".form-group.shiny-input-container.shiny-input-checkboxgroup.shiny-bound-input{margin-top:-10px; font-size: 1em}",
     ".well{padding-left:5px; padding-top:5px}",
     ".bttn-unite{margin-bottom:10px}",
@@ -19,16 +19,18 @@ header = ##Some css
   tabPanel("By Indicator",
       fluidPage(
         fluidRow(
-          column(4,
+          column(4, style = "padding-left:10px",
       selectInput("category", "Select Indicator Category", unique(excl_Scotland$Domain),
                           selected = "Adult Social Care")
       ),
       column(6,
                   uiOutput("indicator")
         )
+      )
       ),
       fluidRow(
-    sidebarPanel(id = "sidPnl", style = "height:75vh;overflow-y:auto;",
+        column(4, style = "padding-left: 10px",
+    wellPanel(id = "sidPnl", style = "height:78vh;overflow-y:auto;padding-left:10px",
       h5("Select Local Authority"),
       div(class = "multicol",style = "column-count:2;-webkit-column-count:2; -moz-column-count:2; margin-top:0px",
         awesomeCheckboxGroup("LA", label = "", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$`Local Authority`))),
@@ -39,14 +41,16 @@ header = ##Some css
       actionBttn("SeriesAll", "Select All",size = "sm"),
       actionBttn("SeriesClear", "Clear All",size = "sm"),
       awesomeRadio("FmlyGrp", "Select Family Group", c("All",1,2,3,4), inline = TRUE),
-      actionBttn("FmlyGrp2", "Update Family Group",size = "sm"), width = 4
-    ),
+      actionBttn("FmlyGrp2", "Update Family Group",size = "sm")
+    )),
+    column(8,
     mainPanel(
       tags$b(uiOutput("PlotTitle")),
-      plotlyOutput("plot1"), width = 8
+      plotlyOutput("plot1", width = "100%")
     )
       )
-    )),
+    )
+    ),
 
 ##New tab for year on year changes
   tabPanel("Year-on-Year Change",
@@ -57,7 +61,7 @@ header = ##Some css
      )),
     fluidPage(
         fluidRow(
-        column(4,
+        column(4, style = "padding-left:10px",
           selectInput("categoryYr", "Select Indicator Category", unique(excl_Scotland$Domain),
                         selected = "Adult Social Care")
                    ),
@@ -66,7 +70,7 @@ header = ##Some css
           )
           ),
      fluidRow( 
-          sidebarPanel(id = "sidPnl", style = "height:75vh;overflow-y:auto;",
+          sidebarPanel(id = "sidPnl", style = "height:78vh;overflow-y:auto;",
                        h5("Select Local Authority"),
                        div(class = "multicol",style = "column-count:2;-webkit-column-count:2; -moz-column-count:2; margin-top:0px",
                          awesomeCheckboxGroup("LAYr", label = "", unique(bnch_data$`Local Authority`), selected = bnch_data$`Local Authority`)),
@@ -104,7 +108,7 @@ tabPanel("By Council",
                   div(style = "padding-right:8px;padding-left:4px;display:inline",actionBttn("SeriesCNCLALL", "Select All", size = "sm")),
 
                   actionBttn("SeriesCNCLClear", "Clear All", size = "sm"),
-                  downloadBttn("tbSv","Save this table", size = "sm")
+                  div(style = "float:right",downloadBttn("tbSv","Save this table", size = "sm"))
            ),
              fluidRow(
                column(4,
@@ -133,8 +137,8 @@ tabPanel("By Council",
                ), width = "100%"
              ),   
         fluidRow(
-             column(4,
-                    wellPanel(id = "sidPnl", style = "height:80vh;overflow-y:auto; margin-right:1px; padding-right:1px; margin-left:5px",
+             column(4, style = "padding-left:10px",
+                    wellPanel(id = "sidPnl", style = "height:80vh;overflow-y:auto; margin-right:1px; padding-right:1px",
                           h5("Select Local Authority"),
                           div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2; margin-bottom:8px",
                               awesomeCheckboxGroup("LADisp", label = "", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority'))
@@ -173,16 +177,16 @@ tabPanel("By Council",
                        ),
                     width = "100%"
              )),             
-      fluidRow(column(4,
-                      wellPanel(style = "height:75vh;overflow-y:auto;",
+      fluidRow(column(4, style = "padding-left:10px",
+                      wellPanel(style = "height:80vh;overflow-y:auto; margin-right:1px; padding-right:1px",
                         h5("Select Local Authority"),
                         div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
                             awesomeCheckboxGroup("LATSD", label = "", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority'))
                         ),
                         actionBttn("LATSDAll", "Select All",size = "sm"),
                         actionBttn("LATSDClear", "Clear All",size = "sm"),
-                        h5("Select years"),
-                        uiOutput("seriesTSD",style = "margin-top:10px;margin-bottom:-5px"),
+                        h5("Select years", style = "margin-top:3px"),
+                        uiOutput("seriesTSD",style = "margin-top:10px;margin-bottom:5px;column-count:2;-webkit-column-count:2; -moz-column-count:2"),
                         actionBttn("seriesTSDAll", "Select All",size = "sm"),
                         actionBttn("seriesTSDClear", "Clear All",size = "sm"),
                         awesomeRadio("FmlyGrpTSD", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
