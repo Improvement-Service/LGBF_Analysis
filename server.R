@@ -301,7 +301,7 @@ MedFun <- reactive({
 ##Create outputs for Dispersion Page ========================
 output$indicatorDisp <- renderUI({
   bnch_data_subset <- filter(excl_Scotland, Domain == input$categoryDisp)
-  selectInput("indicator2Disp", "Please Select Indicator", sort(unique(bnch_data_subset$Title)))
+  selectInput("indicator2Disp", "Please Select Indicator", sort(unique(bnch_data_subset$Title)), width = "100%")
 })
       
 #create buttons to select all or clear all in time series
@@ -416,7 +416,7 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
   
   output$indicatorTSD <- renderUI({
     bnch_data_subset <- filter(excl_Scotland, Domain == input$categoryTSD)
-    selectInput("indicator2TSD", "Please Select Indicator", sort(unique(bnch_data_subset$Title)))
+    selectInput("indicator2TSD", "Please Select Indicator", sort(unique(bnch_data_subset$Title)), width = "100%")
   })
 output$seriesTSD <- renderUI({
     bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2TSD)

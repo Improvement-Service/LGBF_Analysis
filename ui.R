@@ -42,12 +42,10 @@ header = ##Some css
       awesomeRadio("FmlyGrp", "Select Family Group", c("All",1,2,3,4), inline = TRUE),
       actionBttn("FmlyGrp2", "Update Family Group",size = "sm")
     )),
-    column(8,
     mainPanel(
       tags$b(uiOutput("PlotTitle")),
-      plotlyOutput("plot1", width = "100%")
+      plotlyOutput("plot1")
     )
-      )
     )
     ),
 
@@ -125,13 +123,13 @@ tabPanel("By Council",
     tabPanel("Dispersion",
                fluidPage(
                  fluidRow(
-                  column(6, 
+                  column(4, 
                      selectInput("categoryDisp", "Select Indicator Category", unique(excl_Scotland$Domain))
                    ),
                   column(6,
                        uiOutput("indicatorDisp")
                        )
-               ), width = "100%"
+               )
              ),   
         fluidRow(
              column(4, style = "padding-left:10px",
@@ -165,13 +163,12 @@ tabPanel("By Council",
     tabPanel("Time Series Data",
                fluidPage(
                  fluidRow(
-                  column(6,  
+                  column(4,  
                       selectInput("categoryTSD", "Select Indicator Category", unique(excl_Scotland$Domain))
                    ),
                   column(6,
                        uiOutput("indicatorTSD")
-                       ),
-                    width = "100%"
+                       )
              )),             
       fluidRow(column(4, style = "padding-left:10px",
                       wellPanel(style = "height:80vh;overflow-y:auto; margin-right:1px; padding-right:1px",
@@ -197,14 +194,14 @@ tabPanel("By Council",
     tabPanel("Rankings Over Time",
              fluidPage(
                fluidRow(
-                 column(4,  
+                 column(3,  
                         selectInput("categoryRank", "Select Indicator Category", unique(excl_Scotland$Domain),
                                     width = "90%")
                  ),
-                 column(3,
+                 column(5,
                         uiOutput("indicatorRank")
                  ),
-                 column(3,
+                 column(2,
                       selectInput("RnkLA", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = "Aberdeen City")),
                  column(2,awesomeCheckbox("ValRank", "Show values")),
                  width = "100%"
