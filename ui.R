@@ -140,7 +140,7 @@ tabPanel("By Council",
              column(4, style = "padding-left:10px",
                     wellPanel(id = "sidPnl", style = "height:80vh;overflow-y:auto; margin-right:1px; padding-right:1px",
                           h5("Select Local Authority"),
-                          div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2; margin-bottom:8px",
+                          div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2; margin-bottom:5px",
                               awesomeCheckboxGroup("LADisp", label = "", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority'))
                           ),
                           actionBttn("LADispAll", "Select All",size = "sm"),
@@ -150,7 +150,7 @@ tabPanel("By Council",
                           actionBttn("seriesDispAll", "Select All",size = "sm"),
                           actionBttn("seriesDispClear", "Clear All",size = "sm"),
                           awesomeRadio("FmlyGrpDisp", "Select Family Group", c(1,2,3,4, "All"), inline = TRUE),
-                          actionBttn("FmlyGrp2Disp", "Update Family Group",size = "sm")
+                          div(style = "margin-bottom:0px",actionBttn("FmlyGrp2Disp", "Update Family Group",size = "sm"))
              )
              ),
              column(8,

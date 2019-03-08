@@ -380,10 +380,11 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
     }
     dta <- spread(dta[c(1,2,3)], key = Year, value = Value)
     tbl <- datatable(dta, class = "row-border",extensions = c("Scroller", "FixedColumns"), rownames = FALSE, 
-                     options = list(pageLength = 32, scrollY = 700, dom = "t", 
+                     options = list(pageLength = 32, scrollY = 720, dom = "t", 
                   scrollX = TRUE, fixedColumns = list(leftColumns = 1))) %>%
       formatStyle(names(dta)[2:ncol(dta)], color = styleInterval(txtbrks, txtclrs),
-                  backgroundColor = styleInterval(brks, clrs), lineHeight = "40%")
+                  backgroundColor = styleInterval(brks, clrs), lineHeight = "50%") %>%
+      formatStyle(colnames(dta), fontSize = "110%")
   })
   
   output$boxDisp <- renderPlot({
@@ -466,6 +467,7 @@ output$TSDTable1 <- renderDataTable({
   p <- dta %>% group_by(Year) %>%
     summarise_at(., vars(Value), funs(mean, min, max, median, sd), na.rm =TRUE) %>%
     mutate_at(., vars(mean:sd), funs(round), digits = 2)
+  colnames(p)[6] <- c("Standard Deviation")
   datatable(p,  extensions = "Scroller",
             options = list(pageLength = 4, scrollY = 100, dom = "t", rownames = FALSE))
   })
@@ -508,7 +510,8 @@ output$TSDTable2 <- renderDataTable({
   }
   srtDta <- dta %>% select(colNums)
   datatable(srtDta, extensions = "Scroller", options = list(pageLength = 32, scrollX = TRUE,
-                          scrollY = 400, dom = "t"),container = cont, rownames = FALSE)
+                          scrollY = 400, dom = "t"),container = cont, rownames = FALSE) %>%
+    formatStyle(c(5,9,13,17,21,25), `border-right` = "1px solid black")
   })
 
 ##Inputs for ranking Page
