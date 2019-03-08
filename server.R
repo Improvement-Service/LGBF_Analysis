@@ -557,4 +557,20 @@ output$rankPlot <- renderPlotly({
       file.rename(out, con)
     }
   )
-})
+  
+  selectedCat <- reactiveValues(catg=NULL)
+  observeEvent(input$category, selectedCat$catg <- input$category)
+  observeEvent(input$categoryYr, selectedCat$catg <- input$categoryYr)
+  observeEvent(input$categoryCNCL, selectedCat$catg <- input$categoryCNCL)
+  observeEvent(input$categoryDisp, selectedCat$catg <- input$categoryDisp)
+  observeEvent(input$categoryTSD, selectedCat$catg <- input$categoryTSD)
+  observeEvent(input$categoryRank, selectedCat$catg <- input$categoryRank)
+  
+  observeEvent(selectedCat$catg, updateSelectInput(session,"category", selected = selectedCat$catg))
+  observeEvent(selectedCat$catg, updateSelectInput(session,"categoryYr", selected = selectedCat$catg))
+  observeEvent(selectedCat$catg, updateSelectInput(session,"categoryCNCL", selected = selectedCat$catg))
+  observeEvent(selectedCat$catg, updateSelectInput(session,"categoryDisp", selected = selectedCat$catg))
+  observeEvent(selectedCat$catg, updateSelectInput(session,"categoryTSD", selected = selectedCat$catg))
+  observeEvent(selectedCat$catg, updateSelectInput(session,"categoryRank", selected = selectedCat$catg))
+  
+  })

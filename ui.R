@@ -20,8 +20,7 @@ header = ##Some css
       fluidPage(
         fluidRow(
           column(4, style = "padding-left:10px",
-      selectInput("category", "Select Indicator Category", unique(excl_Scotland$Domain),
-                          selected = "Adult Social Care")
+      selectInput("category", "Select Indicator Category", unique(excl_Scotland$Domain))
       ),
       column(6,
                   uiOutput("indicator")
@@ -62,8 +61,7 @@ header = ##Some css
     fluidPage(
         fluidRow(
         column(4, style = "padding-left:10px",
-          selectInput("categoryYr", "Select Indicator Category", unique(excl_Scotland$Domain),
-                        selected = "Adult Social Care")
+          selectInput("categoryYr", "Select Indicator Category", unique(excl_Scotland$Domain))
                    ),
         column(6,
           uiOutput("indicatorYr")
@@ -96,7 +94,7 @@ tabPanel("By Council",
               fluidRow(
                 column(6,
            selectInput("categoryCNCL", "Select Indicator Category", unique(excl_Scotland$Domain),
-                               selected = "Adult Social Care", width = "100%")
+                                width = "100%")
            ),
            column(6,
                    selectInput("LA_CNCL", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = "Aberdeen City", width = "100%")
@@ -128,8 +126,7 @@ tabPanel("By Council",
                fluidPage(
                  fluidRow(
                   column(6, 
-                     selectInput("categoryDisp", "Select Indicator Category", unique(excl_Scotland$Domain),
-                                   selected = "Children's Services")
+                     selectInput("categoryDisp", "Select Indicator Category", unique(excl_Scotland$Domain))
                    ),
                   column(6,
                        uiOutput("indicatorDisp")
@@ -169,8 +166,7 @@ tabPanel("By Council",
                fluidPage(
                  fluidRow(
                   column(6,  
-                      selectInput("categoryTSD", "Select Indicator Category", unique(excl_Scotland$Domain),
-                                   selected = "Children's Services")
+                      selectInput("categoryTSD", "Select Indicator Category", unique(excl_Scotland$Domain))
                    ),
                   column(6,
                        uiOutput("indicatorTSD")
@@ -203,7 +199,7 @@ tabPanel("By Council",
                fluidRow(
                  column(4,  
                         selectInput("categoryRank", "Select Indicator Category", unique(excl_Scotland$Domain),
-                                    selected = "Children's Services", width = "90%")
+                                    width = "90%")
                  ),
                  column(3,
                         uiOutput("indicatorRank")
