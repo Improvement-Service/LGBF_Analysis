@@ -8,6 +8,7 @@ setwd("C:/Users/cassidy.nicholas/OneDrive - IS/LGBF-Spotfire/data")
 data <- read_excel("new bnch data.xlsx")[1:1326] ##remove last few columns, these only have Scotland values from SHS
 data <- data[complete.cases(data$`Local Authority`),]
 metadata <- read_excel("Metadata - Shiny.xlsx")
+metadata$Title <- tools::toTitleCase(metadata$Title)
 simdData <- read_excel("SIMDvalues.xlsx")
 colnames(simdData)[2:3] <- c("Family group (People)", "Family group (Other)")
 
