@@ -60,8 +60,10 @@ shinyServer(function(input, output, session) {
                                           inputId = "LA",
                                           selected = if(input$FmlyGrp == "All"){
                                             unique(excl_Scotland$`Local Authority`)} 
-                                            else{
+                                            else if(input$category %in% c("Children's Services", "Adult Social Care", "Housing Services")){
                                               unique(filter(excl_Scotland, `Family group (People)` %in% input$FmlyGrp))[[1]] 
+                                            } else{
+                                              unique(filter(excl_Scotland, `Family group (Other)` %in% input$FmlyGrp))[[1]]
                                             }
                  )
                }
@@ -203,8 +205,10 @@ MedFun <- reactive({
                                             inputId = "LAYr",
                                             selected = if(input$FmlyGrpYr == "All"){
                                               unique(bnch_data$`Local Authority`)
+                                            } else if(input$categoryYr %in% c("Children's Services", "Adult Social Care", "Housing Services")){
+                                              unique(filter(excl_Scotland, `Family group (People)` %in% input$FmlyGrpYr))[[1]] 
                                             } else{
-                                              unique(filter(excl_Scotland, `Family group (People)` %in% input$FmlyGrpYr)[[1]])
+                                              unique(filter(excl_Scotland, `Family group (Other)` %in% input$FmlyGrpYr))[[1]]
                                             }
     )
                  }
@@ -357,8 +361,10 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
                                         inputId = "LADisp",
                                         selected = if(input$FmlyGrpDisp == "All"){
                                           unique(excl_Scotland$`Local Authority`)} 
-                                        else{
+                                        else if(input$categoryDisp %in% c("Children's Services", "Adult Social Care", "Housing Services")){
                                           unique(filter(excl_Scotland, `Family group (People)` %in% input$FmlyGrpDisp))[[1]] 
+                                        } else{
+                                          unique(filter(excl_Scotland, `Family group (Other)` %in% input$FmlyGrpDisp))[[1]]
                                         }
                             )
                   }
@@ -453,9 +459,11 @@ observeEvent(eventExpr = input$FmlyGrp2TSD,
                                    inputId = "LATSD",
                                   selected = if(input$FmlyGrpTSD == "All"){
                                             unique(excl_Scotland$`Local Authority`)} 
-                                          else{
-                                            unique(filter(excl_Scotland, `Family group (People)` %in% input$FmlyGrpTSD))[[1]] 
-                                          }
+                                  else if(input$categoryTSD %in% c("Children's Services", "Adult Social Care", "Housing Services")){
+                                    unique(filter(excl_Scotland, `Family group (People)` %in% input$FmlyGrpTSD))[[1]] 
+                                  } else{
+                                    unique(filter(excl_Scotland, `Family group (Other)` %in% input$FmlyGrpTSD))[[1]]
+                                  }
                  )
                }
   )
@@ -469,7 +477,7 @@ output$TSDTable1 <- renderDataTable({
     mutate_at(., vars(mean:sd), funs(round), digits = 2)
   colnames(p)[6] <- c("Standard Deviation")
   datatable(p,  extensions = "Scroller",
-            options = list(pageLength = 4, scrollY = 100, dom = "t", rownames = FALSE))
+            options = list(pageLength = 8, scrollY = 150, dom = "t", rownames = FALSE))
   })
 
 
@@ -530,17 +538,20 @@ output$rankPlot <- renderPlotly({
     dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Year, FUN = function(x) rank(-x, ties.method = "first"))
   }
   selDta <- ifelse(input$ValRank == FALSE, "ranks","Value")
+  colnames(dtaRnk)[1] <- "Local_Authority"
   grp <- ggplot(data = dtaRnk) +
-    geom_line(aes_string(x = "Year", y = selDta, group = "`Local Authority`", colour = "selection", size = "selection"), na.rm = TRUE) +
+    geom_line(aes(x = Year, y = !!ensym(selDta), group = `Local_Authority`, colour = selection, size = selection,
+                         text = paste(" Local Authority: ", `Local_Authority`,"<br>",
+                                      "Year: ", `Year`,"<br>" , "Rank: ", `ranks`,"<br>", "Value: ", `Value`)), na.rm = TRUE) +
     {if(input$ValRank== FALSE)
       scale_y_reverse(lim = c(32,1), breaks = seq(1,32, 6)) 
     }+
     theme_bw()+
     guides(colour = FALSE)+
-    scale_x_discrete(expand = c(0,0))+
+    scale_x_discrete(expand = c(0.001,0.01))+
   scale_size_manual(breaks = c("Yes", "No"), values = c(0.4,1.5))+
     scale_colour_manual(breaks = c("Yes", "No"), values = c("grey","red"))
-  ggplotly(grp) %>% layout(showlegend = FALSE)
+  ggplotly(grp, tooltip = c("text")) %>% layout(showlegend = FALSE)
   })
 
   output$tbSv <- downloadHandler(
