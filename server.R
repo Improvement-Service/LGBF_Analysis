@@ -92,9 +92,10 @@ MedFun <- reactive({
                                  "<br>", "Value:", `Value`)), colour = "black",position = "dodge", stat = "identity")+
       theme_bw()+
       xlab("")+ylab("")+
+      scale_y_continuous(expand = c(0,0))+
       geom_hline(aes(yintercept = MedFun(), colour = Year))+
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
-            axis.text.x = element_text(angle = 90, hjust = 1.0, vjust = 0.3))+
+            axis.text.x = element_text(angle = 90, hjust = 5, vjust = 2, size = 14))+
       guides(fill = FALSE)
     ggplotly(p, tooltip = c("text")) %>% hide_legend()
             
@@ -275,10 +276,10 @@ MedFun <- reactive({
   #create a reactive function to filter the new data set to only show what is selected for local authority and domain  
     SelectedDtaCNCL <- reactive({
       CNCLdta <- filter(SumStat, Local.Authority %in% input$LA_CNCL & Domain %in% input$categoryCNCL & Year %in% input$TSeriesCNCL)
-    })
+      })
     
    #create a table which displays all of the values   
-      output$CnclTbl <- function(){
+      output$CnclTbl <- renderUI({
         SelectedDtaCNCL <- SelectedDtaCNCL()
         SelectedDtaCNCL <- select(SelectedDtaCNCL, -Local.Authority, -Domain)
         SelectedDtaCNCL <- arrange(SelectedDtaCNCL, Indicator, Year)
@@ -289,10 +290,22 @@ MedFun <- reactive({
           names(rws) <- indis[i]
           lstGrps <- c(lstGrps, rws)
         }
-        kable(SelectedDtaCNCL[-1]) %>%
+        grph <- select(SelectedDtaCNCL, c("Year","Indicator", "Ranking")) %>%
+          mutate(maxt = 32) %>%
+          gather(Indi, values, c("Ranking", "maxt")) %>%
+          group_by(Indicator, Year) %>%
+          dplyr::summarise(grphs = spk_chr(
+            values, type = "bullet", width = "100"
+          ))
+        grph <- dplyr::arrange(grph, Indicator, Year)
+        SelectedDtaCNCL$grphs <- grph$grphs
+        
+        format_table(SelectedDtaCNCL[-1], align = "c") %>%
           group_rows(index = lstGrps) %>%
-          kable_styling()
-      }
+          htmltools::HTML() %>%
+          shiny::div() %>%
+          sparkline::spk_add_deps()
+      })
 
       
     #add a title above the table

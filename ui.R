@@ -111,7 +111,7 @@ tabPanel("By Council",
            tags$b(uiOutput("TableTitle"))
            ),
            column(12,
-              tableOutput("CnclTbl")
+              htmlOutput("CnclTbl")
                )
          )
          
