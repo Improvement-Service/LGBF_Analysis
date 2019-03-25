@@ -39,7 +39,7 @@ bnch_data$Value <- round(bnch_data$Value,1)
 excl_Scotland <- filter(bnch_data, `Local Authority` != "Scotland")
 
 export_formattable <- function(w, file, width = "100%", height = NULL, 
-                               background = "white", delay = 0.2)
+                               background = "white", delay = 0.02)
 {
   path <- html_print(w, background = background, viewer = NULL)
   url <- paste0("file:///", gsub("\\\\", "/", normalizePath(path)))

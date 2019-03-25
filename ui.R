@@ -95,7 +95,7 @@ tabPanel("By Council",
                                 width = "100%")
            ),
            column(6,
-                   selectInput("LA_CNCL", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = "Aberdeen City", width = "100%")
+                   selectInput("LA_CNCL", "Select Local Authority", unique(excl_Scotland$`Local Authority`), width = "100%")
            ),
            column(12,
                    uiOutput("seriesCNCL")

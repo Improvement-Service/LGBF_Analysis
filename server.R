@@ -571,7 +571,7 @@ output$rankPlot <- renderPlotly({
   })
 
   output$tbSv <- downloadHandler(
-    filename = paste0(input$LA_CNCL, "_",input$categoryCNCL,".pdf"),
+    filename = function(){paste0(input$LA_CNCL, "_",input$categoryCNCL,".pdf")},
     content = function(con){
       export_formattable(cnclTblOut(), con)
           }
