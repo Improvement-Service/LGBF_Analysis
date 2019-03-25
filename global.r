@@ -7,10 +7,14 @@ library(DT)
 library(data.table)
 library(plotly)
 library(shinyWidgets)
-library(dygraphs)
 library(kableExtra)
 library(formattable)
 library(sparkline)
+library(magick)
+library(webshot)
+library(htmltools)
+
+if(is.null(suppressMessages(webshot:::find_phantom()))) {webshot::install_phantomjs()}
 
 Sys.setenv("plotly_username" = "NMCassidy")
 Sys.setenv("plotly_api_key" = "xwk9zuxumf")
@@ -33,3 +37,14 @@ bnch_data<- arrange(bnch_data, Domain, Title, Year)
 bnch_data$Title <- gsub('\"', "", bnch_data$Title)
 bnch_data$Value <- round(bnch_data$Value,1)
 excl_Scotland <- filter(bnch_data, `Local Authority` != "Scotland")
+
+export_formattable <- function(w, file, width = "100%", height = NULL, 
+                               background = "white", delay = 0.2)
+{
+  path <- html_print(w, background = background, viewer = NULL)
+  url <- paste0("file:///", gsub("\\\\", "/", normalizePath(path)))
+  webshot(url,
+          file = file,
+          selector = ".table",
+          delay = delay)
+}

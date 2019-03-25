@@ -279,7 +279,7 @@ MedFun <- reactive({
       })
     
    #create a table which displays all of the values   
-      output$CnclTbl <- renderUI({
+      cnclTblOut <- function(){
         SelectedDtaCNCL <- SelectedDtaCNCL()
         SelectedDtaCNCL <- select(SelectedDtaCNCL, -Local.Authority, -Domain)
         SelectedDtaCNCL <- arrange(SelectedDtaCNCL, Indicator, Year)
@@ -298,15 +298,18 @@ MedFun <- reactive({
             values, type = "bullet", width = "100"
           ))
         grph <- dplyr::arrange(grph, Indicator, Year)
-        SelectedDtaCNCL$grphs <- grph$grphs
+        SelectedDtaCNCL$`Ranked Position` <- grph$grphs
         
         format_table(SelectedDtaCNCL[-1], align = "c") %>%
           group_rows(index = lstGrps) %>%
           htmltools::HTML() %>%
           shiny::div() %>%
           sparkline::spk_add_deps()
-      })
-
+      }
+    
+      output$CnclTbl <- renderUI({
+        cnclTblOut()
+        })
       
     #add a title above the table
       output$TableTitle <- renderText({
@@ -570,16 +573,8 @@ output$rankPlot <- renderPlotly({
   output$tbSv <- downloadHandler(
     filename = paste0(input$LA_CNCL, "_",input$categoryCNCL,".pdf"),
     content = function(con){
-      src <- normalizePath("TableDL.rmd")
-      
-      owd <- setwd(tempdir())
-      on.exit(setwd(owd))
-      file.copy(src, 'TableDL.rmd', overwrite = TRUE)
-      
-      library(rmarkdown)
-      out <- render('TableDL.rmd', "pdf_document")
-      file.rename(out, con)
-    }
+      export_formattable(cnclTblOut(), con)
+          }
   )
   
   selectedCat <- reactiveValues(catg=NULL)

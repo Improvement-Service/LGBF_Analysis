@@ -23,6 +23,10 @@ output: word_document
 ```{r, include=FALSE}
 library(dplyr)
 library(kableExtra)
+library(formattable)
+library(sparkline)
+library(webshot)
+library(htmltools)
 ```
 
 ```{r echo = FALSE}
@@ -36,8 +40,34 @@ SelectedDtaCNCL <- SelectedDtaCNCL()
           names(rws) <- indis[i]
           lstGrps <- c(lstGrps, rws)
         }
-        kable(SelectedDtaCNCL[-1], format = "latex", booktabs = T, longtable = T, caption = "", align = "c") %>%
-          group_rows(index = lstGrps,latex_gap_space = "1em") %>%
-          kable_styling(position = "left", latex_options = c("repeat_header")) %>%
-          column_spec(1:7, width  = "8em")
+        grph <- select(SelectedDtaCNCL, c("Year","Indicator", "Ranking")) %>%
+          mutate(maxt = 32) %>%
+          gather(Indi, values, c("Ranking", "maxt")) %>%
+          group_by(Indicator, Year) %>%
+          dplyr::summarise(grphs = spk_chr(
+            values, type = "bullet", width = "100"
+          ))
+        grph <- dplyr::arrange(grph, Indicator, Year)
+        SelectedDtaCNCL$grphs <- grph$grphs
+        
+        f <- formattable(SelectedDtaCNCL[-1])
+#          group_rows(index = lstGrps) %>%
+#          kable_styling(position = "left") %>%
+#          htmltools::HTML() %>%
+#          shiny::div() %>%
+#          sparkline::spk_add_deps()
+
+        export_formattable <- function(f, file, width = "100%", height = NULL, 
+                               background = "white", delay = 0.2)
+    {
+      w <- as.htmlwidget(f, width = width, height = height) %>% sparkline::spk_add_deps()
+      path <- html_print(w, background = background, viewer = NULL)
+      url <- paste0("file:///", gsub("\\\\", "/", normalizePath(path)))
+      webshot(url,
+              file = file,
+              selector = ".formattable_widget",
+              delay = delay)
+        }
+        export_formattable(f, "test.pdf")
+        
 ```
