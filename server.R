@@ -405,10 +405,21 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
       txtbrks <- quantile(dta$Value, probs = c(0,0.75), na.rm = TRUE)
       txtclrs <- c("white", "black", "black")
     }
-    dta <- spread(dta[c(1,2,3)], key = Year, value = Value)
-    tbl <- datatable(dta, class = "row-border",extensions = c("Scroller", "FixedColumns"), rownames = FALSE, 
+    ##generate sparklines html
+    sprkcode <- dta %>% dplyr::group_by(`Local Authority`) %>% summarise(Trend = spk_chr(
+      Value, type = "line"
+    ))
+    dta <- spread(dta[c(1,2,3)], key = Year, value = Value) %>%
+      left_join(sprkcode)
+    tbl <- datatable(dta, class = "row-border",escape = F,extensions = c("Scroller", "FixedColumns"), rownames = FALSE, 
                      options = list(pageLength = 32, scrollY = 720, dom = "t", 
-                  scrollX = TRUE, fixedColumns = list(leftColumns = 1))) %>%
+                  scrollX = TRUE, fixedColumns = list(leftColumns = 1),
+                  fnDrawCallback  = htmlwidgets::JS(
+                    "function(){
+                    HTMLWidgets.staticRender();
+                    }"
+                  ))) %>%
+      spk_add_deps() %>%
       formatStyle(names(dta)[2:ncol(dta)], color = styleInterval(txtbrks, txtclrs),
                   backgroundColor = styleInterval(brks, clrs), lineHeight = "50%") %>%
       formatStyle(colnames(dta), fontSize = "110%")
@@ -498,7 +509,7 @@ output$TSDTable1 <- renderDataTable({
     mutate_at(., vars(mean:sd), funs(round), digits = 2)
   colnames(p)[6] <- c("Standard Deviation")
   datatable(p,  extensions = "Scroller",
-            options = list(pageLength = 8, scrollY = 150, dom = "t", rownames = FALSE))
+            options = list(pageLength = 8, scrollY = 400, dom = "t", rownames = FALSE))
   })
 
 

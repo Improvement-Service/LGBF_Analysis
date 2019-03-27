@@ -152,7 +152,7 @@ tabPanel("All Indicators",
                     mainPanel(id = "mainDisp", style = "padding-left:1px; margin-left:1px",
            #      splitLayout(
           #         cellWidths = c("70%", "80%"),
-                 div(DT::dataTableOutput("tableDisp"),style = "font-size:80%; line-height:75%; width:150%")
+                 div(DT::dataTableOutput("tableDisp"),style = "font-size:80%; line-height:75%; width:160%")
           #       plotOutput("boxDisp")
           #       )
                )
@@ -187,8 +187,9 @@ tabPanel("All Indicators",
                       )
                       ),
                column(8,
-                      dataTableOutput("TSDTable1"),
-                      dataTableOutput("TSDTable2")))
+                      dataTableOutput("TSDTable1")
+ #                     dataTableOutput("TSDTable2")
+                      ))
     ),
 ##New Tab with Rankings
     tabPanel("Rankings Over Time",
