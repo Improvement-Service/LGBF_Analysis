@@ -26,7 +26,8 @@ shinyServer(function(input, output, session) {
   
  output$series <- renderUI({
     bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2)
-    awesomeCheckboxGroup("TSeries", "", unique(bnch_data_indi$Year), selected = unique(bnch_data_indi$Year)) 
+    pstn <-  c(1, length(unique(bnch_data_indi$Year))-1, length(unique(bnch_data_indi$Year)))
+    awesomeCheckboxGroup("TSeries", "", unique(bnch_data_indi$Year), selected = unique(bnch_data_indi$Year)[pstn]) 
  })
 
 #create a reactive function to store time series choices available    
@@ -86,18 +87,22 @@ MedFun <- reactive({
     output$plot1 <- renderPlotly({
     colnames(excl_Scotland)[1] <- "Local_Authority"
     excl_Scotland <- filter(excl_Scotland, Local_Authority %in% input$LA & Year %in% input$TSeries)
+    lbls <- unique(excl_Scotland$Year)
+    clrs <- brewer.pal(length(lbls), "Set1")
     p <- ggplot(excl_Scotland[excl_Scotland$Title == input$indicator2,])+
-      geom_bar(aes(x = Local_Authority, y = Value, fill = Year, 
+      geom_col(aes(x = Local_Authority, y = Value, fill = Year, 
                     text = paste("Local Authority:", `Local_Authority`, "<br>", "Year:", `Year`,
-                                 "<br>", "Value:", `Value`)), colour = "black",position = "dodge", stat = "identity")+
+                                 "<br>", "Value:", `Value`)), colour = "black",position = position_dodge(0.8), stat = "identity")+
       theme_bw()+
-      xlab("")+ylab("")+
-      scale_y_continuous(expand = c(0,0))+
+      scale_fill_manual(labels = lbls, values = clrs)+
+      xlab("")+
+      ylab("")+
+      scale_y_continuous(expand = expand_scale(add = c(0,1)))+
       geom_hline(aes(yintercept = MedFun(), colour = Year))+
+      guides(yintercept = FALSE)+
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
-            axis.text.x = element_text(angle = 90, hjust = 5, vjust = 2, size = 14))+
-      guides(fill = FALSE)
-    ggplotly(p, tooltip = c("text")) %>% hide_legend()
+            axis.text.x = element_text(angle = 90, hjust = 5, vjust = 2, size = 14))
+    ggplotly(p, tooltip = c("text"))
             
   })
 

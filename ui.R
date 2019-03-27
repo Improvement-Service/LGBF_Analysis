@@ -28,10 +28,10 @@ header = ##Some css
       )
       ),
       fluidRow(
-        column(4, style = "padding-left: 10px",
+        column(3, style = "padding-left: 5px",
     wellPanel(id = "sidPnl", style = "height:78vh;overflow-y:auto;padding-left:10px",
       h5("Select Local Authority"),
-      div(class = "multicol",style = "column-count:2;-webkit-column-count:2; -moz-column-count:2; margin-top:0px",
+      div(class = "multicol",style = "margin-top:0px",
         awesomeCheckboxGroup("LA", label = "", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$`Local Authority`))),
       actionBttn("LAAll", "Select All",size = "sm"),
       actionBttn("LAClear", "Clear All",size = "sm"),
@@ -44,7 +44,7 @@ header = ##Some css
     )),
     mainPanel(
       tags$b(uiOutput("PlotTitle")),
-      plotlyOutput("plot1")
+      plotlyOutput("plot1"), width = 9
     )
     )
     ),
@@ -86,7 +86,7 @@ header = ##Some css
   ),
 
 ##new tab for By Council
-tabPanel("By Council",
+tabPanel("All Indicators",
     
             fluidPage(
               fluidRow(
@@ -150,11 +150,11 @@ tabPanel("By Council",
              ),
              column(8,
                     mainPanel(id = "mainDisp", style = "padding-left:1px; margin-left:1px",
-                 splitLayout(
-                   cellWidths = c("70%", "80%"),
-                 div(DT::dataTableOutput("tableDisp"),style = "font-size:74%; line-height:40%"),
-                 plotOutput("boxDisp")
-                 )
+           #      splitLayout(
+          #         cellWidths = c("70%", "80%"),
+                 div(DT::dataTableOutput("tableDisp"),style = "font-size:80%; line-height:75%; width:150%")
+          #       plotOutput("boxDisp")
+          #       )
                )
              )
            )
