@@ -92,7 +92,7 @@ MedFun <- reactive({
     p <- ggplot(excl_Scotland[excl_Scotland$Title == input$indicator2,])+
       geom_col(aes(x = Local_Authority, y = Value, fill = Year, 
                     text = paste("Local Authority:", `Local_Authority`, "<br>", "Year:", `Year`,
-                                 "<br>", "Value:", `Value`)), colour = "black",position = position_dodge(0.8), stat = "identity")+
+                                 "<br>", "Value:", `Value`)), colour = "black",position = position_dodge(0.7), stat = "identity")+
       theme_bw()+
       scale_fill_manual(labels = lbls, values = clrs)+
       xlab("")+
@@ -260,8 +260,8 @@ MedFun <- reactive({
     OneIsHigh <- filter(excl_Scotland, `One is high` == "Yes")
     OneIsLow <- filter(excl_Scotland, `One is high` == "No")
   #calculate rankings
-    RankHigh <- ddply(OneIsHigh,. (Year, Title), transform, Ranking = rank(-Value, ties.method = "max"))
-    RankLow <- ddply(OneIsLow,. (Year, Title), transform, Ranking = rank(Value, ties.method = "max"))
+    RankHigh <- ddply(OneIsHigh,. (Year, Title), transform, Ranking = frank(-Value, ties.method = "max"))
+    RankLow <- ddply(OneIsLow,. (Year, Title), transform, Ranking = frank(Value, ties.method = "max"))
     Rankings <- rbind(RankHigh, RankLow)
     
   #add the min, max and med values to the dataset
@@ -507,9 +507,21 @@ output$TSDTable1 <- renderDataTable({
   p <- dta %>% group_by(Year) %>%
     summarise_at(., vars(Value), funs(mean, min, max, median, sd), na.rm =TRUE) %>%
     mutate_at(., vars(mean:sd), funs(round), digits = 2)
-  colnames(p)[6] <- c("Standard Deviation")
-  datatable(p,  extensions = "Scroller",
-            options = list(pageLength = 8, scrollY = 400, dom = "t", rownames = FALSE))
+  colnames(p)[6] <- c("St. Dev.")
+  mxV <- max(p$max) *1.05
+  mnV <- min(p$min)*0.95
+  spkls <- dta %>% group_by(Year) %>%
+    summarise(Dispersion = spk_chr(Value, type = "box", chartRangeMin = mnV, chartRangeMax = mxV, width = 80))
+  p$Dispersion <- spkls$Dispersion
+  
+  datatable(p,  extensions = "Scroller",escape = FALSE,
+            options = list(pageLength = 8, scrollY = 400, dom = "t", rownames = FALSE,
+                           fnDrawCallback  = htmlwidgets::JS(
+                             "function(){
+                             HTMLWidgets.staticRender();
+                      }"
+                  ))) %>%
+    spk_add_deps()
   })
 
 
@@ -534,9 +546,9 @@ output$TSDTable2 <- renderDataTable({
     dta$Value <- round(dta$Value,2)
 #calculate ranks by year
   if("no" %in% dta$`One is high`){
-  dta$rank <- ave(dta$Value, dta$Year, FUN = function(x) rank(x, ties.method = "first"))
+  dta$rank <- ave(dta$Value, dta$Year, FUN = function(x) frank(x, ties.method = "first"))
   } else{
-  dta$rank <- ave(dta$Value, dta$Year, FUN = function(x) rank(-x, ties.method = "first"))
+  dta$rank <- ave(dta$Value, dta$Year, FUN = function(x) frank(-x, ties.method = "first"))
   }
   dta$rankMov<- ave(dta$rank, dta$`Local Authority`, FUN = function(x) {x - lag(x,1)})
   dta$valMov<- round(ave(dta$Value, dta$`Local Authority`, FUN = function(x) {x - lag(x,1)}),2)
@@ -564,10 +576,10 @@ output$rankPlot <- renderPlotly({
   dtaRnk <- filter(excl_Scotland, Title == input$indiRank)
   dtaRnk$selection <- ifelse(dtaRnk$`Local Authority` == input$RnkLA, "Yes", "No")
   if("no" %in% dtaRnk$`One is high`){
-    dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Year, FUN = function(x) rank(x, ties.method = "first"))
+    dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Year, FUN = function(x) frank(x, ties.method = "first"))
   }
   else{
-    dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Year, FUN = function(x) rank(-x, ties.method = "first"))
+    dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Year, FUN = function(x) frank(-x, ties.method = "first"))
   }
   selDta <- ifelse(input$ValRank == FALSE, "ranks","Value")
   colnames(dtaRnk)[1] <- "Local_Authority"
