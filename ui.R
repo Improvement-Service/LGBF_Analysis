@@ -13,10 +13,11 @@ header = ##Some css
     ".bttn-unite{margin-bottom:10px}",
     ".control-label{font-weight:bold; color:black}",
     "#TableTitle{font-weight:bold;color:black}",
+    "#TSDTable1 th {text-align: center}",
     HTML("h5{font-weight:bold;color:black}
          label{font-weight:bold; color:black}")
   )),
-  tabPanel("By Indicator",
+  tabPanel("All Councils By Indicator",
       fluidPage(
         fluidRow(
           column(4, style = "padding-left:10px",
@@ -86,7 +87,7 @@ header = ##Some css
   ),
 
 ##new tab for By Council
-tabPanel("All Indicators",
+tabPanel("All Indicators by Council",
     
             fluidPage(
               fluidRow(
@@ -152,7 +153,7 @@ tabPanel("All Indicators",
                     mainPanel(id = "mainDisp", style = "padding-left:1px; margin-left:1px",
            #      splitLayout(
           #         cellWidths = c("70%", "80%"),
-                 div(DT::dataTableOutput("tableDisp"),style = "font-size:80%; line-height:75%; width:160%")
+                 div(DT::dataTableOutput("tableDisp"),style = "font-size:80%; line-height:80%; width:160%")
           #       plotOutput("boxDisp")
           #       )
                )
@@ -160,7 +161,7 @@ tabPanel("All Indicators",
            )
         ),
 #New Tab for Time Series Data
-    tabPanel("Time Series Data",
+    tabPanel("Indicators Over Time",
                fluidPage(
                  fluidRow(
                   column(4,  
@@ -187,7 +188,7 @@ tabPanel("All Indicators",
                       )
                       ),
                column(8,
-                      dataTableOutput("TSDTable1")
+                      div(dataTableOutput("TSDTable1"), style = "font-size:16px; line-height: 30px")
  #                     dataTableOutput("TSDTable2")
                       ))
     ),

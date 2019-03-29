@@ -99,9 +99,9 @@ MedFun <- reactive({
       ylab("")+
       scale_y_continuous(expand = expand_scale(add = c(0,1)))+
       geom_hline(aes(yintercept = MedFun(), colour = Year))+
-      guides(yintercept = FALSE)+
+      guides(yintercept = FALSE, colour = FALSE)+
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
-            axis.text.x = element_text(angle = 90, hjust = 5, vjust = 2, size = 14))
+            axis.text.x = element_text(angle = 90, size = 14))
     ggplotly(p, tooltip = c("text"))
             
   })
@@ -418,7 +418,7 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
                     "function(){
                     HTMLWidgets.staticRender();
                     }"
-                  ))) %>%
+                  ), columnDefs = list(list(className = "dt-center", targets = "_all")))) %>%
       spk_add_deps() %>%
       formatStyle(names(dta)[2:ncol(dta)], color = styleInterval(txtbrks, txtclrs),
                   backgroundColor = styleInterval(brks, clrs), lineHeight = "50%") %>%
@@ -511,7 +511,7 @@ output$TSDTable1 <- renderDataTable({
   mxV <- max(p$max) *1.05
   mnV <- min(p$min)*0.95
   spkls <- dta %>% group_by(Year) %>%
-    summarise(Dispersion = spk_chr(Value, type = "box", chartRangeMin = mnV, chartRangeMax = mxV, width = 80))
+    summarise(Dispersion = spk_chr(Value, type = "box", chartRangeMin = mnV, chartRangeMax = mxV, width = 200))
   p$Dispersion <- spkls$Dispersion
   
   datatable(p,  extensions = "Scroller",escape = FALSE,
@@ -520,7 +520,7 @@ output$TSDTable1 <- renderDataTable({
                              "function(){
                              HTMLWidgets.staticRender();
                       }"
-                  ))) %>%
+                  ), columnDefs = list(list(className = "dt-center", targets = 0:6)))) %>%
     spk_add_deps()
   })
 
