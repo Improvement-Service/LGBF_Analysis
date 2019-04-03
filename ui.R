@@ -15,6 +15,13 @@ header = ##Some css
     "#TableTitle{font-weight:bold;color:black}",
     "#TSDTable1 th {text-align: center}",
     HTML("h5{font-weight:bold;color:black}
+          .multico{
+             -webkit-column-count: 5; 
+             -moz-column-count: 5;   
+         column-count: 5; 
+         -moz-column-fill: auto;
+          -column-fill: auto;
+          }
          label{font-weight:bold; color:black}")
   )),
   tabPanel("All Councils By Indicator",
@@ -29,23 +36,22 @@ header = ##Some css
       )
       ),
       fluidRow(
-        column(3, style = "padding-left: 5px",
-    wellPanel(id = "sidPnl", style = "height:78vh;overflow-y:auto;padding-left:10px",
+        mainPanel(
+          tags$b(uiOutput("PlotTitle")),
+          plotlyOutput("plot1", height = "200px"), width = 12
+        ),
+    wellPanel(id = "sidPnl", style = "overflow-y:auto;padding-left:10px",
       h5("Select Local Authority"),
-      div(class = "multicol",style = "margin-top:0px",
-        awesomeCheckboxGroup("LA", label = "", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$`Local Authority`))),
+      tags$div(align = "left", class = "multico",
+        awesomeCheckboxGroup("LA", label = "", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$`Local Authority`), inline = FALSE)),
       actionBttn("LAAll", "Select All",size = "sm"),
       actionBttn("LAClear", "Clear All",size = "sm"),
       h5("Select years"),
-      uiOutput("series", style = "margin-top:10px;margin-bottom:10px;column-count:2;-webkit-column-count:2; -moz-column-count:2"),
+      uiOutput("series", style = "margin-top:10px;margin-bottom:10px;"),
       actionBttn("SeriesAll", "Select All",size = "sm"),
       actionBttn("SeriesClear", "Clear All",size = "sm"),
       awesomeRadio("FmlyGrp", "Select Family Group", c("All",1,2,3,4), inline = TRUE),
       actionBttn("FmlyGrp2", "Update Family Group",size = "sm")
-    )),
-    mainPanel(
-      tags$b(uiOutput("PlotTitle")),
-      plotlyOutput("plot1"), width = 9
     )
     )
     ),
@@ -96,16 +102,19 @@ tabPanel("All Indicators by Council",
                                 width = "100%")
            ),
            column(6,
-                   selectInput("LA_CNCL", "Select Local Authority", unique(excl_Scotland$`Local Authority`), width = "100%")
+                   selectInput("LA_CNCL", "Select Local Authority", unique(excl_Scotland$`Local Authority`), width = "80%")
+                  ),
+           column(10,
+                   uiOutput("seriesCNCL")),
+           column(2,
+                  div(style = "float:right",switchInput("CNCLreal", onLabel = "Cash", offLabel = "Real", inline=TRUE, offStatus = "success", label = "<i class=\"glyphicon glyphicon-gbp\"></i>"))
            ),
            column(12,
-                   uiOutput("seriesCNCL")
-                  
-           ),
                   div(style = "padding-right:8px;padding-left:4px;display:inline",actionBttn("SeriesCNCLALL", "Select All", size = "sm")),
-
+          
                   actionBttn("SeriesCNCLClear", "Clear All", size = "sm"),
                   div(style = "float:right",downloadBttn("tbSv","Save this table", size = "sm"))
+           )
            ),
              fluidRow(
                column(4,

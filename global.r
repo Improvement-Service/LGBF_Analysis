@@ -48,3 +48,6 @@ export_formattable <- function(w, file, width = "100%", height = NULL,
           selector = ".table",
           delay = delay)
 }
+
+##custom function for deselecting indicators
+`%ni%` <- Negate(`%in%`)
