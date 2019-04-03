@@ -27,7 +27,7 @@ shinyServer(function(input, output, session) {
  output$series <- renderUI({
     bnch_data_indi <- filter(excl_Scotland, Title == input$indicator2)
     pstn <-  c(1, length(unique(bnch_data_indi$Year))-1, length(unique(bnch_data_indi$Year)))
-    awesomeCheckboxGroup("TSeries", "", unique(bnch_data_indi$Year), selected = unique(bnch_data_indi$Year)[pstn]) 
+    awesomeCheckboxGroup("TSeries", "", unique(bnch_data_indi$Year), selected = unique(bnch_data_indi$Year)[pstn], inline = TRUE) 
  })
 
 #create a reactive function to store time series choices available    
@@ -280,6 +280,17 @@ MedFun <- reactive({
 
   #create a reactive function to filter the new data set to only show what is selected for local authority and domain  
     SelectedDtaCNCL <- reactive({
+      #create list of real & cash values and remove them
+      inds <- unique(SumStat$Indicator)
+      realInds <-  grep("Adjusted", inds, value = TRUE) 
+      cashInds <- gsub(" Adjusted for Inflation","",realInds)
+      
+      if(input$CNCLreal == TRUE){
+        SumStat <- SumStat[SumStat$Indicator %ni% realInds,]
+      } else{
+        SumStat <- SumStat[SumStat$Indicator %ni% cashInds,]
+      }
+      
       CNCLdta <- filter(SumStat, Local.Authority %in% input$LA_CNCL & Domain %in% input$categoryCNCL & Year %in% input$TSeriesCNCL)
       })
     
@@ -289,6 +300,7 @@ MedFun <- reactive({
         SelectedDtaCNCL <- select(SelectedDtaCNCL, -Local.Authority, -Domain)
         SelectedDtaCNCL <- arrange(SelectedDtaCNCL, Indicator, Year)
         indis <- unique(SelectedDtaCNCL$Indicator)
+      
         lstGrps <- c()
         for(i in 1:length(indis)){
           rws <- sum(SelectedDtaCNCL$Indicator == indis[i])
@@ -512,7 +524,7 @@ output$TSDTable1 <- renderDataTable({
   mnV <- min(p$min)*0.95
   spkls <- dta %>% group_by(Year) %>%
     summarise(Dispersion = spk_chr(Value, type = "box", chartRangeMin = mnV, chartRangeMax = mxV, width = 200))
-  p$Dispersion <- spkls$Dispersion
+  p$`Data Distribution` <- spkls$Dispersion
   
   datatable(p,  extensions = "Scroller",escape = FALSE,
             options = list(pageLength = 8, scrollY = 400, dom = "t", rownames = FALSE,
