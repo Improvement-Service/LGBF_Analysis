@@ -1,6 +1,6 @@
 shinyUI(navbarPage(id = "pageList",
                    
-  title = "Test LGBF Tool", 
+  title = "LGBF Data Analysis", 
 #Can change the theme - see shinyTheme package  
   theme = shinytheme("simplex"),
 header = ##Some css
