@@ -5,7 +5,7 @@ shinyUI(navbarPage(id = "pageList",
   theme = shinytheme("simplex"),
 header = ##Some css
   tags$head(tags$style(
-    "#plot1 {height:78vh !important; border-right:0px; padding-right:0px}",
+    "#plot1 {height:40vh !important; border-right:0px; padding-right:0px}",
     "#Year-on-Year-Plot {height:78vh !important}",
     "#CnclTbl {height:78vh !important}",
     ".form-group.shiny-input-container.shiny-input-checkboxgroup.shiny-bound-input{margin-top:-10px; font-size: 1em}",
@@ -16,6 +16,7 @@ header = ##Some css
     "#TSDTable1 th {text-align: center}",
     HTML("h5{font-weight:bold;color:black}
           .multico{
+              padding-left:10px;
              -webkit-column-count: 5; 
              -moz-column-count: 5;   
          column-count: 5; 
@@ -41,17 +42,19 @@ header = ##Some css
           plotlyOutput("plot1", height = "200px"), width = 12
         ),
     wellPanel(id = "sidPnl", style = "overflow-y:auto;padding-left:10px",
-      h5("Select Local Authority"),
+      h5("Select Local Authorities"),
       tags$div(align = "left", class = "multico",
         awesomeCheckboxGroup("LA", label = "", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$`Local Authority`), inline = FALSE)),
       actionBttn("LAAll", "Select All",size = "sm"),
       actionBttn("LAClear", "Clear All",size = "sm"),
-      h5("Select years"),
-      uiOutput("series", style = "margin-top:10px;margin-bottom:10px;"),
+      hr(style = "margin-top:0px; margin-bottom:3px"),
+      column(6,h5("Select years"),
+      uiOutput("series", style = "margin-top:3px;margin-bottom:10px;"),
       actionBttn("SeriesAll", "Select All",size = "sm"),
-      actionBttn("SeriesClear", "Clear All",size = "sm"),
-      awesomeRadio("FmlyGrp", "Select Family Group", c("All",1,2,3,4), inline = TRUE),
-      actionBttn("FmlyGrp2", "Update Family Group",size = "sm")
+      actionBttn("SeriesClear", "Clear All",size = "sm")),
+      column(6,h5("Select Family Group"),
+      awesomeRadio("FmlyGrp", "", c("All",1,2,3,4), inline = TRUE),
+      actionBttn("FmlyGrp2", "Update Family Group",size = "sm"))
     )
     )
     ),
@@ -102,7 +105,7 @@ tabPanel("All Indicators by Council",
                                 width = "100%")
            ),
            column(6,
-                   selectInput("LA_CNCL", "Select Local Authority", unique(excl_Scotland$`Local Authority`), width = "80%")
+                   selectInput("LA_CNCL", "Select Local Authorities", unique(excl_Scotland$`Local Authority`), width = "80%")
                   ),
            column(10,
                    uiOutput("seriesCNCL")),
@@ -144,7 +147,7 @@ tabPanel("All Indicators by Council",
         fluidRow(
              column(4, style = "padding-left:10px",
                     wellPanel(id = "sidPnl", style = "height:80vh;overflow-y:auto; margin-right:1px; padding-right:1px",
-                          h5("Select Local Authority"),
+                          h5("Select Local Authorities"),
                           div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2; margin-bottom:5px",
                               awesomeCheckboxGroup("LADisp", label = "", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority'))
                           ),
@@ -182,7 +185,7 @@ tabPanel("All Indicators by Council",
              )),             
       fluidRow(column(4, style = "padding-left:10px",
                       wellPanel(style = "height:80vh;overflow-y:auto; margin-right:1px; padding-right:1px",
-                        h5("Select Local Authority"),
+                        h5("Select Local Authorities"),
                         div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2",
                             awesomeCheckboxGroup("LATSD", label = "", unique(excl_Scotland$`Local Authority`), selected = unique(excl_Scotland$'Local Authority'))
                         ),
@@ -213,7 +216,7 @@ tabPanel("All Indicators by Council",
                         uiOutput("indicatorRank")
                  ),
                  column(2,
-                      selectInput("RnkLA", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = "Aberdeen City")),
+                      selectInput("RnkLA", "Select Local Authorities", unique(excl_Scotland$`Local Authority`), selected = "Aberdeen City")),
                  column(2,awesomeCheckbox("ValRank", "Show values")),
                  width = "100%"
                ),

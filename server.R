@@ -88,20 +88,20 @@ MedFun <- reactive({
     colnames(excl_Scotland)[1] <- "Local_Authority"
     excl_Scotland <- filter(excl_Scotland, Local_Authority %in% input$LA & Year %in% input$TSeries)
     lbls <- unique(excl_Scotland$Year)
-    clrs <- brewer.pal(length(lbls), "Set1")
+    clrs <- brewer.pal(length(lbls), "Set2")
     p <- ggplot(excl_Scotland[excl_Scotland$Title == input$indicator2,])+
-      geom_col(aes(x = Local_Authority, y = Value, fill = Year, 
-                    text = paste("Local Authority:", `Local_Authority`, "<br>", "Year:", `Year`,
-                                 "<br>", "Value:", `Value`)), colour = "black",position = position_dodge(0.7), stat = "identity")+
+      geom_hline(aes(yintercept = MedFun(), colour = Year))+
       theme_bw()+
+      geom_col(aes(x = Local_Authority, y = Value, fill = Year, 
+                   text = paste("Local Authority:", `Local_Authority`, "<br>", "Year:", `Year`,
+                                "<br>", "Value:", `Value`)), colour = "black",width = 0.65, position = position_dodge(0.7))+
       scale_fill_manual(labels = lbls, values = clrs)+
       xlab("")+
       ylab("")+
-      scale_y_continuous(expand = expand_scale(add = c(0,1)))+
-      geom_hline(aes(yintercept = MedFun(), colour = Year))+
+      scale_y_continuous(expand = expand_scale(mult = c(0,0.05)))+
       guides(yintercept = FALSE, colour = FALSE)+
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
-            axis.text.x = element_text(angle = 90, size = 14))
+            axis.text.x = element_text(angle = 90, size = 11))
     ggplotly(p, tooltip = c("text"))
             
   })
@@ -423,7 +423,7 @@ observeEvent(eventExpr = input$FmlyGrp2Disp,
     ))
     dta <- spread(dta[c(1,2,3)], key = Year, value = Value) %>%
       left_join(sprkcode)
-    tbl <- datatable(dta, class = "row-border",escape = F,extensions = c("Scroller", "FixedColumns"), rownames = FALSE, 
+    tbl <- datatable(dta, rownames = FALSE, class = "row-border",escape = F,extensions = c("Scroller", "FixedColumns"), 
                      options = list(pageLength = 32, scrollY = 720, dom = "t", 
                   scrollX = TRUE, fixedColumns = list(leftColumns = 1),
                   fnDrawCallback  = htmlwidgets::JS(
@@ -526,8 +526,8 @@ output$TSDTable1 <- renderDataTable({
     summarise(Dispersion = spk_chr(Value, type = "box", chartRangeMin = mnV, chartRangeMax = mxV, width = 200))
   p$`Data Distribution` <- spkls$Dispersion
   
-  datatable(p,  extensions = "Scroller",escape = FALSE,
-            options = list(pageLength = 8, scrollY = 400, dom = "t", rownames = FALSE,
+  datatable(p,  extensions = "Scroller",escape = FALSE,rownames = FALSE,
+            options = list(pageLength = 8, scrollY = 400, dom = "t", 
                            fnDrawCallback  = htmlwidgets::JS(
                              "function(){
                              HTMLWidgets.staticRender();
