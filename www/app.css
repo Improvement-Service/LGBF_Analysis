@@ -1,0 +1,15 @@
+h1 {
+    text-decoration:none;
+    width : 92px;
+    height : 50px;
+    border : 0;
+    margin : 0;
+    margin-right: 0px;
+    padding : 0;
+    right: -5px;
+    top: -5px;
+    position: absolute;
+    background : url(logo.png) no-repeat 0 0;
+    z-index: 10000;
+    float:right
+}

@@ -1,11 +1,16 @@
 shinyUI(navbarPage(id = "pageList",
                    
-  title = "LGBF Data Analysis", 
-#Can change the theme - see shinyTheme package  
+  title = "LGBF Analysis", 
+  windowTitle = "LGBF Analysis",
+  #Can change the theme - see shinyTheme package  
   theme = shinytheme("simplex"),
 header = ##Some css
-  tags$head(tags$style(
-    "#plot1 {height:40vh !important; border-right:0px; padding-right:0px}",
+  tags$head(tags$title(""),
+            tags$link(rel="stylesheet", type="text/css",
+                      href="app.css"),
+            tags$h1(a(href="http://www.improvementservice.org.uk/benchmarking/")),
+            tags$style(
+    "#plot1 {height:400px; border-right:0px; padding-right:0px}",
     "#Year-on-Year-Plot {height:78vh !important}",
     "#CnclTbl {height:78vh !important}",
     ".form-group.shiny-input-container.shiny-input-checkboxgroup.shiny-bound-input{margin-top:-10px; font-size: 1em}",
@@ -39,7 +44,7 @@ header = ##Some css
       fluidRow(
         mainPanel(
           tags$b(uiOutput("PlotTitle")),
-          plotlyOutput("plot1", height = "200px"), width = 12
+          plotlyOutput("plot1", height = "400px"), width = 12
         ),
     wellPanel(id = "sidPnl", style = "overflow-y:auto;padding-left:10px",
       h5("Select Local Authorities"),
@@ -68,7 +73,7 @@ header = ##Some css
      )),
     fluidPage(
         fluidRow(
-        column(4, style = "padding-left:10px",
+        column(4, style = "padding-left:10px; width:30%",
           selectInput("categoryYr", "Select Indicator Category", unique(excl_Scotland$Domain))
                    ),
         column(6,
@@ -145,7 +150,7 @@ tabPanel("All Indicators by Council",
                )
              ),   
         fluidRow(
-             column(4, style = "padding-left:10px",
+             column(4, style = "padding-left:10px; padding-right:0px;width:30%",
                     wellPanel(id = "sidPnl", style = "height:80vh;overflow-y:auto; margin-right:1px; padding-right:1px",
                           h5("Select Local Authorities"),
                           div(style = "column-count:2;-webkit-column-count:2; -moz-column-count:2; margin-bottom:5px",
@@ -161,11 +166,11 @@ tabPanel("All Indicators by Council",
                           div(style = "margin-bottom:0px",actionBttn("FmlyGrp2Disp", "Update Family Group",size = "sm"))
              )
              ),
-             column(8,
+             column(8,style = "width:70%",
                     mainPanel(id = "mainDisp", style = "padding-left:1px; margin-left:1px",
            #      splitLayout(
           #         cellWidths = c("70%", "80%"),
-                 div(DT::dataTableOutput("tableDisp"),style = "font-size:80%; line-height:80%; width:160%")
+                 div(DT::dataTableOutput("tableDisp"),style = "font-size:80%; line-height:80%; width:160%; padding-left:0px")
           #       plotOutput("boxDisp")
           #       )
                )
@@ -176,7 +181,7 @@ tabPanel("All Indicators by Council",
     tabPanel("Indicators Over Time",
                fluidPage(
                  fluidRow(
-                  column(4,  
+                  column(4,  style = "width:30%",
                       selectInput("categoryTSD", "Select Indicator Category", unique(excl_Scotland$Domain))
                    ),
                   column(6,
@@ -217,7 +222,7 @@ tabPanel("All Indicators by Council",
                  ),
                  column(2,
                       selectInput("RnkLA", "Select Local Authorities", unique(excl_Scotland$`Local Authority`), selected = "Aberdeen City")),
-                 column(2,awesomeCheckbox("ValRank", "Show values")),
+                 column(2,style = "margin-top:20px",awesomeCheckbox("ValRank", "Show values")),
                  width = "100%"
                ),
              
