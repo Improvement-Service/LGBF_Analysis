@@ -90,14 +90,16 @@ MedFun <- reactive({
     lbls <- unique(excl_Scotland$Year)
     clrs <- brewer.pal(length(lbls), "Set2")
     p <- ggplot(excl_Scotland[excl_Scotland$Title == input$indicator2,])+
-      geom_hline(aes(yintercept = MedFun(), colour = Year))+
-      theme_bw()+
       geom_col(aes(x = Local_Authority, y = Value, fill = Year, 
                    text = paste("Local Authority:", `Local_Authority`, "<br>", "Year:", `Year`,
                                 "<br>", "Value:", `Value`)), colour = "black",width = 0.65, position = position_dodge(0.7))+
       scale_fill_manual(labels = lbls, values = clrs)+
+      {if(input$ScotShow == TRUE)
+        geom_hline(aes(yintercept = MedFun(), colour = Year))}+
+      scale_colour_manual(labels = lbls, values = clrs)+
       xlab("")+
       ylab("")+
+       theme_bw()+
       scale_y_continuous(expand = expand_scale(mult = c(0,0.05)))+
       guides(yintercept = FALSE, colour = FALSE)+
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 

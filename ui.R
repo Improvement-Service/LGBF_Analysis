@@ -38,7 +38,8 @@ header = ##Some css
       ),
       column(6,
                   uiOutput("indicator")
-        )
+        ),
+      column(2, awesomeCheckbox("ScotShow", "Show Scotland Value", value = TRUE))
       )
       ),
       fluidRow(
