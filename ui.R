@@ -19,6 +19,7 @@ header = ##Some css
     ".control-label{font-weight:bold; color:black}",
     "#TableTitle{font-weight:bold;color:black}",
     "#TSDTable1 th {text-align: center}",
+    "#ScotShow{margin-top:15px}",
     HTML("h5{font-weight:bold;color:black}
           .multico{
               padding-left:10px;
@@ -83,7 +84,7 @@ header = ##Some css
           ),
      fluidRow( 
           sidebarPanel(id = "sidPnl", style = "height:78vh;overflow-y:auto;",
-                       h5("Select Local Authority"),
+                       h5("Select Local Authorities"),
                        div(class = "multicol",style = "column-count:2;-webkit-column-count:2; -moz-column-count:2; margin-top:0px",
                          awesomeCheckboxGroup("LAYr", label = "", unique(bnch_data$`Local Authority`), selected = bnch_data$`Local Authority`)),
                         actionBttn("LAYrAll", "Select All",size = "sm"),
@@ -111,7 +112,7 @@ tabPanel("All Indicators by Council",
                                 width = "100%")
            ),
            column(6,
-                   selectInput("LA_CNCL", "Select Local Authorities", unique(excl_Scotland$`Local Authority`), width = "80%")
+                   selectInput("LA_CNCL", "Select Local Authority", unique(excl_Scotland$`Local Authority`), width = "80%")
                   ),
            column(10,
                    uiOutput("seriesCNCL")),
@@ -222,7 +223,7 @@ tabPanel("All Indicators by Council",
                         uiOutput("indicatorRank")
                  ),
                  column(2,
-                      selectInput("RnkLA", "Select Local Authorities", unique(excl_Scotland$`Local Authority`), selected = "Aberdeen City")),
+                      selectInput("RnkLA", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = "Aberdeen City")),
                  column(2,style = "margin-top:20px",awesomeCheckbox("ValRank", "Show values")),
                  width = "100%"
                ),

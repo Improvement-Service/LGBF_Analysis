@@ -12,6 +12,9 @@ metadata$Title <- tools::toTitleCase(metadata$Title)
 simdData <- read_excel("SIMDvalues.xlsx")
 colnames(simdData)[2:3] <- c("Family group (People)", "Family group (Other)")
 
+##For some reason ENV4b is changing A to a - fix this
+metadata[metadata$`Variable name` == "ENV4b",2] <- "Percentage of A Class Roads that Should be Considered for Maintenance Treatment"
+
 #convert data to long format
 data <- gather(data = data, key = "Inticators Time", value = "value",-1)
 data$`Inticators Time` <- gsub(" 20", "_20",data$`Inticators Time`)
@@ -39,4 +42,4 @@ allData <- left_join(allData, simdData, by = c("Local Authority"))
 allData <- allData[c(1:2,5,4,3,6:27)]
 colnames(allData)[3] <- "Value"
 allData$Value <- as.numeric(allData$Value)
-saveRDS(allData, "data-March19.rds")
+saveRDS(allData, "data-April19.rds")

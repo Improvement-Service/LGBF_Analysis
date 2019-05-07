@@ -314,7 +314,7 @@ MedFun <- reactive({
           gather(Indi, values, c("Ranking", "maxt")) %>%
           group_by(Indicator, Year) %>%
           dplyr::summarise(grphs = spk_chr(
-            values, type = "bullet", width = "100"
+            values, type = "bullet", width = "130",targetWidth = 6
           ))
         grph <- dplyr::arrange(grph, Indicator, Year)
         SelectedDtaCNCL$`Ranked Position` <- grph$grphs
