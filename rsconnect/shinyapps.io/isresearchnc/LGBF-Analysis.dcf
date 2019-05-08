@@ -1,0 +1,12 @@
+name: LGBF-Analysis
+title: LGBF-Analysis
+username:
+account: isresearchnc
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 914943
+bundleId: 2066663
+url: https://isresearchnc.shinyapps.io/LGBF-Analysis/
+when: 1557238574.3699
+asMultiple: FALSE
+asStatic: FALSE

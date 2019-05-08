@@ -146,7 +146,7 @@ MedFun <- reactive({
   #selectizeInput lets you have it start blank instead of
   #selecting the first value - as selectInput does!
       selectizeInput("baseYrSrv", "Start Year", 
-                     choices = unique(bnch_data_indiYR$Year),
+                     choices = unique(bnch_data_indiYR[bnch_data_indiYR$Year != input$compYrSrv, "Year"]),
                     options = list(
                       placeholder = "Select Start Year",
                       onInitialize = I('function() {this.setValue("");}')
@@ -155,12 +155,9 @@ MedFun <- reactive({
     })
     output$compYr <- renderUI({
       bnch_data_indiYR <- bnch_data_indiYR()
-      selectizeInput("compYrSrv", "End Year:", 
-                     choices = c(unique(bnch_data_indiYR[bnch_data_indiYR$Year != input$baseYrSrv, "Year"])),
-      options = list(
-        placeholder = "Select End Year",
-        onInitialize = I('function() {this.setValue("");}')
-      ))
+      lstYr <- unique(dplyr::last(bnch_data_indiYR$Year))
+      selectInput("compYrSrv", "End Year:", 
+                     choices = c(unique(bnch_data_indiYR$Year)), selected = lstYr)
     })
 #calculate changes for each LA between base and comparator year
     chngDta <- reactive({
@@ -182,8 +179,11 @@ MedFun <- reactive({
       colnames(dat)[1] <- "Local_Authority"
       dat <- filter(dat,Local_Authority %in% input$LAYr)
       if(input$RelVal == FALSE){
-      pp <- ggplot(data = dat, aes(x = Local_Authority, y = Diffdata)) +
-        geom_bar(stat = "identity", position= "dodge", fill = "darkblue")+
+      pp <- ggplot(data = dat) +
+        geom_bar(aes(x = Local_Authority, y = Diffdata,
+                text = paste0("Local Authority: ", 
+            Local_Authority, "<br>", "Change from Base Year: ", Diffdata)),
+          stat = "identity", position= "dodge", fill = "darkblue")+
         theme_bw()+
         xlab("")+
         ylab(paste("Change", as.character(input$baseYrSrv), "to", as.character(input$compYrSrv))) +
@@ -193,8 +193,11 @@ MedFun <- reactive({
               panel.border = element_blank(),
               axis.line = element_line(colour = "black"))
       } else{
-        pp <- ggplot(data = dat, aes(x = Local_Authority, y = PerDiffdata)) +
-          geom_bar(stat = "identity", position= "dodge", fill = "darkblue")+
+        pp <- ggplot(data = dat) +
+          geom_bar(aes(x = Local_Authority, y = PerDiffdata,
+                    text = paste0("Local Authority: ", 
+               Local_Authority, "<br>", "Change from Base Year: ", paste0(PerDiffdata,"%"))),
+               stat = "identity", position= "dodge", fill = "darkblue")+
           theme_bw()+
           xlab("")+
           ylab(paste("Percentage Change", as.character(input$baseYrSrv), "to", as.character(input$compYrSrv))) +
@@ -204,7 +207,7 @@ MedFun <- reactive({
                 panel.border = element_blank(),
                 axis.line = element_line(colour = "black"))
       }
-      ggplotly(pp)
+      ggplotly(pp, tooltip = c("text"))
     })
     
     observeEvent(eventExpr = input$FmlyGrp2Yr,
