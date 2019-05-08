@@ -224,7 +224,8 @@ tabPanel("All Indicators by Council",
                  ),
                  column(2,
                       selectInput("RnkLA", "Select Local Authority", unique(excl_Scotland$`Local Authority`), selected = "Aberdeen City")),
-                 column(2,style = "margin-top:20px",awesomeCheckbox("ValRank", "Show values")),
+                 column(2, h5("Display Ranks or Values", style = "margin-top:0px"),switchInput(inputId = "ValRank", onLabel = "Values",
+                        label = "<i class=\"fa fa-line-chart\"></i>", offLabel = "Ranks", offStatus = "danger")),
                  width = "100%"
                ),
              
