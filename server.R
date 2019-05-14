@@ -265,8 +265,8 @@ MedFun <- reactive({
     OneIsHigh <- filter(excl_Scotland, `One is high` == "Yes")
     OneIsLow <- filter(excl_Scotland, `One is high` == "No")
   #calculate rankings
-    RankHigh <- ddply(OneIsHigh,. (Year, Title), transform, Ranking = frank(-Value, ties.method = "max"))
-    RankLow <- ddply(OneIsLow,. (Year, Title), transform, Ranking = frank(Value, ties.method = "max"))
+    RankHigh <- ddply(OneIsHigh,. (Year, Title), transform, Ranking = frank(-Value, ties.method = "min"))
+    RankLow <- ddply(OneIsLow,. (Year, Title), transform, Ranking = frank(Value, ties.method = "min"))
     Rankings <- rbind(RankHigh, RankLow)
     
   #add the min, max and med values to the dataset
@@ -563,9 +563,9 @@ output$TSDTable2 <- renderDataTable({
     dta$Value <- round(dta$Value,2)
 #calculate ranks by year
   if("no" %in% dta$`One is high`){
-  dta$rank <- ave(dta$Value, dta$Year, FUN = function(x) frank(x, ties.method = "first"))
+  dta$rank <- ave(dta$Value, dta$Year, FUN = function(x) frank(x, ties.method = "min"))
   } else{
-  dta$rank <- ave(dta$Value, dta$Year, FUN = function(x) frank(-x, ties.method = "first"))
+  dta$rank <- ave(dta$Value, dta$Year, FUN = function(x) frank(-x, ties.method = "min"))
   }
   dta$rankMov<- ave(dta$rank, dta$`Local Authority`, FUN = function(x) {x - lag(x,1)})
   dta$valMov<- round(ave(dta$Value, dta$`Local Authority`, FUN = function(x) {x - lag(x,1)}),2)
@@ -593,10 +593,10 @@ output$rankPlot <- renderPlotly({
   dtaRnk <- filter(excl_Scotland, Title == input$indiRank)
   dtaRnk$selection <- ifelse(dtaRnk$`Local Authority` == input$RnkLA, "Yes", "No")
   if("no" %in% dtaRnk$`One is high`){
-    dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Year, FUN = function(x) frank(x, ties.method = "first"))
+    dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Year, FUN = function(x) frank(x, ties.method = "min"))
   }
   else{
-    dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Year, FUN = function(x) frank(-x, ties.method = "first"))
+    dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Year, FUN = function(x) frank(-x, ties.method = "min"))
   }
   selDta <- ifelse(input$ValRank == FALSE, "ranks","Value")
   colnames(dtaRnk)[1] <- "Local_Authority"
