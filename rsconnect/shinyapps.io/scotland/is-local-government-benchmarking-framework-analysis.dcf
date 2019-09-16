@@ -1,0 +1,13 @@
+name: is-local-government-benchmarking-framework-analysis
+title: is-local-government-benchmarking-framework-analysis
+username:
+account: scotland
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 964346
+bundleId: 2416916
+url: https://scotland.shinyapps.io/is-local-government-benchmarking-framework-analysis/
+when: 1568630602.9541
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: cleanData.R|README.md|TableDL.rmd|old data/bnch_dta_macrosttest-3-4-18.csv|old data/bnch_dta_macrosttest.csv|old data/bnch_dta_macrosttest_Dec17.csv|old data/bnch_dta_macrosttest_Dec17_SWRemoved.csv

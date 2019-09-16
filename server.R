@@ -562,7 +562,7 @@ output$TSDTable2 <- renderDataTable({
   )
     dta$Value <- round(dta$Value,2)
 #calculate ranks by year
-  if("no" %in% dta$`One is high`){
+  if("No" %in% dta$`One is high`){
   dta$rank <- ave(dta$Value, dta$Year, FUN = function(x) frank(x, ties.method = "min"))
   } else{
   dta$rank <- ave(dta$Value, dta$Year, FUN = function(x) frank(-x, ties.method = "min"))
@@ -592,7 +592,7 @@ output$indicatorRank <- renderUI({
 output$rankPlot <- renderPlotly({
   dtaRnk <- filter(excl_Scotland, Title == input$indiRank)
   dtaRnk$selection <- ifelse(dtaRnk$`Local Authority` == input$RnkLA, "Yes", "No")
-  if("no" %in% dtaRnk$`One is high`){
+  if("No" %in% dtaRnk$`One is high`){
     dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Year, FUN = function(x) frank(x, ties.method = "min"))
   }
   else{

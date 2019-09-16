@@ -172,7 +172,7 @@ tabPanel("All Indicators by Council",
                     mainPanel(id = "mainDisp", style = "padding-left:1px; margin-left:1px",
            #      splitLayout(
           #         cellWidths = c("70%", "80%"),
-                 div(DT::dataTableOutput("tableDisp"),style = "font-size:80%; line-height:80%; width:160%; padding-left:0px")
+                 div(DT::dataTableOutput("tableDisp"),style = "font-size:80%; line-height:75%; width:160%; padding-left:0px")
           #       plotOutput("boxDisp")
           #       )
                )
