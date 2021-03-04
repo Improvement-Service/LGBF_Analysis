@@ -5,9 +5,9 @@ account: isresearchnc
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 914943
-bundleId: 2129016
+bundleId: 2636408
 url: https://isresearchnc.shinyapps.io/LGBF-Analysis/
-when: 1559641756.90974
+when: 1575388554.8175
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: README.md|TableDL.rmd|old data/bnch_dta_macrosttest-3-4-18.csv|old data/bnch_dta_macrosttest.csv|old data/bnch_dta_macrosttest_Dec17.csv|old data/bnch_dta_macrosttest_Dec17_SWRemoved.csv

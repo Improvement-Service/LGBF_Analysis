@@ -100,7 +100,7 @@ MedFun <- reactive({
       xlab("")+
       ylab("")+
        theme_bw()+
-      scale_y_continuous(expand = expand_scale(mult = c(0,0.05)))+
+      scale_y_continuous(expand = expansion(mult = c(0,0.05)))+
       guides(yintercept = FALSE, colour = FALSE)+
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
             axis.text.x = element_text(angle = 90, size = 11))
@@ -264,9 +264,19 @@ MedFun <- reactive({
   #split data by whether one is high
     OneIsHigh <- filter(excl_Scotland, `One is high` == "Yes")
     OneIsLow <- filter(excl_Scotland, `One is high` == "No")
+    #FINSUS2 <- filter(excl_Scotland, `One is high` == "FINSUS2")
+    #FINSUS5 <- filter(excl_Scotland, `One is high` == "FINSUS5")
+    
   #calculate rankings
     RankHigh <- ddply(OneIsHigh,. (Year, Title), transform, Ranking = frank(-Value, ties.method = "min"))
     RankLow <- ddply(OneIsLow,. (Year, Title), transform, Ranking = frank(Value, ties.method = "min"))
+   # FINSUS2_rnks <-  FINSUS2 %>% mutate(dist = abs(Value-3)) %>% group_by(Year) %>%
+  #    mutate(Ranking = frank(dist, ties.method = "min")) %>% mutate(Ranking = replace(Ranking, dist <=1, 1))%>% 
+  #    select(-dist)
+   # FINSUS5_rnks <-  FINSUS5 %>% mutate(dist = abs(Value-100)) %>% group_by(Year) %>%
+  #    mutate(Ranking = frank(dist, ties.method = "min")) %>% select(-dist)
+  #  names(FINSUS2_rnks) <- names(RankHigh)
+  #  names(FINSUS5_rnks) <- names(RankHigh)
     Rankings <- rbind(RankHigh, RankLow)
     
   #add the min, max and med values to the dataset
@@ -564,7 +574,7 @@ output$TSDTable2 <- renderDataTable({
 #calculate ranks by year
   if("No" %in% dta$`One is high`){
   dta$rank <- ave(dta$Value, dta$Year, FUN = function(x) frank(x, ties.method = "min"))
-  } else{
+  } else {
   dta$rank <- ave(dta$Value, dta$Year, FUN = function(x) frank(-x, ties.method = "min"))
   }
   dta$rankMov<- ave(dta$rank, dta$`Local Authority`, FUN = function(x) {x - lag(x,1)})
@@ -594,10 +604,12 @@ output$rankPlot <- renderPlotly({
   dtaRnk$selection <- ifelse(dtaRnk$`Local Authority` == input$RnkLA, "Yes", "No")
   if("No" %in% dtaRnk$`One is high`){
     dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Year, FUN = function(x) frank(x, ties.method = "min"))
-  }
-  else{
+  } else {
     dtaRnk$ranks <- ave(dtaRnk$Value, dtaRnk$Year, FUN = function(x) frank(-x, ties.method = "min"))
-  }
+    dtaRnk <<- dtaRnk
+    }
+  
+  
   selDta <- ifelse(input$ValRank == FALSE, "ranks","Value")
   colnames(dtaRnk)[1] <- "Local_Authority"
   grp <- ggplot(data = dtaRnk) +
@@ -610,8 +622,8 @@ output$rankPlot <- renderPlotly({
     theme_bw()+
     guides(colour = FALSE)+
     scale_x_discrete(expand = c(0.001,0.01))+
-  scale_size_manual(breaks = c("Yes", "No"), values = c(0.4,1.5))+
-    scale_colour_manual(breaks = c("Yes", "No"), values = c("grey","red"))
+  scale_size_manual(breaks = c("Yes", "No"), values = c(1.3,0.5))+
+    scale_colour_manual(breaks = c("Yes", "No"), values = c("red","grey"))
   ggplotly(grp, tooltip = c("text")) %>% layout(showlegend = FALSE)
   })
 
