@@ -207,7 +207,7 @@ tabPanel("All Indicators by Council",
                       )
                       ),
                column(8,
-                      div(dataTableOutput("TSDTable1"), style = "font-size:16px; line-height: 30px")
+                      div(dataTableOutput("TSDTable1"), style = "font-size:16px; line-height: 30px;overflow-y: scroll")
  #                     dataTableOutput("TSDTable2")
                       ))
     ),

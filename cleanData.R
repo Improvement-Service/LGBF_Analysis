@@ -5,7 +5,7 @@ library(readxl)
 
 ##read in most up to date master data sheet and metadata
 setwd("C:/Users/cassidy.nicholas/OneDrive - IS/LGBF-Spotfire/data")
-data <- read_excel("new bnch data.xlsx", sheet = 2)[1:1857] ##remove last few columns, these only have Scotland values from SHS
+data <- read_excel("new bnch data.xlsx", sheet = 2)[1:1857] ##remove last few columns with Scotland values from SHS
 data <- data[complete.cases(data$`Local Authority`),]
 ##remove columns with all NAs
 all_na <- function(x) any(!is.na(x))
@@ -52,6 +52,6 @@ allData <- left_join(allData, simdData, by = c("Local Authority"))
 allData <- allData[c(1:2,5,4,3,6:27)]
 colnames(allData)[3] <- "Value"
 allData$Value <- as.numeric(allData$Value)
-saveRDS(allData, "data-Feb21.rds")
+saveRDS(allData, "data-May21.rds")
 
-write_csv(allData, "data-Feb21.csv")
+write_csv(allData, "data-May21.csv")

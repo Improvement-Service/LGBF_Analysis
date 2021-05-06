@@ -542,7 +542,7 @@ output$TSDTable1 <- renderDataTable({
   p$`Data Distribution` <- spkls$Dispersion
   
   datatable(p,  extensions = "Scroller",escape = FALSE,rownames = FALSE,
-            options = list(pageLength = 8, scrollY = 400, dom = "t", 
+            options = list(scrollY = "400px", dom = "t", 
                            fnDrawCallback  = htmlwidgets::JS(
                              "function(){
                              HTMLWidgets.staticRender();
